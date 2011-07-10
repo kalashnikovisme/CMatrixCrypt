@@ -1,10 +1,4 @@
-#include <string>
-#include <stdexcept>
-#include <iostream>
-#include <iomanip>
-#include <sstream>
-
-#include <zlib.h>
+#include "gzip.hpp"
 
 /** Compress a STL string using zlib with given compression level and return
   * the binary data. */

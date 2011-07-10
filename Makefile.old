@@ -1,0 +1,16 @@
+CC=g++
+CFLAGS=-c -g -Wall
+
+all: test
+
+cmatrix.o: src/cmatrix.cpp
+	$(CC) $(CFLAGS) src/cmatrix.cpp
+
+test: src/test.cpp src/ascii86.cpp src/gzip.cpp src/util.cpp src/cmatrix.o
+	$(CC) src/cmatrix.o src/test.cpp -o bin/test
+
+mcrypt: src/ascii86.cpp src/gzip.cpp src/util.cpp src/cmatrix.o src/mcrypt.cpp
+	$(CC) $(CFLAGS) -o bin/mcrypt src/cmatrix.o src/gzip.cpp 
+
+clean:
+	rm -f *.o
