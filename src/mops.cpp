@@ -13,7 +13,7 @@ marry makePassMatrix(const string pass) {
     mat(1,0) = pass[i+2];
     mat(1,1) = pass[i+3];
     mat.escape();         // escape matrix
-    mats.append(mat);     // append matrix to array
+    mats.push_back(mat);  // append matrix to array
   }
 
   // return matrices
@@ -34,7 +34,7 @@ marry makeMesgMatrix(string mesg) {
     mat(0,1) = mesg[i+1];
     mat(1,0) = mesg[i+2];
     mat(1,1) = mesg[i+3];
-    mats.append(mat);     // append matrix to array
+    mats.push_back(mat);   // append matrix to array
   }
 
   // return matrices
