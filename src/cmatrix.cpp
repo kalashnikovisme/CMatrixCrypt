@@ -289,6 +289,10 @@ float& CMatrix::operator()(int x, int y) {
   return(getElem(x, y));
 }
 
+float& CMatrix::operator[](int pos) {
+  return(getElem(pos/sizeY, pos%sizeY));
+}
+
 /* EQUALITY TESTS */
 // compare matrices
 bool CMatrix::operator==(const CMatrix& rhs) const {

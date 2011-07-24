@@ -31,7 +31,7 @@ public:
   float get(int x, int y) const;   // get a copy of X,Y
   void  set(int x, int y, float v);// set X,Y to V
   int height() const;              // get the height of the matrix (
-  int width() const;              // get the matrix's length
+  int width() const;               // get the matrix's length
 
   // matrix related things
   bool square() const;        // return true if this is a square matrix
@@ -45,6 +45,7 @@ public:
   // operators
   // element access
   float& operator()(int x, int y); 
+  float& operator[](int pos); 
 
   // comparing
   bool operator==(const CMatrix&) const;
