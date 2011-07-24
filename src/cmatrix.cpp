@@ -238,6 +238,7 @@ void CMatrix::invert() {
   temp(1,1) += getElem(0,0);
   temp(0,1) -= getElem(0,1);
   temp(1,0) -= getElem(1,0);
+  temp      /= this->determinant(); // divide by determinant
 
   // copy the converted matrix over
   *this = temp;
@@ -261,6 +262,7 @@ CMatrix CMatrix::inverse() const {
   temp(1,1) += getElemCon(0,0);
   temp(0,1) -= getElemCon(0,1);
   temp(1,0) -= getElemCon(1,0);
+  temp      /= this->determinant(); // divide by determinant
 
   // return the temporary matrix
   return(temp);
@@ -472,6 +474,24 @@ CMatrix CMatrix::operator*(const CMatrix& rhs) const {
   }
 
   return(temp);  // return self for chaining
+}
+
+/* DIVISION OPERATIONS */
+// divide every element in the matrix
+CMatrix& CMatrix::operator/=(const float v) {
+  for(int x = 0; x < sizeX; x++) {
+    for(int y = 0; y < sizeY; y++) {
+      getElem(x, y) /= v; // getElem returns a reference, which is why this code works. 
+    }
+  }
+  return(*this);  // return self for chained command calls.
+}
+
+// divide a matrix by a float
+CMatrix CMatrix::operator/(const float v) const {
+  CMatrix temp(*this);  // make a copy of this
+  temp /= v;            // divide copy of this
+  return(temp);         // return copy
 }
 
 /* STREAM OPERATIONS */

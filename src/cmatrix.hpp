@@ -60,6 +60,7 @@ public:
   CMatrix& operator--();
   CMatrix& operator*=(const float);
   CMatrix& operator*=(const CMatrix&);
+  CMatrix& operator/=(const float);
 
   // math
   CMatrix operator+(const float) const;
@@ -68,6 +69,7 @@ public:
   CMatrix operator-(const CMatrix&) const;
   CMatrix operator*(const float) const;
   CMatrix operator*(const CMatrix&) const;
+  CMatrix operator/(const float) const;
   friend CMatrix operator+(const float, const CMatrix&);
   friend CMatrix operator-(const float, const CMatrix&);
   friend CMatrix operator*(const float, const CMatrix&);
