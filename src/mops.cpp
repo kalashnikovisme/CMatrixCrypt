@@ -1,7 +1,7 @@
 #include "mops.hpp"
 using namespace std;
 
-marry makePassMatrix(const string pass) {
+marry makePassMatrix(const string& pass) {
   // matrices array
   marry mats;
   mats.reserve((pass.size()/4)+1); // tell mats an estimate of how much space we're going to need
@@ -22,21 +22,61 @@ marry makePassMatrix(const string pass) {
 }
 
 
-marry makeMesgMatrix(const string msg) {
+marry makeMesgMatrix(const string& msg) {
   // append to the mesg to denote end
   string mesg = msg + ";";
   // matrices array
   marry mats;
-  mats.reserve((mats.size()/4)+1); // tell mats about how much space we'll need
-  // temp matrix
-  CMatrix mat;
-  // iterate thru chars of string
-  for(int i = 0; i < mesg.size(); i+=4) {
-    mat(0,0) = mesg[i+0];  // fill up matrix
-    mat(0,1) = mesg[i+1];  // these chars of mesg may or may not exist!!!
-    mat(1,0) = mesg[i+2];
-    mat(1,1) = mesg[i+3];
-    mats.push_back(mat);   // append matrix to array
+  mats.reserve((mesg.size()/4)+1); // tell mats about how much space we'll need
+
+  {
+    CMatrix mat;
+    // iterate thru chars of string
+    for(int i = 0; (i+4) < mesg.size(); i+=4) {
+      mat(0,0) = mesg[i+0];  // fill up matrix
+      mat(0,1) = mesg[i+1];  // these chars of mesg may or may not exist!!!
+      mat(1,0) = mesg[i+2];
+      mat(1,1) = mesg[i+3];
+      mats.push_back(mat);   // append matrix to array
+    }
+  }
+
+  // little rant: these next couple of lines are thanks to my supidity with accessors to CMatrix
+  // i am considering writing an operator[] for CMatrix in case it's important enuff....
+  {
+    CMatrix mat;
+    switch(mesg.size()%4) {
+      case(3):
+        mat(1,0) = mesg[mesg.size()-1];
+      case(2):
+        mat(0,1) = mesg[mesg.size()-2];
+      case(1):
+        mat(0,0) = mesg[mesg.size()-3];
+        break;
+      default:
+        break;
+    }
+
+    switch(mesg.size()%4) {
+      case(3):
+        mat(1,1) = ';';
+        break;
+      case(2):
+        mat(1,0) = ';';
+        break;
+      case(1):
+        mat(0,1) = ';';
+        break;
+      default:
+        break;
+    }
+  }
+
+
+  // make sure the amount of matrices is even
+  if((mats.size()%1) == 1) {
+    CMatrix mat(0,0,0.0);
+    mats.push_back(mat);
   }
 
   // return matrices
@@ -76,7 +116,7 @@ marry decryptMatrices(const marry mesg, const marry pass) {
 }
 
 // turn two matrices into a string representation
-string twoMatricesToString(const CMatrix m1, const CMatrix m2) {
+string twoMatricesToString(const CMatrix& m1, const CMatrix& m2) {
   // the conversion temporarily converts the numbers in the matrices into a base 2 representation
   // this will be the buffer and the result
   std::string bin_tmp, result;
@@ -102,3 +142,23 @@ string twoMatricesToString(const CMatrix m1, const CMatrix m2) {
 
   return(result);
 }
+
+// turn encrypted matrices into a string
+string cryptedMatrixToString(const marry& crypt) {
+  // place to store the result
+  string result;
+  // make space to store all the stuff
+  result.reserve(((crypt.size()+1)/2) * 17);
+  
+  for(int i = 0; (i+1) < crypt.size(); i+=2) {
+    result.push_back(twoMatricesToString(crypt[0], crypt[1]));
+  }
+
+  if((crypt.size()%2) == 1) {
+    CMatrix mat(2,2,0);
+    result += twoMatricesToString(crypt[crypt.size()-1], mat);
+  }
+
+  return(result);
+}
+
