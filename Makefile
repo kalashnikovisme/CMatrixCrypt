@@ -1,5 +1,6 @@
 CC=g++
 CFLAGS=-c -Wall
+LFLAGS=-lz -Wall
 
 # default
 all: cmatrix.o gzip.o util.o ascii86.o mops.o
@@ -26,6 +27,9 @@ ascii86.o: src/ascii86.cpp src/ascii86.hpp
 # matrix operations, has the matrix encryption functions
 mops.o: src/mops.cpp src/mops.hpp
 	$(CC) $(CFLAGS) src/mops.cpp -o src/mops.o
+
+test: all src/test.cpp
+	$(CC) $(LFLAGS) src/cmatrix.o src/gzip.o src/util.o src/ascii86.o src/mops.o src/test.cpp -o bin/test
 
 clean:
 	rm -f src/*.o
