@@ -1,35 +1,51 @@
 CC=g++
-CFLAGS=-c -Wall
-LFLAGS=-lz -Wall
+CFLAGS=-c -Wall -Wno-sign-compare
+LFLAGS=-lz -Wall -Wno-sign-compare
 
-# default
-all: cmatrix.o gzip.o util.o ascii86.o mops.o
+# all libraries used
+all: src/cmatrix.o src/gzip.o src/util.o src/ascii86.o src/mops.o
 
 # everything that is from other dirs and not coded here
-stuff: cmatrix.o gzip.o util.o ascii86.o
+stuff: src/cmatrix.o src/gzip.o src/util.o src/ascii86.o
 
 # matrix class
-cmatrix.o: src/cmatrix.cpp src/cmatrix.hpp
+src/cmatrix.o: src/cmatrix.cpp src/cmatrix.hpp
 	$(CC) $(CFLAGS) src/cmatrix.cpp -o src/cmatrix.o
 
 # gzip wrapper
-gzip.o: src/gzip.cpp src/gzip.hpp
+src/gzip.o: src/gzip.cpp src/gzip.hpp
 	$(CC) $(CFLAGS) src/gzip.cpp -o src/gzip.o
 
 # various useful functions
-util.o: src/util.cpp src/util.hpp
+src/util.o: src/util.cpp src/util.hpp
 	$(CC) $(CFLAGS) src/util.cpp -o src/util.o
 
 # ascii85 implementation
-ascii86.o: src/ascii86.cpp src/ascii86.hpp
+src/ascii86.o: src/ascii86.cpp src/ascii86.hpp
 	$(CC) $(CFLAGS) src/ascii86.cpp -o src/ascii86.o
 
 # matrix operations, has the matrix encryption functions
-mops.o: src/mops.cpp src/mops.hpp
+src/mops.o: src/mops.cpp src/mops.hpp
 	$(CC) $(CFLAGS) src/mops.cpp -o src/mops.o
 
-test: all src/test.cpp
-	$(CC) $(LFLAGS) src/cmatrix.o src/gzip.o src/util.o src/ascii86.o src/mops.o src/test.cpp -o bin/test
+# compile tests
+src/test.o: src/test.cpp
+	$(CC) $(CFLAGS) src/test.cpp -o src/test.o
+
+# compile the final product
+src/mcrypt.o: src/mcrypt.cpp src/mcrypt.hpp
+	$(CC) $(CFLAGS) src/mcrypt.cpp -o src/mcrypt.o
+
+# make a binary for mcrypt
+bin/mcrypt: all src/mcrypt.o
+	$(CC) $(LFLAGS) src/cmatrix.o src/gzip.o src/util.o src/ascii86.o src/mops.o src/mcrypt.o -o bin/mcrypt
+
+# make a binary for test
+bin/test: all src/test.o
+	$(CC) $(LFLAGS) src/cmatrix.o src/gzip.o src/util.o src/ascii86.o src/mops.o src/test.o -o bin/test 
+
+estimate:
+	wc Makefile src/*.cpp src/*.hpp
 
 clean:
 	rm -f src/*.o
