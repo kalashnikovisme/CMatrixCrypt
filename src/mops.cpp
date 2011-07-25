@@ -1,145 +1,88 @@
 #include "mops.hpp"
 using namespace std;
 
+// turn a password into a matrices array usable for encryption
 marry makePassMatrix(const string& pass) {
   // matrices array
-  marry mats;
-  mats.reserve((pass.size()/4)+1); // tell mats an estimate of how much space we're going to need
-  // temp matrix
-  CMatrix mat;
-  // iterate thru chars of string
-  for(int i = 0; i < pass.size(); i+=4) {
-    mat(0,0) = pass[i+0];  // fill up matrix
-    mat(0,1) = pass[i+1];  // these chars may or may not exist!!!
-    mat(1,0) = pass[i+2];  // we are relying on the standard behavior of std::string to return 0 for an inexisting element. 
-    mat(1,1) = pass[i+3];
-    mat.escape();         // escape matrix
-    mats.push_back(mat);  // append matrix to array
+  marry mats((pass.size()+3)/4);
+
+  // copy the pass string over into marry
+  for(int i = 0; i < pass.size(); ++i) {
+    mats[i/4][i%4] = pass[i];
+  }
+
+  // escape every matrix
+  for(int i = 0; i < marry.size(); ++i) {
+    mats[i].escape();
   }
 
   // return matrices
   return(mats);
 }
 
-
-marry makeMesgMatrix(const string& msg) {
-  // append to the mesg to denote end
-  string mesg = msg + ";";
+// turn any message into an array of matrices suitable for encryption
+marry makeMesgMatrix(const string& mesg) {
   // matrices array
-  marry mats;
-  mats.reserve((mesg.size()/4)+1); // tell mats about how much space we'll need
+  marry mats((mesg.size()+4)/4);
 
-  {
-    CMatrix mat;
-    // iterate thru chars of string
-    for(int i = 0; (i+4) < mesg.size(); i+=4) {
-      mat(0,0) = mesg[i+0];  // fill up matrix
-      mat(0,1) = mesg[i+1];  // these chars of mesg may or may not exist!!!
-      mat(1,0) = mesg[i+2];
-      mat(1,1) = mesg[i+3];
-      mats.push_back(mat);   // append matrix to array
-    }
+  // copy the mesg over into the matrices
+  for(int i = 0; i < mesg.size(); ++i) {
+    mats[i/4][i%4] = mesg[i];
   }
 
-  // little rant: these next couple of lines are thanks to my supidity with accessors to CMatrix
-  // i am considering writing an operator[] for CMatrix in case it's important enuff....
-  {
-    CMatrix mat;
-    switch(mesg.size()%4) {
-      case(3):
-        mat(1,0) = mesg[mesg.size()-1];
-      case(2):
-        mat(0,1) = mesg[mesg.size()-2];
-      case(1):
-        mat(0,0) = mesg[mesg.size()-3];
-        break;
-      default:
-        break;
-    }
-
-    switch(mesg.size()%4) {
-      case(3):
-        mat(1,1) = ';';
-        break;
-      case(2):
-        mat(1,0) = ';';
-        break;
-      case(1):
-        mat(0,1) = ';';
-        break;
-      default:
-        break;
-    }
-  }
-
-
-  // make sure the amount of matrices is even
-  if((mats.size()%1) == 1) {
-    CMatrix mat(0,0,0.0);
-    mats.push_back(mat);
-  }
+  // make the last character be a semicolon
+  mats[mesg.size()/4][mesg.size()%4] = ';';
 
   // return matrices
   return(mats);
 }
 
 // encrypt marry mesg with marry pass
-marry encryptMatrices(const marry mesg, const marry pass) {
-  // marry to hold the result
-  marry result;
-  // make space to hold all the stuff we need to
-  result.reserve(mesg.size());
-
+marry encryptMatrices(const marry mesg, const marry& pass) {
   // now the fun part: let's crypt :D
-  for(int i = 0; i < mesg.size(); ++i) {                // loop thru mesg
-    result.push_back(mesg[i] * pass[i % pass.size()]);  // multiply mesg with a pass matrix
+  for(int i = 0; i < mesg.size(); ++i) {  // loop thru mesg
+    mesg[i] *= pass[i%pass.size()];       // multiply and store result in the mesg matrix array
   }
 
   // whoa, we're done!
-  return(result);
+  return(mesg);
 }
 
 // decrypt marry mesg with marry pass
-marry decryptMatrices(const marry mesg, const marry pass) {
-  // marry to hold the result
-  marry result;
-  // make space to hold all the stuff we need to
-  result.reserve(mesg.size());
-
+marry decryptMatrices(const marry mesg, const marry& pass) {
   // now the fun part: let's decrypt :D
-  for(int i = 0; i < mesg.size(); ++i) {                          // loop thru mesg
-    result.push_back(mesg[i] * pass[i % pass.size()].inverse());  // multiply mesg with a pass matrix's inverse
+  for(int i = 0; i < mesg.size(); ++i) {  // loop thru mesg
+    mesg *= pass[i%pass.size()].inverse();// multiply with inverse
   }
 
   // whoa, we're done!
-  return(result);
+  return(mesg);
 }
 
 // turn two matrices into a string representation
 string twoMatricesToString(const CMatrix& m1, const CMatrix& m2) {
   // the conversion temporarily converts the numbers in the matrices into a base 2 representation
   // this will be the buffer and the result
-  std::string bin_tmp, result;
+  string binpool, result;
 
   // tell both strings how much space to allocate
-  bin_tmp.reserve(136);
+  binpool.reserve(136);
   result.reserve(17);
 
-  // fill up the temp string
-  bin_tmp += intToBinString(m1.get(0,0), 17);
-  bin_tmp += intToBinString(m1.get(0,1), 17);
-  bin_tmp += intToBinString(m1.get(1,0), 17);
-  bin_tmp += intToBinString(m1.get(1,1), 17);
-  bin_tmp += intToBinString(m2.get(0,0), 17);
-  bin_tmp += intToBinString(m2.get(0,1), 17);
-  bin_tmp += intToBinString(m2.get(1,0), 17);
-  bin_tmp += intToBinString(m2.get(1,1), 17);
-  cout << bin_tmp << endl;
+  // copy the first matrix into the binary pool
+  for(int i = 0; i < 4; ++i) {
+    binpool += intToBinString(m1[i], 17);
+  }
+  // same with the second matrix
+  for(int i = 0; i < 4; ++i) {
+    binpool += intToBinString(m2[i], 17);
+  }
   // convert it into a string
-  for(int i = 0; (i+8) <= 136; i+=8) {
-    result.push_back((char)binStringToInt(bin_tmp.substr(i, 8)));
+  for(int i = 0; i < 17; ++i) {
+    result.push_back((char)binStringToInt(bin_tmp.substr(i*8, 8))); // extract 8 chars and convert
   }
 
+  // done :D
   return(result);
 }
 
