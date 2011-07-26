@@ -29,6 +29,7 @@ public:
 
   // public accessors
   float get(int x, int y) const;   // get a copy of X,Y
+  float get(int pos     ) const;   // get a copy of pos (like operator[])
   void  set(int x, int y, float v);// set X,Y to V
   int height() const;              // get the height of the matrix (
   int width() const;               // get the matrix's length

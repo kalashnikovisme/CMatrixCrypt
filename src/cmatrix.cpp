@@ -144,6 +144,10 @@ float CMatrix::get(int x, int y) const {
   return(getElemCon(x, y));
 }
 
+float CMatrix::get(int pos) const {
+  return(getElemCon(pos/sizeY, pos%sizeY));
+}
+
 // set X,Y to V
 void CMatrix::set(int x, int y, float v) {
   setElem(x, y, v);
