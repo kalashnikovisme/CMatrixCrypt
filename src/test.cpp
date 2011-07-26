@@ -9,4 +9,5 @@
 using namespace std;
 
 int main(int argc, char *argv[]) {
+  cout << matrixEncrypt("hello world", "pass") << endl;
 }
