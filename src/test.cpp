@@ -9,5 +9,12 @@
 using namespace std;
 
 int main(int argc, char *argv[]) {
-  cout << matrixEncrypt("hello world", "pass") << endl;
+  if(argc < 3) {
+    cout << "Need 2 arguments" << endl;
+    return(-1);
+  }
+  string mesg, pass;
+  mesg = argv[1];
+  pass = argv[2];
+  cout << matrixEncrypt(mesg, pass) << endl;
 }
