@@ -15,12 +15,17 @@ marry makePassMatrix(const std::string&);
 marry makeMesgMatrix(const std::string&);
 
 // encrypt the mesg and pass matrices
-marry encryptMatrices(const marry& mesg, const marry& pass);
+marry encryptMatrices(marry mesg, const marry& pass);
 // decrypt the mesg and pass matrices
-marry decryptMatrices(const marry& mesg, const marry& pass);
+marry decryptMatrices(marry mesg, const marry& pass);
 
 // turn two encrpyted matrices into a string with 17 chars
 std::string twoMatricesToString(const CMatrix& m1, const CMatrix& m2);
 
+// turn one encrypted matrix into a string
+std::string oneMatrixToString(const CMatrix& mat);
+
 // turn that encrypted shiba into a string
 std::string crypedMatrixToString(const marry& crypt);
+
+std::string matrixEncrypt(const std::string& mesg, const std::string& pass);

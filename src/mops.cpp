@@ -12,7 +12,7 @@ marry makePassMatrix(const string& pass) {
   }
 
   // escape every matrix
-  for(int i = 0; i < marry.size(); ++i) {
+  for(int i = 0; i < mats.size(); ++i) {
     mats[i].escape();
   }
 
@@ -38,7 +38,7 @@ marry makeMesgMatrix(const string& mesg) {
 }
 
 // encrypt marry mesg with marry pass
-marry encryptMatrices(const marry mesg, const marry& pass) {
+marry encryptMatrices(marry mesg, const marry& pass) {
   // now the fun part: let's crypt :D
   for(int i = 0; i < mesg.size(); ++i) {  // loop thru mesg
     mesg[i] *= pass[i%pass.size()];       // multiply and store result in the mesg matrix array
@@ -49,10 +49,10 @@ marry encryptMatrices(const marry mesg, const marry& pass) {
 }
 
 // decrypt marry mesg with marry pass
-marry decryptMatrices(const marry mesg, const marry& pass) {
+marry decryptMatrices(marry mesg, const marry& pass) {
   // now the fun part: let's decrypt :D
   for(int i = 0; i < mesg.size(); ++i) {  // loop thru mesg
-    mesg *= pass[i%pass.size()].inverse();// multiply with inverse
+    mesg[i] *= pass[i%pass.size()].inverse();// multiply with inverse
   }
 
   // whoa, we're done!
@@ -71,19 +71,25 @@ string twoMatricesToString(const CMatrix& m1, const CMatrix& m2) {
 
   // copy the first matrix into the binary pool
   for(int i = 0; i < 4; ++i) {
-    binpool += intToBinString(m1[i], 17);
+    binpool += intToBinString(m1.get(i), 17);
   }
   // same with the second matrix
   for(int i = 0; i < 4; ++i) {
-    binpool += intToBinString(m2[i], 17);
+    binpool += intToBinString(m2.get(i), 17);
   }
   // convert it into a string
   for(int i = 0; i < 17; ++i) {
-    result.push_back((char)binStringToInt(bin_tmp.substr(i*8, 8))); // extract 8 chars and convert
+    result.push_back((char)binStringToInt(binpool.substr(i*8, 8))); // extract 8 chars and convert
   }
 
   // done :D
   return(result);
+}
+
+// turn only one matrix into a string
+string oneMatrixToString(const CMatrix& mat) {
+  CMatrix m2;
+  return(twoMatricesToString(mat, m2));
 }
 
 // turn encrypted matrices into a string
@@ -93,15 +99,28 @@ string cryptedMatrixToString(const marry& crypt) {
   // make space to store all the stuff
   result.reserve(((crypt.size()+1)/2) * 17);
   
+  // convert all matrices to strings
   for(int i = 0; (i+1) < crypt.size(); i+=2) {
-    result.push_back(twoMatricesToString(crypt[0], crypt[1]));
+    result.append(twoMatricesToString(crypt[i], crypt[i+1]));
   }
 
-  if((crypt.size()%2) == 1) {
-    CMatrix mat(2,2,0);
-    result += twoMatricesToString(crypt[crypt.size()-1], mat);
+  if((crypt.size()%2) == 1) { // if there is an uneven number of matrices
+    result += oneMatrixToString(crypt[crypt.size()-1]); // add the last one
   }
 
+  // return the beautiful result
   return(result);
+}
+
+// matrix encrypt
+string matrixEncrypt(const std::string& mesg, const std::string& pass) {
+  marry msg, pw, crypt; // matrix representation of the mesg and the password
+  msg = makeMesgMatrix(mesg); // prepare mesg
+  pw  = makePassMatrix(pass); // and pass
+  crypt = encryptMatrices(msg, pw); // encrypt
+
+  string enc = cryptedMatrixToString(crypt); // turn into string representation
+  enc = compress_string(enc, Z_BEST_COMPRESSION);               // compress with gzip
+  return encode86(enc);                     // encode86
 }
 
