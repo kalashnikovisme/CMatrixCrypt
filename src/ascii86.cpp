@@ -85,6 +85,7 @@ string decode86(string data) {
 */
 
 namespace cme {
+  /* ENCODE86 CODE */
   /* CONSTRUCTORS */
   Encode86::Encode86() {
     reset();
@@ -96,7 +97,7 @@ namespace cme {
   }
 
   /* ENCODING FACILITIES */
-  void Encode86::encode_tuple(std::string tuple) {
+  void Encode86::encode_tuple(const std::string& tuple) {
     std::string enc = "";      // encoded string
     long int int_rep = 0; // integer representation of the string, this is a LONG int so that it's min. 32bit
 
@@ -230,4 +231,124 @@ namespace cme {
     std::cout << "outpos: " << outpos << std::endl;
     std::cout << "closed: " << closed_input << std::endl;
   }
+
+  /* DECODE86 CODE */
+  /* CONSTRUCTORS */
+  Decode86::Decode86() {
+    reset();
+  }
+
+  Decode86::Decode86(std::string data) {
+    reset();
+    write(data);
+  }
+
+  /* DECODING FACILITIES */
+  void Decode86::decode_tuple(const std::string& tuple) {
+  }
+
+  void Decode86::decode() {
+    if(!start_decoding) {
+      int pos = inbuf.find("<~", 0);
+      if(pos != std::string::npos) {
+        inbuf.erase(0, pos+2);
+        start_decoding = true;
+      } else {
+        inbuf = "";
+      }
+    }
+
+    if(!closed_input) {
+      int amount = inbuf.size()/4;
+      int pos;
+      for(pos = 0; pos < amount; ++pos) {
+        decode_tuple(inbuf.substr(pos*4, 4));
+      }
+      inbuf.erase(0, amount*4);
+    }
+  }
+
+  /* OUTPUT FACILITIES */
+  // get a single character
+  char Decode86::get() const {
+    if(outpos < outbuf.size()) {
+      ++outpos;
+      return(outbuf[outpos]);
+    } else {
+      return(0);
+    }
+  }
+
+  // read as much data as there is
+  std::string Decode86::read() const {
+    if((outbuf.size() - outpos) > 0) {
+      return(outbuf.substr(outpos, (outbuf.size() - outpos)));
+    } else {
+      return("");
+    }
+  }
+
+  std::string Decode86::data() const {
+    return(outbuf);
+  }
+
+  /* INPUT FACILITIES */
+  // push a single character
+  void Decode86::put(char chr) {
+    if(!closed_input) {
+      inbuf.push_back(chr);
+      decode(); // tell the class to try to encode the data we got
+    }
+  }
+
+  void Decode86::write(std::string data) {
+    if(!closed_input) {
+      inbuf += data;
+      decode();
+    }
+  }
+
+  /* OPERATOR OVERLOADS */
+  // write to a string
+  Decode86& Decode86::operator>>(std::string& out) {
+    close();
+    out += read();
+    return(*this);
+  }
+
+  Decode86& Decode86::operator<<(const std::string& in) {
+    if(!closed_input) {
+      write(in);
+      decode();
+    }
+    return(*this);
+  }
+
+  /* OTHER STUFF */
+  // check if the input is closed
+  bool Decode86::closed() const {
+    return(closed_input);
+  }
+
+  // close the input
+  void Decode86::close() {
+  }
+
+  void Decode86::reset() {
+    closed_input = false;
+    start_decoding = false;
+    inbuf = "";
+    outbuf = "<~";
+    outpos = 0;
+  }
+
+  void Decode86::debug() {
+    std::cout << "inbuf: " << inbuf << std::endl;
+    std::cout << "outbuf: " << outbuf << std::endl;
+    std::cout << "outpos: " << outpos << std::endl;
+    std::cout << "closed: " << closed_input << std::endl;
+  }
+
 }
+
+

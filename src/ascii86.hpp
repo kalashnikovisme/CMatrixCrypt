@@ -21,7 +21,7 @@ namespace cme {
       // whether the input is closed
       bool closed_input;
 
-      void encode_tuple(std::string);
+      void encode_tuple(const std::string&);
       void encode();
     public:
       // constructors
@@ -45,6 +45,44 @@ namespace cme {
       bool closed() const;// check if the input is closed (this needs to be done explicitly)
       void close();       // close the input
       void reset();       // reset everything
+      void debug();
+  };
+
+  class Decode86 {
+    private:
+      // buffers for i/o
+      std::string inbuf, outbuf;
+      // position in the outbuf
+      mutable int outpos;
+      // closed input
+      bool closed_input;
+      bool start_decoding;
+
+      // decoding functions
+      void decode_tuple(const std::string&);
+      void decode();
+      void close();
+    public:
+      // constructors
+      Decode86();
+      Decode86(std::string);
+
+      // reading facilities
+      char get() const;
+      std::string read() const;
+      std::string data() const;
+
+      // input facilities
+      void put(char);
+      void write(std::string);
+
+      // operators
+      Decode86& operator>>(std::string&);
+      Decode86& operator<<(const std::string&);
+
+      // others
+      bool closed() const;
+      void reset();
       void debug();
   };
 }
