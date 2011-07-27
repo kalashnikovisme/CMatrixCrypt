@@ -2,7 +2,9 @@ CC=g++
 CFLAGS=-c -Wall -Wno-sign-compare
 LFLAGS=-lz -Wall -Wno-sign-compare
 
-# all libraries used
+
+# LIBRARIES
+# all the libraries used
 all: src/cmatrix.o src/gzip.o src/util.o src/ascii86.o src/mops.o
 
 # everything that is from other dirs and not coded here
@@ -28,10 +30,26 @@ src/ascii86.o: src/ascii86.cpp src/ascii86.hpp
 src/mops.o: src/mops.cpp src/mops.hpp
 	$(CC) $(CFLAGS) src/mops.cpp -o src/mops.o
 
+
+# TESTS
 # compile tests
 src/test.o: src/test.cpp
 	$(CC) $(CFLAGS) src/test.cpp -o src/test.o
 
+# make a binary for test
+bin/test: all src/test.o
+	$(CC) $(LFLAGS) src/cmatrix.o src/gzip.o src/util.o src/ascii86.o src/mops.o src/test.o -o bin/test 
+
+# ascii86 tests
+src/ascii86_tests: src/ascii86_tests.cpp
+	$(CC) $(CFLAGS) src/ascii86_tests.cpp -o src/ascii86_tests.o
+
+# make tests for ascii86
+bin/ascii86_tests: all src/ascii86_tests.o
+	$(CC) $(LFLAGS) src/ascii86.o src/ascii86_tests.o -o bin/ascii86_tests 
+
+
+# BINARIES
 # compile the final product
 src/mcrypt.o: src/mcrypt.cpp src/mcrypt.hpp
 	$(CC) $(CFLAGS) src/mcrypt.cpp -o src/mcrypt.o
@@ -40,9 +58,6 @@ src/mcrypt.o: src/mcrypt.cpp src/mcrypt.hpp
 bin/mcrypt: all src/mcrypt.o
 	$(CC) $(LFLAGS) src/cmatrix.o src/gzip.o src/util.o src/ascii86.o src/mops.o src/mcrypt.o -o bin/mcrypt
 
-# make a binary for test
-bin/test: all src/test.o
-	$(CC) $(LFLAGS) src/cmatrix.o src/gzip.o src/util.o src/ascii86.o src/mops.o src/test.o -o bin/test 
 
 estimate:
 	wc Makefile src/*.cpp src/*.hpp
