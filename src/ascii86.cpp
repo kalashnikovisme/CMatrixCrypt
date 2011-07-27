@@ -155,32 +155,34 @@ namespace cme {
   /* INPUT FACILITIES */
   // push a single character
   void Encode86::put(char chr) {
-    if(!closed_input) {
-      inbuf.push_back(chr);
-      encode(); // tell the class to try to encode the data we got
+    if(closed_input) {
+      throw std::runtime_error("already closed input");
     }
+    inbuf.push_back(chr);
+    encode(); // tell the class to try to encode the data we got
   }
 
   void Encode86::write(std::string data) {
-    if(!closed_input) {
-      inbuf += data;
-      encode();
+    if(closed_input) {
+      throw std::runtime_error("already closed input");
     }
+    inbuf += data;
+    encode();
   }
 
   /* OPERATOR OVERLOADS */
   // write to a string
   Encode86& Encode86::operator>>(std::string& out) {
-    close();
     out += read();
     return(*this);
   }
 
   Encode86& Encode86::operator<<(const std::string& in) {
-    if(!closed_input) {
-      write(in);
-      encode();
+    if(closed_input) {
+      throw std::runtime_error("already closed input");
     }
+    write(in);
+    encode();
     return(*this);
   }
 
@@ -192,30 +194,32 @@ namespace cme {
 
   // close the input
   void Encode86::close() {
-    if(!closed_input) {
-      encode();             // encode the rest of the stuff in the input buffer
-      closed_input = true;  // prevent new input from coming in
-      
-      int appendixes = (inbuf.size() % 4);  // find out how many characters are missing
-      if(appendixes != 0) {
-        for(int i = 0; i < (4-appendixes); ++i) { 
-          inbuf.push_back('\0');              // add the null characters
-        }
+    if(closed_input) {
+      throw std::runtime_error("already closed input");
+    }
 
-        // encode the last four characters
-        encode_tuple(inbuf.substr(inbuf.size()-4, 4));
-
-        for(int i = 0; i < (4-appendixes); ++i) { // remove the unneeded characters
-          outbuf.erase(outbuf.size()-1, 1);
-        }
+    encode();             // encode the rest of the stuff in the input buffer
+    closed_input = true;  // prevent new input from coming in
+    
+    int appendixes = (inbuf.size() % 4);  // find out how many characters are missing
+    if(appendixes != 0) {
+      for(int i = 0; i < (4-appendixes); ++i) { 
+        inbuf.push_back('\0');              // add the null characters
       }
 
-      // reset inbuf
-      inbuf = "";
+      // encode the last four characters
+      encode_tuple(inbuf.substr(inbuf.size()-4, 4));
 
-      // finish outbuf
-      outbuf += "~>";
+      for(int i = 0; i < (4-appendixes); ++i) { // remove the unneeded characters
+        outbuf.erase(outbuf.size()-1, 1);
+      }
     }
+
+    // reset inbuf
+    inbuf = "";
+
+    // finish outbuf
+    outbuf += "~>";
   }
 
   void Encode86::reset() {
@@ -245,26 +249,53 @@ namespace cme {
 
   /* DECODING FACILITIES */
   void Decode86::decode_tuple(const std::string& tuple) {
+    std::string dec = "";      // decoded string
+    long int int_rep = 0; // integer representation of the tuple, long int so that it's at least 32bit
+
+    long int multiplier = 85*85*85*85;        // turn the tuple into an int, long so that it's at least 32bit
+    for(int i = 0; i < tuple.length(); i++) { // loop thru the characters
+      int_rep += (((unsigned char)tuple[i])-33) * multiplier; // add the byte to the int_representation, subtracting 33
+                                                              // coerced to unsigned char to correctly multiply chars >128
+      multiplier /= 85;                       // increase the multiplier
+    }
+
+    unsigned char chr;           // store current unsigned character
+    for(int i = 0; i < 4; i++) { // loop 4 times
+      chr = (int_rep%256);       // extract a character
+      dec.insert(0, 1, chr);     // insert the character at the beginning (the extraction process is in reverse)
+      int_rep /= 256;            // prime the int for the next extraction
+    }
+
+    outbuf += dec;
   }
 
   void Decode86::decode() {
+    // start_decoding indicates wheather <~ has been met yet (start of encoded stream)
     if(!start_decoding) {
-      int pos = inbuf.find("<~", 0);
-      if(pos != std::string::npos) {
-        inbuf.erase(0, pos+2);
-        start_decoding = true;
+      int pos = inbuf.find("<~", 0);  // try to find <~
+      if(pos != std::string::npos) {  // if it's found
+        inbuf.erase(0, pos+2);        // erase everything before it and itself
+        start_decoding = true;        // and start decoding
       } else {
-        inbuf = "";
+        inbuf = "";                   // else, ignore the stuff and move on
       }
     }
 
-    if(!closed_input) {
-      int amount = inbuf.size()/4;
-      int pos;
-      for(pos = 0; pos < amount; ++pos) {
-        decode_tuple(inbuf.substr(pos*4, 4));
-      }
-      inbuf.erase(0, amount*4);
+    // let's try to find the end of the input
+    int end = inbuf.find("~>", 0);
+    if(end != std::string::npos) {        // in case we do find it,
+      inbuf.erase(end, inbuf.size()-end); // erase it and all the crap after it
+    }
+
+    int amount = inbuf.size()/5;            // how many tupled need to be decoded?
+    int pos;
+    for(pos = 0; pos < amount; ++pos) {
+      decode_tuple(inbuf.substr(pos*5, 5));
+    }
+    inbuf.erase(0, amount*5);
+
+    if(end != std::string::npos) {  // if we found the end, 
+      close();                      // close the input
     }
   }
 
@@ -295,32 +326,34 @@ namespace cme {
   /* INPUT FACILITIES */
   // push a single character
   void Decode86::put(char chr) {
-    if(!closed_input) {
-      inbuf.push_back(chr);
-      decode(); // tell the class to try to encode the data we got
+    if(closed_input) {
+      throw std::runtime_error("input already closed");
     }
+    inbuf.push_back(chr);
+    decode(); // tell the class to try to encode the data we got
   }
 
   void Decode86::write(std::string data) {
-    if(!closed_input) {
-      inbuf += data;
-      decode();
+    if(closed_input) {
+      throw std::runtime_error("input already closed");
     }
+    inbuf += data;
+    decode();
   }
 
   /* OPERATOR OVERLOADS */
   // write to a string
   Decode86& Decode86::operator>>(std::string& out) {
-    close();
     out += read();
     return(*this);
   }
 
   Decode86& Decode86::operator<<(const std::string& in) {
-    if(!closed_input) {
-      write(in);
-      decode();
+    if(closed_input) {
+      throw std::runtime_error("input already closed");
     }
+    write(in);
+    decode();
     return(*this);
   }
 
@@ -332,13 +365,35 @@ namespace cme {
 
   // close the input
   void Decode86::close() {
+    if(closed_input) {
+      throw std::runtime_error("already closed input");
+    }
+
+    decode();             // encode the rest of the stuff in the input buffer
+    closed_input = true;  // prevent new input from coming in
+    
+    int appendixes = (inbuf.size() % 5);  // find out how many characters are missing
+    if(appendixes != 0) {
+      for(int i = 0; i < (5-appendixes); ++i) { 
+        inbuf.push_back('u');              // add the characters
+      }
+
+      // encode the last four characters
+      decode_tuple(inbuf.substr(inbuf.size()-5, 5));
+
+      for(int i = 0; i < (5-appendixes); ++i) { // remove the unneeded characters
+        outbuf.erase(outbuf.size()-1, 1);
+      }
+    }
+
+    // reset inbuf
+    inbuf = "";
   }
 
   void Decode86::reset() {
     closed_input = false;
-    start_decoding = false;
     inbuf = "";
-    outbuf = "<~";
+    outbuf = "";
     outpos = 0;
   }
 
@@ -348,7 +403,4 @@ namespace cme {
     std::cout << "outpos: " << outpos << std::endl;
     std::cout << "closed: " << closed_input << std::endl;
   }
-
 }
-
-

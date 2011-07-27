@@ -4,6 +4,7 @@
 #include <cstdlib>
 #include <string>
 #include <sstream>
+#include <stdexcept>
 
 // PROTOTYPES
 //std::string encode86(std::string data); //encodes a string of any length
