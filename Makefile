@@ -41,11 +41,11 @@ bin/test: all src/test.o
 	$(CC) $(LFLAGS) src/cmatrix.o src/gzip.o src/util.o src/ascii86.o src/mops.o src/test.o -o bin/test 
 
 # ascii86 tests
-src/ascii86_tests: src/ascii86_tests.cpp
+src/ascii86_tests.o: src/ascii86_tests.cpp
 	$(CC) $(CFLAGS) src/ascii86_tests.cpp -o src/ascii86_tests.o
 
 # make tests for ascii86
-bin/ascii86_tests: all src/ascii86_tests.o
+bin/ascii86_tests: src/ascii86.o src/ascii86_tests.o
 	$(CC) $(LFLAGS) src/ascii86.o src/ascii86_tests.o -o bin/ascii86_tests 
 
 
