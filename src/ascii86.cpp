@@ -133,7 +133,7 @@ namespace cme {
   char Encode86::get() const {
     if(outpos < outbuf.size()) {
       ++outpos;
-      return(outbuf[outpos]);
+      return(outbuf[outpos-1]);
     } else {
       return(0);
     }
@@ -142,7 +142,9 @@ namespace cme {
   // read as much data as there is
   std::string Encode86::read() const {
     if((outbuf.size() - outpos) > 0) {
-      return(outbuf.substr(outpos, (outbuf.size() - outpos)));
+      std::string ret = outbuf.substr(outpos, (outbuf.size() - outpos));
+      outpos = outbuf.size();
+      return(ret);
     } else {
       return("");
     }
@@ -249,6 +251,7 @@ namespace cme {
 
   /* DECODING FACILITIES */
   void Decode86::decode_tuple(const std::string& tuple) {
+    std::cout << tuple << std::endl;
     std::string dec = "";      // decoded string
     long int int_rep = 0; // integer representation of the tuple, long int so that it's at least 32bit
 
@@ -272,12 +275,12 @@ namespace cme {
   void Decode86::decode() {
     // start_decoding indicates wheather <~ has been met yet (start of encoded stream)
     if(!start_decoding) {
-      int pos = inbuf.find("<~", 0);  // try to find <~
-      if(pos != std::string::npos) {  // if it's found
-        inbuf.erase(0, pos+2);        // erase everything before it and itself
-        start_decoding = true;        // and start decoding
+      int pos = inbuf.find("<~", 0);    // try to find <~
+      if(pos != std::string::npos) {    // if it's found
+        inbuf.erase(0, pos+2);          // erase everything before it and itself
+        start_decoding = true;          // and start decoding
       } else {
-        inbuf = "";                   // else, ignore the stuff and move on
+        inbuf.erase(0, inbuf.size()-1); // else, ignore the stuff and move on
       }
     }
 
@@ -287,12 +290,14 @@ namespace cme {
       inbuf.erase(end, inbuf.size()-end); // erase it and all the crap after it
     }
 
-    int amount = inbuf.size()/5;            // how many tupled need to be decoded?
-    int pos;
-    for(pos = 0; pos < amount; ++pos) {
-      decode_tuple(inbuf.substr(pos*5, 5));
+    if(inbuf.size() > 5 or end!=std::string::npos) {
+      int amount = inbuf.size()/5;            // how many tupled need to be decoded?
+      int pos;
+      for(pos = 0; pos < amount; ++pos) {
+        decode_tuple(inbuf.substr(pos*5, 5));
+      }
+      inbuf.erase(0, amount*5);
     }
-    inbuf.erase(0, amount*5);
 
     if(end != std::string::npos) {  // if we found the end, 
       close();                      // close the input
@@ -304,7 +309,7 @@ namespace cme {
   char Decode86::get() const {
     if(outpos < outbuf.size()) {
       ++outpos;
-      return(outbuf[outpos]);
+      return(outbuf[outpos-1]);
     } else {
       return(0);
     }
@@ -392,6 +397,7 @@ namespace cme {
 
   void Decode86::reset() {
     closed_input = false;
+    start_decoding = false;
     inbuf = "";
     outbuf = "";
     outpos = 0;
