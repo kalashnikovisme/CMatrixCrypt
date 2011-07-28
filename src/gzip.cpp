@@ -1,7 +1,6 @@
 #include "gzip.hpp"
 
-/** Compress a STL string using zlib with given compression level and return
-  * the binary data. */
+/* OLD CODE, TO BE REMOVED:
 std::string compress_string(const std::string& str,
                             int compressionlevel = Z_BEST_COMPRESSION)
 {
@@ -43,7 +42,6 @@ std::string compress_string(const std::string& str,
     return outstring;
 }
 
-/** Decompress an STL string using zlib and return the original data. */
 std::string decompress_string(const std::string& str)
 {
     z_stream zs;                        // z_stream is zlib's control structure
@@ -84,8 +82,10 @@ std::string decompress_string(const std::string& str)
 
     return outstring;
 }
+*/
 
 namespace cme {
+  /* DEFLATE */
   // standard constructor
   Deflate::Deflate() {
     setup();
@@ -236,5 +236,151 @@ namespace cme {
   bool Deflate::eol() {
     return(outpos >= output.size());
   }
+
+  /* INFLATE */
+  // standard constructor
+  Inflate::Inflate() {
+    setup();
+  }
+
+  // destructor
+  Inflate::~Inflate() {
+    if(!closed_input) {
+      close();  // if not closed already, do so (to deallocate some stuff)
+    }
+  }
+
+  // get a single character
+  char Inflate::get() const {
+    if(outpos < output.size()) {
+      ++outpos; // increase the position in the output stream
+      return(output[outpos-1]); // return a character
+    } else {
+      return(0);  // if at end of stream, return NULL (this is why you should check for eol() before getting a character)
+    }
+  }
+
+  // read as much data as there is in the output buffer
+  std::string Inflate::read() const {
+    // check if there's new data in the output buffer
+    if((output.size() - outpos) > 0) {
+      // if so, construct a string containing the new data
+      std::string ret = output.substr(outpos, (output.size() - outpos));
+      outpos = output.size(); // move the output pointer
+      return(ret);            // and return the contructed string
+    } else {
+      return("");             // else, simply return an empty string
+    }
+  }
+
+  // return any and all data in the output buffer
+  std::string Inflate::data() const {
+    return(output);
+  }
+
+  // decompress a string
+  void Inflate::write(const std::string& str) {
+    // make sure that the input isn't closed
+    if(closed_input) {
+      throw std::runtime_error("already closed input");
+    }
+
+    // to capture the return value
+    int ret;
+
+    // prepare the stream's input
+    decompress_stream.next_in = (Bytef*)str.data();
+    // tell zlib how much data to expect
+    decompress_stream.avail_in = str.size();
+
+    // compress
+    do {
+      // tell it the address of the output buffer
+      decompress_stream.next_out = reinterpret_cast<Bytef*>(output_buffer);
+      // as well as it's size
+      decompress_stream.avail_out = output_buffer_size;
+
+      // inflate some data
+      ret = inflate(&decompress_stream, Z_NO_FLUSH);
+
+      // if there is new, inflated data in the output buffer,
+      if(output.size() < decompress_stream.total_out) {
+        // add it to the output string
+        output.append(output_buffer, decompress_stream.total_out - output.size());
+      }
+    } while(ret == Z_OK); // repeat while the return value indicates that this should be done
+  }
+
+  // add data (basically the same as write())
+  Inflate& Inflate::operator<<(const std::string& str) {
+    write(str);
+    return(*this);
+  }
+
+  // fetch data
+  Inflate& Inflate::operator>>(std::string& str) {
+    str += read();
+    return(*this);
+  }
+
+  // check if the input is closed
+  bool Inflate::closed() {
+    return(closed_input);
+  }
+
+  // close the input
+  void Inflate::close() {
+    if(closed_input) {
+      throw std::runtime_error("already closed input");
+    }
+    closed_input = true;  // indicate this via a variable
+    // to store the return value
+    int ret;
+
+    // finish up the decompression
+    decompress_stream.next_in = NULL; // no more stuff to compress
+    decompress_stream.avail_in = 0;
+
+    do {
+      decompress_stream.next_out = reinterpret_cast<Bytef*>(output_buffer);
+      decompress_stream.avail_out = output_buffer_size;
+
+      ret = inflate(&decompress_stream, Z_FINISH);  // Z_FINISH indicates that this is the last data to be compressed
+
+      // add any remaining stuff from the flush to the output string
+      if(output.size() < decompress_stream.total_out) {
+        output.append(output_buffer, decompress_stream.total_out - output.size());
+      }
+    } while(ret == Z_OK);
+
+    // this deallocates some stuff
+    inflateEnd(&decompress_stream);
+  }
+
+  // setup the decompression
+  void Inflate::setup() {
+    closed_input = false;
+    output.clear();
+
+    // set all to zero
+    memset(&decompress_stream, 0, sizeof(decompress_stream));
+    // initialize data
+    inflateInit(&decompress_stream);
+
+    outpos = 0;
+  }
+
+  void Inflate::reset() {
+    if(!closed_input) {
+      close();
+    }
+    setup();
+  }
+
+  // check for end of output (useful for use with get())
+  bool Inflate::eol() {
+    return(outpos >= output.size());
+  }
+
 }
 
