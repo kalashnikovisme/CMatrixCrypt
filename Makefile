@@ -48,6 +48,14 @@ src/ascii86_tests.o: src/ascii86_tests.cpp
 bin/ascii86_tests: src/ascii86.o src/ascii86_tests.o
 	$(CC) $(LFLAGS) src/ascii86.o src/ascii86_tests.o -o bin/ascii86_tests 
 
+# ascii86 tests
+src/gzip_tests.o: src/gzip_tests.cpp
+	$(CC) $(CFLAGS) src/gzip_tests.cpp -o src/gzip_tests.o
+
+# make tests for ascii86
+bin/gzip_tests: src/gzip.o src/gzip_tests.o
+	$(CC) $(LFLAGS) src/gzip.o src/gzip_tests.o -o bin/gzip_tests 
+
 
 # BINARIES
 # compile the final product
