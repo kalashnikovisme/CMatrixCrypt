@@ -58,8 +58,8 @@ src/mcrypt.o: src/mcrypt.cpp src/mcrypt.hpp
 bin/mcrypt: all src/mcrypt.o
 	$(CC) $(LFLAGS) src/cmatrix.o src/gzip.o src/util.o src/ascii86.o src/mops.o src/mcrypt.o -o bin/mcrypt
 
-
-estimate:
+# make wc is faster to type than make estimate, and more accurate too
+wc:
 	wc Makefile src/*.cpp src/*.hpp
 
 clean:
