@@ -1,89 +1,106 @@
+#include <iostream>
+#include <string>
+#include <cassert>
 #include "gzip.hpp"
 using namespace std;
 
-// try compressing multiple string with gzip
+void deflate_tests();
+void deflate_test_words();
+void deflate_test_sentences();
+void deflate_test_input();
+void deflate_test_output();
+void deflate_test_constructor();
+void deflate_test_misc();
+
+// shorter alias to decompress
+string inflate(string in) {
+  return(decompress_string(in));
+}
+
 int main(void) {
-  string tst1, tst2;
-  tst1 = "Harrow, Harrow, said the Korean, ";
-  tst2 = "who likes to eat pie. ";
-  int compressionlevel = Z_BEST_COMPRESSION;
+  deflate_tests();
+}
 
-  // MEMORY STRUCTURES
-  z_stream zs;                        // z_stream is zlib's control structure
-  std::string outstring;
-  int ret;
-  char outbuffer[32768];
-  memset(&zs, 0, sizeof(zs));
- 
-  // INITIALIZE
-  if (deflateInit(&zs, compressionlevel) != Z_OK)
-    throw(std::runtime_error("deflateInit failed while compressing."));
+void deflate_tests() {
+  cout << "test words" << endl;
+  deflate_test_words();
+  cout << "test sentences" << endl;
+  deflate_test_sentences();
+  cout << "test input" << endl;
+  deflate_test_input();
+  cout << "test output" << endl;
+  deflate_test_output();
+  cout << "test constructor" << endl;
+  deflate_test_constructor();
+  cout << "test misc" << endl;
+  deflate_test_misc();
+}
 
-  // SET UP INPUT
-  zs.next_in = (Bytef*)tst1.data();
-  zs.avail_in = tst1.size();           // set the z_stream's input
+void deflate_test_words() {
+  cme::Deflate def;
+  def << "Harrow";
+  def.close();
+  assert(inflate(def.data()) == "Harrow");
+  def.reset();
 
-  // COMPRESSION
+  def << "leapfrog";
+  def.close();
+  assert(inflate(def.data()) == "leapfrog");
+  def.reset();
+}
 
-  // retrieve the compressed bytes blockwise
-  do {
-    zs.next_out = reinterpret_cast<Bytef*>(outbuffer);
-    zs.avail_out = sizeof(outbuffer);
+void deflate_test_sentences() {
+  cme::Deflate def;
+  def << "Harrow, harrow, sais the Korean.";
+  def.close();
+  assert(inflate(def.data()) == "Harrow, harrow, sais the Korean.");
+  def.reset();
 
-    ret = deflate(&zs, Z_NO_FLUSH);
+  def << "That's what she said.";
+  def.close();
+  assert(inflate(def.data()) == "That's what she said.");
+  def.reset();
+}
 
-    if (outstring.size() < zs.total_out) {
-      // append the block to the output string
-      outstring.append(outbuffer,
-          zs.total_out - outstring.size());
-    }
-  } while (ret == Z_OK);
-  // END OF COMPRESSION
+void deflate_test_input() {
+  cme::Deflate def;
+  def << "Hello ";
+  def.write("world");
+  def.close();
+  assert(inflate(def.data()) == "Hello world");
+  def.reset();
+}
 
-  // SET UP INPUT2
-  zs.next_in = (Bytef*)tst2.data();
-  zs.avail_in = tst2.size();           // set the z_stream's input
+void deflate_test_output() {
+  cme::Deflate def;
+  string out;
+  def << "Long output test";
+  out += def.read();
+  def.close();
+  out += def.read();
+  assert(inflate(out) == "Long output test");
+  assert(inflate(def.data()) == "Long output test");
+  def.reset(); out.clear();
 
-  // COMPRESSION
-
-  // retrieve the compressed bytes blockwise
-  do {
-    zs.next_out = reinterpret_cast<Bytef*>(outbuffer);
-    zs.avail_out = sizeof(outbuffer);
-
-    ret = deflate(&zs, Z_NO_FLUSH);
-
-    if (outstring.size() < zs.total_out) {
-      // append the block to the output string
-      outstring.append(outbuffer,
-          zs.total_out - outstring.size());
-    }
-  } while (ret == Z_OK);
-  // END OF COMPRESSION
-  zs.next_in = NULL;
-  zs.avail_in = 0;           // set the z_stream's input
-
-  do {
-    zs.next_out = reinterpret_cast<Bytef*>(outbuffer);
-    zs.avail_out = sizeof(outbuffer);
-
-    ret = deflate(&zs, Z_FINISH);
-
-    if (outstring.size() < zs.total_out) {
-      // append the block to the output string
-      outstring.append(outbuffer,
-          zs.total_out - outstring.size());
-    }
-  } while (ret == Z_OK);
-  
-  // FINALIZE
-  deflateEnd(&zs);
-
-  if (ret != Z_STREAM_END) {          // an error occurred that was not EOF
-    std::ostringstream oss;
-    oss << "Exception during zlib compression: (" << ret << ") " << zs.msg;
-    throw(std::runtime_error(oss.str()));
+  def << "longer output";
+  def.close();
+  while(!def.eol()) {
+    out.push_back(def.get());
   }
 
-  cout << decompress_string(outstring) << endl;
+  assert(inflate(out) == "longer output");
+  def.reset();
+}
+
+void deflate_test_constructor() {
+}
+
+void deflate_test_misc() {
+  cme::Deflate def;
+  assert(def.closed() == false);
+  def.write("asafd");
+  def.close();
+  assert(def.closed() == true);
+  def.read();
+  assert(def.eol() == true);
 }
