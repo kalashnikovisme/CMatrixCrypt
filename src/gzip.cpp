@@ -85,3 +85,156 @@ std::string decompress_string(const std::string& str)
     return outstring;
 }
 
+namespace cme {
+  // standard constructor
+  Deflate::Deflate() {
+    setup();
+    compressionlevel = Z_BEST_COMPRESSION; // set it up with the best compression level
+  }
+
+  // constructor specifying the compression level
+  Deflate::Deflate(int complvl) {
+    setup();
+    compressionlevel = complvl; // set the specified compression level
+  }
+
+  // destructor
+  Deflate::~Deflate() {
+    if(!closed_input) {
+      close();  // if not closed already, do so (to deallocate some stuff)
+    }
+  }
+
+  // get a single character
+  char Deflate::get() const {
+    if(outpos < output.size()) {
+      ++outpos; // increase the position in the output stream
+      return(output[outpos-1]); // return a character
+    } else {
+      return(0);  // if at end of stream, return NULL (this is why you should check for eol() before getting a character)
+    }
+  }
+
+  // read as much data as there is in the output buffer
+  std::string Deflate::read() const {
+    // check if there's new data in the output buffer
+    if((output.size() - outpos) > 0) {
+      // if so, construct a string containing the new data
+      std::string ret = output.substr(outpos, (output.size() - outpos));
+      outpos = output.size(); // move the output pointer
+      return(ret);            // and return the contructed string
+    } else {
+      return("");             // else, simply return an empty string
+    }
+  }
+
+  // return any and all data in the output buffer
+  std::string Deflate::data() const {
+    return(output);
+  }
+
+  // compress a string
+  void Deflate::write(const std::string& str) {
+    // make sure that the input isn't closed
+    if(closed_input) {
+      throw std::runtime_error("already closed input");
+    }
+
+    // to capture the return value
+    int ret;
+
+    // prepare the stream's input
+    compress_stream.next_in = (Bytef*)str.data();
+    // tell zlib how much data to expect
+    compress_stream.avail_in = str.size();
+
+    // compress
+    do {
+      // tell it the address of the output buffer
+      compress_stream.next_out = reinterpret_cast<Bytef*>(output_buffer);
+      // as well as it's size
+      compress_stream.avail_out = output_buffer_size;
+
+      // deflate some data
+      ret = deflate(&compress_stream, Z_NO_FLUSH);
+
+      // if there is new, inflated data in the output buffer,
+      if(output.size() < compress_stream.total_out) {
+        // add it to the output string
+        output.append(output_buffer, compress_stream.total_out - output.size());
+      }
+    } while(ret == Z_OK); // repeat while the return value indicates that this should be done
+  }
+
+  // add data (basically the same as write())
+  Deflate& Deflate::operator<<(const std::string& str) {
+    write(str);
+    return(*this);
+  }
+
+  // fetch data
+  Deflate& Deflate::operator>>(std::string& str) {
+    str += read();
+    return(*this);
+  }
+
+  // check if the input is closed
+  bool Deflate::closed() {
+    return(closed_input);
+  }
+
+  // close the input
+  void Deflate::close() {
+    if(closed_input) {
+      throw std::runtime_error("already closed input");
+    }
+    closed_input = true;  // indicate this via a variable
+    // to store the return value
+    int ret;
+
+    // finish up the compression
+    compress_stream.next_in = NULL; // no more stuff to compress
+    compress_stream.avail_in = 0;
+
+    do {
+      compress_stream.next_out = reinterpret_cast<Bytef*>(output_buffer);
+      compress_stream.avail_out = output_buffer_size;
+
+      ret = deflate(&compress_stream, Z_FINISH);  // Z_FINISH indicates that this is the last data to be compressed
+
+      // add any remaining stuff from the flush to the output string
+      if(output.size() < compress_stream.total_out) {
+        output.append(output_buffer, compress_stream.total_out - output.size());
+      }
+    } while(ret == Z_OK);
+
+    // this deallocates some stuff
+    deflateEnd(&compress_stream);
+  }
+
+  // setup the compression
+  void Deflate::setup() {
+    closed_input = false;
+    output.clear();
+
+    // set all to zero
+    memset(&compress_stream, 0, sizeof(compress_stream));
+    // initialize data
+    deflateInit(&compress_stream, compressionlevel);
+
+    outpos = 0;
+  }
+
+  void Deflate::reset() {
+    if(!closed_input) {
+      close();
+    }
+    setup();
+  }
+
+  // check for end of output (useful for use with get())
+  bool Deflate::eol() {
+    return(outpos >= output.size());
+  }
+}
+
