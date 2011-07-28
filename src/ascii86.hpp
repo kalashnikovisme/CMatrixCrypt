@@ -85,5 +85,6 @@ namespace cme {
       bool closed() const;
       void reset();
       void debug();
+      bool eol();   // has the output reached end of line yet?
   };
 }

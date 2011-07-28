@@ -167,10 +167,12 @@ void decode_test_outputs() {
 
   for(int i = 0; i < enc.size(); ++i) {
     dec.put(enc[i]);
+  }
+
+  while(!dec.eol()) {
     orig.push_back(dec.get());
   }
 
-  cout << orig.size();
   assert(orig == "Eastern revolution");
   dec.reset(); orig.clear();
 
@@ -184,4 +186,13 @@ void decode_test_outputs() {
 }
 
 void decode_test_misc() {
+  cme::Decode86 dec;
+
+  assert(dec.closed() == false);
+  dec << "<~7:C7ZATDZ2Eb0E4Cisi6Df,~>";
+  assert(dec.closed() == true);
+
+  assert(dec.eol() == false);
+  dec.read();
+  assert(dec.eol() == true);
 }

@@ -251,7 +251,6 @@ namespace cme {
 
   /* DECODING FACILITIES */
   void Decode86::decode_tuple(const std::string& tuple) {
-    std::cout << tuple << std::endl;
     std::string dec = "";      // decoded string
     long int int_rep = 0; // integer representation of the tuple, long int so that it's at least 32bit
 
@@ -318,7 +317,9 @@ namespace cme {
   // read as much data as there is
   std::string Decode86::read() const {
     if((outbuf.size() - outpos) > 0) {
-      return(outbuf.substr(outpos, (outbuf.size() - outpos)));
+      std::string ret = outbuf.substr(outpos, (outbuf.size() - outpos));
+      outpos = outbuf.size();
+      return(ret);
     } else {
       return("");
     }
@@ -393,6 +394,10 @@ namespace cme {
 
     // reset inbuf
     inbuf = "";
+  }
+
+  bool Decode86::eol() {
+    return(outpos >= outbuf.size());
   }
 
   void Decode86::reset() {
