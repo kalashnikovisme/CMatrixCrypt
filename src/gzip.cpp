@@ -164,6 +164,12 @@ namespace cme {
         output.append(output_buffer, compress_stream.total_out - output.size());
       }
     } while(ret == Z_OK); // repeat while the return value indicates that this should be done
+
+    if (ret != Z_STREAM_END && ret != Z_BUF_ERROR) {          // an error occurred that was not EOF
+        std::ostringstream oss;
+        oss << "Exception during zlib compression [write]: (" << ret << ") " << compress_stream.msg;
+        throw(std::runtime_error(oss.str()));
+    }
   }
 
   // add data (basically the same as write())
@@ -208,6 +214,12 @@ namespace cme {
       }
     } while(ret == Z_OK);
 
+    if (ret != Z_STREAM_END && ret != Z_BUF_ERROR) {          // an error occurred that was not EOF
+        std::ostringstream oss;
+        oss << "Exception during zlib compression [close]: (" << ret << ") " << compress_stream.msg;
+        throw(std::runtime_error(oss.str()));
+    }
+
     // this deallocates some stuff
     deflateEnd(&compress_stream);
   }
@@ -220,7 +232,9 @@ namespace cme {
     // set all to zero
     memset(&compress_stream, 0, sizeof(compress_stream));
     // initialize data
-    deflateInit(&compress_stream, compressionlevel);
+    if(deflateInit(&compress_stream, compressionlevel) != Z_OK) {
+      throw std::runtime_error("deflateInit failed while decompressing.");
+    }
 
     outpos = 0;
   }
@@ -309,6 +323,12 @@ namespace cme {
         output.append(output_buffer, decompress_stream.total_out - output.size());
       }
     } while(ret == Z_OK); // repeat while the return value indicates that this should be done
+
+    if (ret != Z_STREAM_END && ret != Z_BUF_ERROR) {          // an error occurred that was not EOF
+        std::ostringstream oss;
+        oss << "Exception during zlib decompression [write]: (" << ret << ") " << decompress_stream.msg;
+        throw(std::runtime_error(oss.str()));
+    }
   }
 
   // add data (basically the same as write())
@@ -353,6 +373,12 @@ namespace cme {
       }
     } while(ret == Z_OK);
 
+    if (ret != Z_STREAM_END && ret != Z_BUF_ERROR) {          // an error occurred that was not EOF
+        std::ostringstream oss;
+        oss << "Exception during zlib decompression [close]: (" << ret << ") " << decompress_stream.msg;
+        throw(std::runtime_error(oss.str()));
+    }
+
     // this deallocates some stuff
     inflateEnd(&decompress_stream);
   }
@@ -365,7 +391,9 @@ namespace cme {
     // set all to zero
     memset(&decompress_stream, 0, sizeof(decompress_stream));
     // initialize data
-    inflateInit(&decompress_stream);
+    if(inflateInit(&decompress_stream) != Z_OK) {
+      throw std::runtime_error("inflateInit failed while decompressing.");
+    }
 
     outpos = 0;
   }
