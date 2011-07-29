@@ -13,8 +13,8 @@
 namespace cme {
   class Deflate {
     private:
-      static const int output_buffer_size = 3727;  // keep track of how big the buffer is
-      char output_buffer[output_buffer_size];       // buffer to read zlib's output from
+      static const int output_buffer_size = 10000;  // keep track of how big the buffer is
+      //char output_buffer[output_buffer_size];       // buffer to read zlib's output from
       std::string output;                           // where to store the output
 
       z_stream compress_stream; // zlib compression stream
@@ -49,8 +49,8 @@ namespace cme {
 
   class Inflate {
     private:
-      static const int output_buffer_size = 3727;  // keep track of how big the buffer is
-      char output_buffer[output_buffer_size];       // buffer to read zlib's output from
+      static const int output_buffer_size = 10000;  // keep track of how big the buffer is
+      //char output_buffer[output_buffer_size];       // buffer to read zlib's output from
       std::string output;                           // where to store the output
 
       z_stream decompress_stream; // zlib decompression stream

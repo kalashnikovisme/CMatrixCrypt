@@ -88,14 +88,14 @@ namespace cme {
   /* DEFLATE */
   // standard constructor
   Deflate::Deflate() {
-    setup();
     compressionlevel = Z_BEST_COMPRESSION; // set it up with the best compression level
+    setup();
   }
 
   // constructor specifying the compression level
   Deflate::Deflate(int complvl) {
-    setup();
     compressionlevel = complvl; // set the specified compression level
+    setup();
   }
 
   // destructor
@@ -142,16 +142,17 @@ namespace cme {
 
     // to capture the return value
     int ret;
+    char output_buffer[output_buffer_size];
 
     // prepare the stream's input
-    compress_stream.next_in = (Bytef*)str.data();
+    compress_stream.next_in = (unsigned char*)str.data();
     // tell zlib how much data to expect
     compress_stream.avail_in = str.size();
 
     // compress
     do {
       // tell it the address of the output buffer
-      compress_stream.next_out = reinterpret_cast<Bytef*>(output_buffer);
+      compress_stream.next_out = reinterpret_cast<unsigned char*>(output_buffer);
       // as well as it's size
       compress_stream.avail_out = output_buffer_size;
 
@@ -197,13 +198,14 @@ namespace cme {
     closed_input = true;  // indicate this via a variable
     // to store the return value
     int ret;
+    char output_buffer[output_buffer_size];
 
     // finish up the compression
     compress_stream.next_in = NULL; // no more stuff to compress
     compress_stream.avail_in = 0;
 
     do {
-      compress_stream.next_out = reinterpret_cast<Bytef*>(output_buffer);
+      compress_stream.next_out = reinterpret_cast<unsigned char*>(output_buffer);
       compress_stream.avail_out = output_buffer_size;
 
       ret = deflate(&compress_stream, Z_FINISH);  // Z_FINISH indicates that this is the last data to be compressed
@@ -232,8 +234,15 @@ namespace cme {
     // set all to zero
     memset(&compress_stream, 0, sizeof(compress_stream));
     // initialize data
-    if(deflateInit(&compress_stream, compressionlevel) != Z_OK) {
-      throw std::runtime_error("deflateInit failed while decompressing.");
+    int ret = deflateInit(&compress_stream, compressionlevel);
+    if(ret != Z_OK) {
+      std::ostringstream oss;
+      oss << "deflateInit failed while decompressing, error code: " << ret;
+      if(compress_stream.msg != NULL) {
+        oss << ", mesg: " << compress_stream.msg;
+      }
+      oss << ", cpmlvl: " << compressionlevel;
+      throw std::runtime_error(oss.str());
     }
 
     outpos = 0;
@@ -301,16 +310,17 @@ namespace cme {
 
     // to capture the return value
     int ret;
+    char output_buffer[output_buffer_size];
 
     // prepare the stream's input
-    decompress_stream.next_in = (Bytef*)str.data();
+    decompress_stream.next_in = (unsigned char*)str.data();
     // tell zlib how much data to expect
     decompress_stream.avail_in = str.size();
 
     // compress
     do {
       // tell it the address of the output buffer
-      decompress_stream.next_out = reinterpret_cast<Bytef*>(output_buffer);
+      decompress_stream.next_out = reinterpret_cast<unsigned char*>(output_buffer);
       // as well as it's size
       decompress_stream.avail_out = output_buffer_size;
 
@@ -356,13 +366,14 @@ namespace cme {
     closed_input = true;  // indicate this via a variable
     // to store the return value
     int ret;
+    char output_buffer[output_buffer_size];
 
     // finish up the decompression
     decompress_stream.next_in = NULL; // no more stuff to compress
     decompress_stream.avail_in = 0;
 
     do {
-      decompress_stream.next_out = reinterpret_cast<Bytef*>(output_buffer);
+      decompress_stream.next_out = reinterpret_cast<unsigned char*>(output_buffer);
       decompress_stream.avail_out = output_buffer_size;
 
       ret = inflate(&decompress_stream, Z_FINISH);  // Z_FINISH indicates that this is the last data to be compressed
