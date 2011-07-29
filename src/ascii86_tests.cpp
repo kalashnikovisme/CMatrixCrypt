@@ -23,18 +23,28 @@ int main(void) {
 }
 
 void encode_tests() {
+  cout << "encode test words" << endl;
   encode_test_words();
+  cout << "encode test sentences" << endl;
   encode_test_sentences();
+  cout << "encode test inputs" << endl;
   encode_test_inputs();
+  cout << "encode test outputs" << endl;
   encode_test_outputs();
+  cout << "encode test misc" << endl;
   encode_test_misc();
 }
 
 void decode_tests() {
+  cout << "decode test words" << endl;
   decode_test_words();
+  cout << "decode test sentences" << endl;
   decode_test_sentences();
+  cout << "decode test inputs" << endl;
   decode_test_inputs();
+  cout << "decode test outputs" << endl;
   decode_test_outputs();
+  cout << "decode test misc" << endl;
   decode_test_misc();
 }
 
