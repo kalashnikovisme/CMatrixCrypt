@@ -41,4 +41,4 @@ with the password "unfathomable", the encrypted output looks like this:
     Ln'Vl"1W@\@?7a!^o9QAl2g7Z+f=G@`K%&$=\7@fRFONe3?JlLY[o9Feqg&m]D^]@I)SmkC^0p\/EbDQ
     OG&T_Wh49,?]!/#Ru&c~>
 
-Except it all has to be in one long string, no newline or spaces seperating the thing. 
+Except it all has to be in one long string, no newline or spaces separating the thing. 
