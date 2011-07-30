@@ -57,7 +57,7 @@ bin/gzip_tests: src/gzip.o src/gzip_tests.o
 	$(CC) $(LFLAGS) src/gzip.o src/gzip_tests.o -o bin/gzip_tests 
 
 src/cmatrix_tests.o: src/cmatrix_tests.cpp
-	$(CC) $(CFLAGS) src/cmatrix.cpp -o src/cmatrix.o
+	$(CC) $(CFLAGS) src/cmatrix_tests.cpp -o src/cmatrix_tests.o
 
 bin/cmatrix_tests: src/cmatrix.o src/cmatrix_tests.o
 	$(CC) $(LFLAGS) src/cmatrix.o src/cmatrix_tests.o -o bin/cmatrix_tests
