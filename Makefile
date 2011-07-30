@@ -56,6 +56,11 @@ src/gzip_tests.o: src/gzip_tests.cpp
 bin/gzip_tests: src/gzip.o src/gzip_tests.o
 	$(CC) $(LFLAGS) src/gzip.o src/gzip_tests.o -o bin/gzip_tests 
 
+src/cmatrix_tests.o: src/cmatrix_tests.cpp
+	$(CC) $(CFLAGS) src/cmatrix.cpp -o src/cmatrix.o
+
+bin/cmatrix_tests: src/cmatrix.o src/cmatrix_tests.o
+	$(CC) $(LFLAGS) src/cmatrix.o src/cmatrix_tests.o -o bin/cmatrix_tests
 
 # BINARIES
 # compile the final product
@@ -72,3 +77,5 @@ wc:
 
 clean:
 	rm -f src/*.o
+
+tests: bin/ascii86_tests bin/gzip_tests bin/cmatrix_tests
