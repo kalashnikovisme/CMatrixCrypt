@@ -1,5 +1,5 @@
 CC=g++
-CFLAGS=-c -Wall -Wno-sign-compare
+CFLAGS=-c -Wall -Wno-sign-compare 
 LFLAGS=-lz -Wall -Wno-sign-compare
 
 
@@ -12,55 +12,66 @@ stuff: src/cmatrix.o src/gzip.o src/util.o src/ascii86.o
 
 # matrix class
 src/cmatrix.o: src/cmatrix.cpp src/cmatrix.hpp
-	$(CC) $(CFLAGS) src/cmatrix.cpp -o src/cmatrix.o
+	$(CC) $(CFLAGS) -o src/cmatrix.o src/cmatrix.cpp
 
 # gzip wrapper
 src/gzip.o: src/gzip.cpp src/gzip.hpp
-	$(CC) $(CFLAGS) src/gzip.cpp -o src/gzip.o
+	$(CC) $(CFLAGS) -o src/gzip.o src/gzip.cpp
 
 # various useful functions
 src/util.o: src/util.cpp src/util.hpp
-	$(CC) $(CFLAGS) src/util.cpp -o src/util.o
+	$(CC) $(CFLAGS) -o src/util.o src/util.cpp
 
 # ascii85 implementation
 src/ascii86.o: src/ascii86.cpp src/ascii86.hpp
-	$(CC) $(CFLAGS) src/ascii86.cpp -o src/ascii86.o
+	$(CC) $(CFLAGS) -o src/ascii86.o src/ascii86.cpp
 
 # matrix operations, has the matrix encryption functions
 src/mops.o: src/mops.cpp src/mops.hpp
-	$(CC) $(CFLAGS) src/mops.cpp -o src/mops.o
+	$(CC) $(CFLAGS) -o src/mops.o src/mops.cpp
 
 
 # TESTS
 # compile tests
 src/test.o: src/test.cpp
-	$(CC) $(CFLAGS) src/test.cpp -o src/test.o
+	$(CC) $(CFLAGS) -o src/test.o src/test.cpp
 
 # make a binary for test
 bin/test: all src/test.o
-	$(CC) $(LFLAGS) src/cmatrix.o src/gzip.o src/util.o src/ascii86.o src/mops.o src/test.o -o bin/test 
+	$(CC) $(LFLAGS) -o bin/test src/cmatrix.o src/gzip.o src/util.o src/ascii86.o src/mops.o src/test.o
 
 # ascii86 tests
 src/ascii86_tests.o: src/ascii86_tests.cpp
-	$(CC) $(CFLAGS) src/ascii86_tests.cpp -o src/ascii86_tests.o
+	$(CC) $(CFLAGS) -o src/ascii86_tests.o src/ascii86_tests.cpp
 
 # make tests for ascii86
 bin/ascii86_tests: src/ascii86.o src/ascii86_tests.o
-	$(CC) $(LFLAGS) src/ascii86.o src/ascii86_tests.o -o bin/ascii86_tests 
+	$(CC) $(LFLAGS) -o bin/ascii86_tests src/ascii86.o src/ascii86_tests.o
 
-# ascii86 tests
+# gzip tests
 src/gzip_tests.o: src/gzip_tests.cpp
-	$(CC) $(CFLAGS) src/gzip_tests.cpp -o src/gzip_tests.o
+	$(CC) $(CFLAGS) -o src/gzip_tests.o src/gzip_tests.cpp
 
-# make tests for ascii86
+# make tests for gzip
 bin/gzip_tests: src/gzip.o src/gzip_tests.o
-	$(CC) $(LFLAGS) src/gzip.o src/gzip_tests.o -o bin/gzip_tests 
+	$(CC) $(LFLAGS) -o bin/gzip_tests src/gzip.o src/gzip_tests.o
 
+# cmatrix tests
 src/cmatrix_tests.o: src/cmatrix_tests.cpp
-	$(CC) $(CFLAGS) src/cmatrix_tests.cpp -o src/cmatrix_tests.o
+	$(CC) $(CFLAGS) -o src/cmatrix_tests.o src/cmatrix_tests.cpp
 
+# make cmatrix test binaries
 bin/cmatrix_tests: src/cmatrix.o src/cmatrix_tests.o
-	$(CC) $(LFLAGS) src/cmatrix.o src/cmatrix_tests.o -o bin/cmatrix_tests
+	$(CC) $(LFLAGS) -o bin/cmatrix_tests src/cmatrix.o src/cmatrix_tests.o
+
+# util tests
+src/util_tests.o: src/util_tests.cpp
+	$(CC) $(CFLAGS) -o src/util_tests.o src/util_tests.cpp
+
+# make util test binaries
+bin/util_tests: src/util.o src/util_tests.o
+	$(CC) $(LFLAGS) -o bin/util_tests src/util.o src/util_tests.o
+
 
 # BINARIES
 # compile the final product
@@ -78,4 +89,4 @@ wc:
 clean:
 	rm -f src/*.o
 
-tests: bin/ascii86_tests bin/gzip_tests bin/cmatrix_tests
+tests: bin/ascii86_tests bin/gzip_tests bin/cmatrix_tests bin/util_tests
