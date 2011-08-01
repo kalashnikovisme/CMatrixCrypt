@@ -44,6 +44,9 @@ src/ascii86_tests.o: src/ascii86_tests.cpp
 src/deflate_tests.o: src/deflate_tests.cpp
 	$(CC) $(CFLAGS) -o src/deflate_tests.o src/deflate_tests.cpp
 
+src/deflate86.o: src/deflate86.cpp
+	$(CC) $(CFLAGS) -o src/deflate86.o src/deflate86.cpp
+
 # cmatrix tests
 src/cmatrix_tests.o: src/cmatrix_tests.cpp
 	$(CC) $(CFLAGS) -o src/cmatrix_tests.o src/cmatrix_tests.cpp
@@ -70,6 +73,9 @@ bin/cmatrix_tests: src/cmatrix.o src/cmatrix_tests.o
 bin/deflate_tests: src/deflate.o src/deflate_tests.o
 	$(CC) $(LFLAGS) -o bin/deflate_tests src/deflate.o src/deflate_tests.o
 
+bin/deflate86: src/deflate.o src/ascii86.o src/deflate86.o
+	$(CC) $(LFLAGS) -o bin/deflate86 src/deflate.o src/ascii86.o src/deflate86.o
+
 # make tests for ascii86
 bin/ascii86_tests: src/ascii86.o src/ascii86_tests.o
 	$(CC) $(LFLAGS) -o bin/ascii86_tests src/ascii86.o src/ascii86_tests.o
@@ -92,8 +98,10 @@ cmatrix_tests: bin/cmatrix_tests
 deflate_tests: bin/deflate_tests
 ascii86_tests: bin/ascii86_tests
 mcrypt: bin/mcrypt
+deflate86: bin/deflate86
 
 
+# MISC
 # make wc is faster to type than make estimate, and more accurate too
 wc:
 	wc Makefile src/*.cpp src/*.hpp
