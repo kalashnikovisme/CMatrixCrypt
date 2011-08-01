@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <cassert>
+#include <ctime>
 #include "ascii86.hpp"
 using namespace std;
 
@@ -18,8 +19,13 @@ void decode_test_outputs();
 void decode_test_misc();
 
 int main(void) {
+  clock_t start = clock();
+  cout.setf(ios_base::fixed);
   encode_tests();
   decode_tests();
+  clock_t end = clock();
+  double time = difftime(end, start) / CLOCKS_PER_SEC;
+  cout << "tests took " << time << " seconds" << endl;
 }
 
 void encode_tests() {

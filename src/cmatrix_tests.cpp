@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <cassert>
+#include <ctime>
 #include "cmatrix.hpp"
 using namespace std;
 
@@ -12,6 +13,8 @@ void test_math_operator();
 void test_equality_operator();
 
 int main(void) {
+  clock_t start = clock();
+  cout.setf(ios_base::fixed);
   cout << "test constructor" << endl;
   test_constructor();
   cout << "test outputs" << endl;
@@ -26,6 +29,9 @@ int main(void) {
   test_constructor();
   cout << "test equality operator" << endl;
   test_constructor();
+  clock_t end = clock();
+  double time = difftime(end, start) / CLOCKS_PER_SEC;
+  cout << "tests took " << time << " seconds" << endl;
 }
 
 void test_constructor() {

@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <cassert>
+#include <ctime>
 #include "gzip.hpp"
 using namespace std;
 
@@ -34,8 +35,13 @@ string deflate(string in) {
 }
 
 int main(void) {
+  clock_t start = clock();
+  cout.setf(ios_base::fixed);
   deflate_tests();
   inflate_tests();
+  clock_t end = clock();
+  double time = difftime(end, start) / CLOCKS_PER_SEC;
+  cout << "tests took " << time << " seconds" << endl;
 }
 
 void deflate_tests() {
