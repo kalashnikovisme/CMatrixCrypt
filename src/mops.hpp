@@ -3,7 +3,7 @@
 #include <vector>
 #include "cmatrix.hpp"
 #include "ascii86.hpp"
-#include "gzip.hpp"
+#include "deflate.hpp"
 #include "util.hpp"
 
 namespace cme {
@@ -32,4 +32,30 @@ namespace cme {
 
   std::string matrixEncrypt(const std::string& mesg, const std::string& pass);
   */
+
+  // this will be a bitch to code...
+  class Encrypt {
+    private:
+      // input buffer
+      std::string input;
+      // output buffer
+      std::string output;
+      // current position in the output buffer
+      int output_pos;
+
+      // exporting classes
+      Deflate deflate;
+      Encode86 encode;
+
+      // encryption code
+      void encrypt();
+      marry getMesgMatrices();
+      marry getPassMatrices();
+      marry doMatrixEncryption(marry& mesg, const marry& pass);
+      std::string matricesToString(const marry& matrices);
+
+      // status tools
+      bool closed;
+      int pass_offset;
+  }
 }
