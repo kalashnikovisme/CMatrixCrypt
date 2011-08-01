@@ -1,4 +1,4 @@
-#include "gzip.hpp"
+#include "deflate.hpp"
 
 /* OLD CODE, TO BE REMOVED:
 std::string compress_string(const std::string& str,

@@ -2,7 +2,7 @@
 #include <string>
 #include <cassert>
 #include <ctime>
-#include "gzip.hpp"
+#include "deflate.hpp"
 using namespace std;
 
 void deflate_tests();

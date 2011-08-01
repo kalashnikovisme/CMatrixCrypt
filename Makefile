@@ -5,18 +5,18 @@ LFLAGS=-lz -Wall -Wno-sign-compare
 
 # LIBRARIES
 # all the libraries used
-all: src/cmatrix.o src/gzip.o src/util.o src/ascii86.o src/mops.o
+all: src/cmatrix.o src/deflate.o src/util.o src/ascii86.o src/mops.o
 
 # everything that is from other dirs and not coded here
-stuff: src/cmatrix.o src/gzip.o src/util.o src/ascii86.o
+stuff: src/cmatrix.o src/deflate.o src/util.o src/ascii86.o
 
 # matrix class
 src/cmatrix.o: src/cmatrix.cpp src/cmatrix.hpp
 	$(CC) $(CFLAGS) -o src/cmatrix.o src/cmatrix.cpp
 
-# gzip wrapper
-src/gzip.o: src/gzip.cpp src/gzip.hpp
-	$(CC) $(CFLAGS) -o src/gzip.o src/gzip.cpp
+# deflate wrapper
+src/deflate.o: src/deflate.cpp src/deflate.hpp
+	$(CC) $(CFLAGS) -o src/deflate.o src/deflate.cpp
 
 # various useful functions
 src/util.o: src/util.cpp src/util.hpp
@@ -38,7 +38,7 @@ src/test.o: src/test.cpp
 
 # make a binary for test
 bin/test: all src/test.o
-	$(CC) $(LFLAGS) -o bin/test src/cmatrix.o src/gzip.o src/util.o src/ascii86.o src/mops.o src/test.o
+	$(CC) $(LFLAGS) -o bin/test src/cmatrix.o src/deflate.o src/util.o src/ascii86.o src/mops.o src/test.o
 
 # ascii86 tests
 src/ascii86_tests.o: src/ascii86_tests.cpp
@@ -48,13 +48,13 @@ src/ascii86_tests.o: src/ascii86_tests.cpp
 bin/ascii86_tests: src/ascii86.o src/ascii86_tests.o
 	$(CC) $(LFLAGS) -o bin/ascii86_tests src/ascii86.o src/ascii86_tests.o
 
-# gzip tests
-src/gzip_tests.o: src/gzip_tests.cpp
-	$(CC) $(CFLAGS) -o src/gzip_tests.o src/gzip_tests.cpp
+# deflate tests
+src/deflate_tests.o: src/deflate_tests.cpp
+	$(CC) $(CFLAGS) -o src/deflate_tests.o src/deflate_tests.cpp
 
-# make tests for gzip
-bin/gzip_tests: src/gzip.o src/gzip_tests.o
-	$(CC) $(LFLAGS) -o bin/gzip_tests src/gzip.o src/gzip_tests.o
+# make tests for deflate
+bin/deflate_tests: src/deflate.o src/deflate_tests.o
+	$(CC) $(LFLAGS) -o bin/deflate_tests src/deflate.o src/deflate_tests.o
 
 # cmatrix tests
 src/cmatrix_tests.o: src/cmatrix_tests.cpp
@@ -80,7 +80,7 @@ src/mcrypt.o: src/mcrypt.cpp src/mcrypt.hpp
 
 # make a binary for mcrypt
 bin/mcrypt: all src/mcrypt.o
-	$(CC) $(LFLAGS) src/cmatrix.o src/gzip.o src/util.o src/ascii86.o src/mops.o src/mcrypt.o -o bin/mcrypt
+	$(CC) $(LFLAGS) src/cmatrix.o src/deflate.o src/util.o src/ascii86.o src/mops.o src/mcrypt.o -o bin/mcrypt
 
 # make wc is faster to type than make estimate, and more accurate too
 wc:
@@ -89,4 +89,6 @@ wc:
 clean:
 	rm -f src/*.o
 
-tests: bin/ascii86_tests bin/gzip_tests bin/cmatrix_tests bin/util_tests
+tests: bin/ascii86_tests bin/deflate_tests bin/cmatrix_tests bin/util_tests
+
+.PHONY: wc clean tests all stuff
