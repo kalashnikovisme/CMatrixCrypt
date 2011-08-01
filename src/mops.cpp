@@ -1,6 +1,7 @@
 #include "mops.hpp"
 using namespace std;
 
+/* OLD CODE - TO BE REPLACED
 // turn a password into a matrices array usable for encryption
 marry makePassMatrix(const string& pass) {
   // matrices array
@@ -123,4 +124,8 @@ string matrixEncrypt(const std::string& mesg, const std::string& pass) {
   enc = compress_string(enc, Z_BEST_COMPRESSION);               // compress with gzip
   return encode86(enc);                     // encode86
 }
+*/ 
 
+namespace cme {
+
+}
