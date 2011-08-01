@@ -2,7 +2,7 @@
 
 namespace cme {
   // convert an integer to a binary string
-  std::string intToBinString(unsigned num) {
+  std::string intToBin(unsigned num) {
     std::string binaryString;                    // a place to store the binary string
     char currentBit;                        // the current bit stored as char (either '0' or '1')
 
@@ -15,8 +15,8 @@ namespace cme {
     return(binaryString);                   // return the binary string
   }
 
-  std::string intToBinString(unsigned num, int size) { // same as the def above but different while loop
-    string binaryString;                    // a place to store the binary string
+  std::string intToBin(unsigned num, int size) { // same as the def above but different while loop
+    std::string binaryString;                    // a place to store the binary string
     char currentBit;                        // the current bit stored as char (either '0' or '1')
 
     for(; size>0; --size) {                         // convert until 'size'  becomes 0
@@ -28,7 +28,7 @@ namespace cme {
     return(binaryString);                   // return the binary string
   }
 
-  unsigned binStringToInt(const std::string& bin) {   // converts a binary string to an unsigned int
+  unsigned binToInt(const std::string& bin) {   // converts a binary string to an unsigned int
     int mult = 1;                         // multiplier (significance of current pos into the binary string)
     unsigned total = 0;                   // result
 
