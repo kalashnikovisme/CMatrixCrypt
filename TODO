@@ -1,8 +1,9 @@
 Rewrite to OOC
  * ascii86 [done]
- * gzip    [in progress]
- * util
- * mops
+ * gzip    [done]
+ * cmatrix [done]
+ * util    [done]
+ * mops    [in progress]
 
 Write
  * mcrypt

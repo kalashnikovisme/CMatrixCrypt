@@ -13,11 +13,12 @@ How can I try it?
 
 You can't. I am not done coding it yet, there are a couple of components in the code that still need to be written/finished/tested:
 
--   *CMatrix*, a class which represents matrices
++   *CMatrix*, a class which represents matrices
 +   *Ascii86*, the implementation of Ascii85
 +   *GZip*, a wrapper around zlib's DEFLATE (has nothing to do with gzip, needs to be renamed)
++   *util.cpp*, various utilities (that is, functions)
 -   *mops*, short for matrix operatrions, which deals with matrices
--   *MCrypt*, which performs the matrix encryption
+-   *CMCcrypt*, which performs the matrix encryption
 
 Once all of these are done coding, I can get to finalize the API. Meanwhile you are welcome to help, if my coding style doesn't scare you. 
 
