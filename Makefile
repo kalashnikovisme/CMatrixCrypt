@@ -44,9 +44,6 @@ src/ascii86_tests.o: src/ascii86_tests.cpp
 src/deflate_tests.o: src/deflate_tests.cpp
 	$(CC) $(CFLAGS) -o src/deflate_tests.o src/deflate_tests.cpp
 
-src/deflate86.o: src/deflate86.cpp
-	$(CC) $(CFLAGS) -o src/deflate86.o src/deflate86.cpp
-
 # cmatrix tests
 src/cmatrix_tests.o: src/cmatrix_tests.cpp
 	$(CC) $(CFLAGS) -o src/cmatrix_tests.o src/cmatrix_tests.cpp
@@ -58,6 +55,14 @@ src/util_tests.o: src/util_tests.cpp
 # matrix operations tests
 src/mops_tests.o: src/mops_tests.cpp
 	$(CC) $(CFLAGS) -o src/mops_tests.o src/mops_tests.cpp
+
+# make deflate86.o
+src/deflate86.o: src/deflate86.cpp
+	$(CC) $(CFLAGS) -o src/deflate86.o src/deflate86.cpp
+
+# make inflate86.0
+src/inflate86.o: src/inflate86.cpp
+	$(CC) $(CFLAGS) -o src/inflate86.o src/inflate86.cpp
 
 
 # TESTS - link the compiled tests
@@ -81,12 +86,16 @@ bin/cmatrix_tests: src/cmatrix.o src/cmatrix_tests.o
 bin/deflate_tests: src/deflate.o src/deflate_tests.o
 	$(CC) $(LFLAGS) -o bin/deflate_tests src/deflate.o src/deflate_tests.o
 
-bin/deflate86: src/deflate.o src/ascii86.o src/deflate86.o
-	$(CC) $(LFLAGS) -o bin/deflate86 src/deflate.o src/ascii86.o src/deflate86.o
-
 # make tests for ascii86
 bin/ascii86_tests: src/ascii86.o src/ascii86_tests.o
 	$(CC) $(LFLAGS) -o bin/ascii86_tests src/ascii86.o src/ascii86_tests.o
+
+# make deflate86 (a test for ascii86.cpp and deflate.cpp)
+bin/deflate86: src/deflate.o src/ascii86.o src/deflate86.o
+	$(CC) $(LFLAGS) -o bin/deflate86 src/deflate.o src/ascii86.o src/deflate86.o
+
+bin/inflate86: src/deflate.o src/ascii86.o src/inflate86.o
+	$(CC) $(LFLAGS) -o bin/inflate86 src/deflate.o src/ascii86.o src/inflate86.o
 
 
 # BINARIES
@@ -107,6 +116,8 @@ cmatrix_tests: bin/cmatrix_tests
 deflate_tests: bin/deflate_tests
 ascii86_tests: bin/ascii86_tests
 deflate86: bin/deflate86
+inflate86: bin/inflate86
+flate86: inflate86 deflate86
 mcrypt: bin/mcrypt
 
 
@@ -120,4 +131,4 @@ clean:
 
 tests: ascii86_tests deflate_tests cmatrix_tests util_tests
 
-.PHONY: wc clean tests all stuff tests test util_tests cmatrix_tests deflate_tests ascii86_tests mops_tests mcrypt deflate86
+.PHONY: wc clean tests all stuff tests test util_tests cmatrix_tests deflate_tests ascii86_tests mops_tests mcrypt deflate86 inflate86 flate86
