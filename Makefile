@@ -55,6 +55,10 @@ src/cmatrix_tests.o: src/cmatrix_tests.cpp
 src/util_tests.o: src/util_tests.cpp
 	$(CC) $(CFLAGS) -o src/util_tests.o src/util_tests.cpp
 
+# matrix operations tests
+src/mops_tests.o: src/mops_tests.cpp
+	$(CC) $(CFLAGS) -o src/mops_tests.o src/mops_tests.cpp
+
 
 # TESTS - link the compiled tests
 # make a binary for test
@@ -64,6 +68,10 @@ bin/test: all src/test.o
 # make util test binaries
 bin/util_tests: src/util.o src/util_tests.o
 	$(CC) $(LFLAGS) -o bin/util_tests src/util.o src/util_tests.o
+
+# make tests for matrix operations
+bin/mops_tests: src/mops.o src/mops_tests.o
+	$(CC) $(LFLAGS) -o bin/mops_tests src/mops.o src/mops_tests.o
 
 # make cmatrix test binaries
 bin/cmatrix_tests: src/cmatrix.o src/cmatrix_tests.o
@@ -94,11 +102,12 @@ bin/mcrypt: all src/mcrypt.o
 # ALIASES
 test: bin/test
 util_tests: bin/util_tests
+mops_tests: bin/mops_tests
 cmatrix_tests: bin/cmatrix_tests
 deflate_tests: bin/deflate_tests
 ascii86_tests: bin/ascii86_tests
-mcrypt: bin/mcrypt
 deflate86: bin/deflate86
+mcrypt: bin/mcrypt
 
 
 # MISC
@@ -111,4 +120,4 @@ clean:
 
 tests: ascii86_tests deflate_tests cmatrix_tests util_tests
 
-.PHONY: wc clean tests all stuff util_tests test cmatrix_tests deflate_tests ascii86_tests mcrypt
+.PHONY: wc clean tests all stuff tests test util_tests cmatrix_tests deflate_tests ascii86_tests mops_tests mcrypt deflate86
