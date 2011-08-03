@@ -54,7 +54,7 @@ void read_file(cme::Deflate& deflate, cme::Encode86& encode, string filename) {
   // check if the input stream is usable
   if(!input.good()) {
     // if not, say so
-    cout << "error opening file " << filename << endl;
+    cerr << "error opening file " << filename << endl;
     // and quit like a fool
     exit(-1);
   }
@@ -82,7 +82,7 @@ void read_input(cme::Deflate& deflate, cme::Encode86& encode) {
   // if there is an error
   if(!cin.good()) {
     // say so
-    cout << "error opening stdin" << endl;
+    cerr << "error opening stdin" << endl;
     // and quit like a fool
     exit(-1);
   }

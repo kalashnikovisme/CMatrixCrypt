@@ -5,63 +5,98 @@
 #include "ascii86.hpp"
 using namespace std;
 
+// decompress a file
 void read_file(cme::Inflate&, cme::Decode86&, string filename);
+// decompress stdin
 void read_input(cme::Inflate&, cme::Decode86&);
 
 int main(int argc, char *argv[]) {
-  if(argc < 2) {
-    cout << "please specify a file to decompress as argument" << endl;
-    return(-1);
-  }
-
+  // object to inflate (decompress)
   cme::Inflate inflate;
+  // decode object
   cme::Decode86 decode;
-  string file(argv[1]);
 
-  if(file == "-") {
+  // if there is no command line argument
+  if(argc < 2) {
+    // read from stdin
     read_input(inflate, decode);
   } else {
-    read_file(inflate, decode, file);
+    // if there is, store it in a string
+    string file(argv[1]);
+    // check if it's -
+    if(file == "-") {
+      // if so, read from stdin
+      read_input(inflate, decode);
+    } else {
+      // else read from file
+      read_file(inflate, decode, file);
+    }
   }
 
+  // decode closes automagically when it has detected end of input
+  if(!decode.closed()) {
+    // when it isn't closed yet, complain about missing data
+    cerr << "not enough input" << endl;
+  }
+
+  // after we're done inflating, close the stream (and flush it)
   inflate.close();
+  // output it to stdout
   cout << inflate.read();
+  // and write a newline char
   cout << endl;
 }
 
+// read from file
 void read_file(cme::Inflate& inflate, cme::Decode86& decode, string filename) {
+  // use an ifstream to read (easier to use)
   ifstream input(filename.data());
+  // temp var to hold a single line
   string line;
 
+  // if there is an error with the ifstream
   if(!input.good()) {
-    cout << "error opening file " << filename << endl;
+    // tell the use
+    cerr << "error opening file " << filename << endl;
+    // and exit
     exit(-1);
   }
 
+  // while there is more stuff in the file and the streams aren't closed
   while(!input.eof() && !inflate.closed() && !decode.closed()) {
+    // read a line
     getline(input, line);
+    // deocde the read line
     decode << line;
+    // inflate the line
     inflate << decode.read();
+    // and print the inflated stuff
     cout << inflate.read();
   }
 }
 
+// read from stdin
 void read_input(cme::Inflate& inflate, cme::Decode86& decode) {
+  // a single line of data
   string line;
 
+  // if stdin has errors
   if(!cin.good()) {
-    cout << "error opening stdin" << endl;
+    // tell the user
+    cerr << "error opening stdin" << endl;
+    // and exit
     exit(-1);
   }
 
+  // whiel there is still more input and the streams aren't closed
   while(!cin.eof() && !decode.closed() && !inflate.closed()) {
-    cout << "GETLINE!!!" << endl;
+    // get a line
     getline(cin, line);
-    cout << "DECODE!!!" << endl;
+    // decode the line
     decode << line;
-    cout << "INFLATE!!!" << endl;
+    // inflat the line
     inflate << decode.read();
-    cout << "COUTING!!!" << endl;
+    // and write to cout
     cout << inflate.read();
   }
 }
