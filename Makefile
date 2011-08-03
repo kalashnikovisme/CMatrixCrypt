@@ -126,9 +126,20 @@ mcrypt: bin/mcrypt
 wc:
 	wc Makefile src/*.cpp src/*.hpp
 
+# remove all .o files
 clean:
 	rm -f src/*.o
 
+# clean the bin folder
+cleanbin:
+	rm -f bin/*
+
+# shortcut for compiling all tests
 tests: ascii86_tests deflate_tests cmatrix_tests util_tests
 
+# shortcut to compile & run all tests
+run_tests:
+	ruby run_tests
+
+# targets that don't really exist
 .PHONY: wc clean tests all stuff tests test util_tests cmatrix_tests deflate_tests ascii86_tests mops_tests mcrypt deflate86 inflate86 flate86
