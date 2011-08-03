@@ -9,4 +9,4 @@ Write
  * mcrypt
 
 Bugfixes
- * ascii86 - ignore newlines and spaced in decode86
+ * ascii86 - ignore newlines and spaced in decode86 [done]

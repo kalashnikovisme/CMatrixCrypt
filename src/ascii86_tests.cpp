@@ -174,6 +174,11 @@ void decode_test_inputs() {
   }
 
   assert(dec.data() == "Angry birds");
+  dec.reset();
+  text = "<~ :iCPh EZfI\n BDesI ~>";
+
+  dec << text;
+  assert(dec.data() == "Power tools");
 }
 
 void decode_test_outputs() {

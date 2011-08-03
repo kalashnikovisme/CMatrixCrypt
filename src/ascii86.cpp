@@ -290,7 +290,8 @@ namespace cme {
     }
 
     if(inbuf.size() > 5 or end!=std::string::npos) {
-      int amount = inbuf.size()/5;            // how many tupled need to be decoded?
+      int amount = inbuf.size()/5;                // how many tuples need to be decoded?
+      outbuf.reserve(outbuf.size() + (amount*4)); // make space in outbuf
       int pos;
       for(pos = 0; pos < amount; ++pos) {
         decode_tuple(inbuf.substr(pos*5, 5));
@@ -343,7 +344,13 @@ namespace cme {
     if(closed_input) {
       throw std::runtime_error("input already closed");
     }
-    inbuf += data;
+    inbuf.reserve(inbuf.size() + data.size());
+    for(int i = 0; i < data.size(); ++i) {
+      if((32 < data[i] && data[i] < 118) || (data[i] == '~')) {
+        inbuf.push_back(data[i]);
+      }
+    }
+    //inbuf += data;
     decode();
   }
 
