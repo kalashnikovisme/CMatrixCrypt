@@ -43,8 +43,8 @@ int main(int argc, char *argv[]) {
   inflate.close();
   // output it to stdout
   cout << inflate.read();
-  // and write a newline char
-  cout << endl;
+  // and DON'T write a newline char [cuz that ain't part of the original file]
+  //cout << endl;
 }
 
 // read from file
