@@ -150,6 +150,19 @@ namespace cme {
     }
   }
 
+  // read as much data as there is
+  std::string Encode86::dread() {
+    std::string ret;
+    if((outbuf.size() - outpos) > 0) {
+      ret = outbuf.substr(outpos, (outbuf.size() - outpos));
+      //outpos = outbuf.size(); // no need since we reset this anyway
+    } else {
+      //ret = ""; // no need cus that's what string start out with anyways
+    }
+    clearbuf(); // reset output buffer & position
+    return(ret);
+  }
+
   std::string Encode86::data() const {
     return(outbuf);
   }
@@ -229,6 +242,15 @@ namespace cme {
     inbuf = "";
     outbuf = "<~";
     outpos = 0;
+  }
+
+  bool Encode86::eol() {
+    return(outpos >= outbuf.size());
+  }
+
+  void Encode86::clearbuf() {
+    outpos = 0;
+    outbuf.clear();
   }
 
   void Encode86::debug() {
@@ -326,6 +348,19 @@ namespace cme {
     }
   }
 
+  // read as much data as there is
+  std::string Decode86::dread() {
+    std::string ret;
+    if((outbuf.size() - outpos) > 0) {
+      ret = outbuf.substr(outpos, (outbuf.size() - outpos));
+      //outpos = outbuf.size(); // no need sice it's reset anyway
+    } else {
+      //ret = ""; // no need since that's what string start out with anyway
+    }
+    clearbuf(); // clear the output buffer & output position in the buffer
+    return(ret);
+  }
+
   std::string Decode86::data() const {
     return(outbuf);
   }
@@ -413,6 +448,11 @@ namespace cme {
     inbuf = "";
     outbuf = "";
     outpos = 0;
+  }
+
+  void Decode86::clearbuf() {
+    outpos = 0;
+    outbuf.clear();
   }
 
   void Decode86::debug() {

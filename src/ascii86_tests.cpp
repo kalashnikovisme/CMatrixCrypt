@@ -124,6 +124,16 @@ void encode_test_outputs() {
   }
 
   assert(result == "<~<+U,m+Cei$AH~>");
+  result.clear(); enc.reset();
+
+  enc << "Test ";
+  result += enc.dread();  // dread (destructive read) clears the output buffer upon reading
+  enc << "case";
+  result += enc.dread();
+  enc.close();
+  result += enc.dread();
+
+  assert(result == "<~<+U,m+Cei$AH~>");
 }
 
 void encode_test_misc() {
@@ -201,6 +211,14 @@ void decode_test_outputs() {
   orig += dec.read();
   dec << "Eb0E4Cisi6Df,~>";
   orig += dec.read();
+
+  assert(orig == "Eastern revolution");
+  dec.reset(); orig.clear();
+
+  dec << "<~7:C7ZATDZ2";
+  orig += dec.dread();  // dread (means destructive read) reads and then clears the output buffer. 
+  dec << "Eb0E4Cisi6Df,~>";
+  orig += dec.dread();
 
   assert(orig == "Eastern revolution");
   dec.reset(); orig.clear();

@@ -32,6 +32,7 @@ namespace cme {
       // read encoded data
       char get() const;             // reads just one character
       std::string read() const;     // reads as much data as there is in the output buffer
+      std::string dread();          // reads as much data as there is in the output buffer and then clears the output buffer
       std::string data() const;     // reads the whole output buffer
 
       // write data to be encoded
@@ -47,6 +48,8 @@ namespace cme {
       void close();       // close the input
       void reset();       // reset everything
       void debug();
+      void clearbuf();
+      bool eol();         // is the output buffer exhausted?
   };
 
   class Decode86 {
@@ -71,6 +74,7 @@ namespace cme {
       // reading facilities
       char get() const;
       std::string read() const;
+      std::string dread();      // reads from output buffer and then clears it
       std::string data() const;
 
       // input facilities
@@ -86,5 +90,6 @@ namespace cme {
       void reset();
       void debug();
       bool eol();   // has the output reached end of line yet?
+      void clearbuf();
   };
 }
