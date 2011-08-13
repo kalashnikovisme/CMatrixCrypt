@@ -125,7 +125,13 @@ void deflate_test_output() {
   }
 
   assert(inflate(out) == "longer output");
-  def.reset();
+  def.reset(); out.clear();
+
+  def << "Output test";
+  out += def.dread();
+  def.close();
+  out += def.dread();
+  assert(inflate(out) == "Output test");
 }
 
 void deflate_test_constructor() {
@@ -169,9 +175,14 @@ void inflate_test_input() {
   cme::Inflate inf;
   string comp;
   comp = deflate("watch out, dog poop");
+  cout << inf.data() << endl;
   inf.write(comp.substr(0, 10));
+  cout << inf.data() << endl;
   inf << comp.substr(10, 100);
+  cout << inf.data() << endl;
   inf.close();
+  cout << inf.data() << endl;
+  cout << inf.data().size() << endl;
   assert(inf.data() == "watch out, dog poop");
 }
 
@@ -194,6 +205,19 @@ void inflate_test_output() {
     str.push_back(inf.get());
   }
   assert(str == "testing");
+  inf.reset(); str.clear();
+
+  cout << "deflating fun stuff" << endl;
+  inf << deflate("fun stuff");
+  cout << inf.data().size() << endl;
+  str += inf.dread();
+  cout << inf.data().size() << endl;
+  inf.close();
+  cout << inf.data().size() << endl;
+  str += inf.dread();
+  cout << inf.data().size() << endl;
+
+  assert(str == "fun stuff");
 }
 
 void inflate_test_misc() {

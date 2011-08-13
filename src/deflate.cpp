@@ -128,6 +128,21 @@ namespace cme {
     }
   }
 
+  // read as much data as there is in the output buffer
+  std::string Deflate::dread() {
+    std::string ret;
+    // check if there's new data in the output buffer
+    if((output.size() - outpos) > 0) {
+      // if so, construct a string containing the new data
+      ret = output.substr(outpos, (output.size() - outpos));
+      outpos = output.size(); // move the output pointer
+    } else {
+      ret = "";
+    }
+    clearbuf();
+    return(ret);
+  }
+
   // return any and all data in the output buffer
   std::string Deflate::data() const {
     return(output);
@@ -183,6 +198,11 @@ namespace cme {
   Deflate& Deflate::operator>>(std::string& str) {
     str += read();
     return(*this);
+  }
+
+  void Deflate::clearbuf() {
+    output.clear();
+    outpos = 0;
   }
 
   // check if the input is closed
@@ -296,6 +316,21 @@ namespace cme {
     }
   }
 
+  // read as much data as there is in the output buffer and clear the latter
+  std::string Inflate::dread() {
+    std::string ret;
+    // check if there's new data in the output buffer
+    if((output.size() - outpos) > 0) {
+      // if so, construct a string containing the new data
+      ret = output.substr(outpos, (output.size() - outpos));
+      outpos = output.size(); // move the output pointer
+    } else {
+      ret = "";
+    }
+    clearbuf();
+    return(ret);
+  }
+
   // return any and all data in the output buffer
   std::string Inflate::data() const {
     return(output);
@@ -328,11 +363,13 @@ namespace cme {
       ret = inflate(&decompress_stream, Z_NO_FLUSH);
 
       // if there is new, inflated data in the output buffer,
-      if(output.size() < decompress_stream.total_out) {
+      if(total_out < decompress_stream.total_out) {
         // add it to the output string
-        output.append(output_buffer, decompress_stream.total_out - output.size());
+        output.append(output_buffer, decompress_stream.total_out - total_out);
       }
     } while(ret == Z_OK); // repeat while the return value indicates that this should be done
+
+    total_out = decompress_stream.total_out;  // keep track of how many bytes were output
 
     if (ret != Z_STREAM_END && ret != Z_BUF_ERROR) {          // an error occurred that was not EOF
         std::ostringstream oss;
@@ -351,6 +388,11 @@ namespace cme {
   Inflate& Inflate::operator>>(std::string& str) {
     str += read();
     return(*this);
+  }
+
+  void Inflate::clearbuf() {
+    output.clear();
+    outpos = 0;
   }
 
   // check if the input is closed
@@ -379,10 +421,12 @@ namespace cme {
       ret = inflate(&decompress_stream, Z_FINISH);  // Z_FINISH indicates that this is the last data to be compressed
 
       // add any remaining stuff from the flush to the output string
-      if(output.size() < decompress_stream.total_out) {
-        output.append(output_buffer, decompress_stream.total_out - output.size());
+      if(total_out < decompress_stream.total_out) {
+        output.append(output_buffer, decompress_stream.total_out - total_out);
       }
     } while(ret == Z_OK);
+
+    total_out = decompress_stream.total_out;  // keep track of how many bytes output yet
 
     if (ret != Z_STREAM_END && ret != Z_BUF_ERROR) {          // an error occurred that was not EOF
         std::ostringstream oss;
@@ -407,6 +451,7 @@ namespace cme {
     }
 
     outpos = 0;
+    total_out = 0;
   }
 
   void Inflate::reset() {

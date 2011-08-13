@@ -20,6 +20,7 @@ namespace cme {
       bool closed_input;        // whether or not this is closed
       int compressionlevel;     // determines how good the compression should be
       mutable int outpos;       // where we are in the outputting
+      int total_out;            // keep track of how many bytes of output there were
 
       void setup();   // set the compression up
     public:
@@ -31,6 +32,7 @@ namespace cme {
       char get() const;         // read a single character
       std::string read() const; // read new data
       std::string data() const; // read all data
+      std::string dread();      // read new data & clear output buffer
 
       // INPUT FUNCTIONS
       void write(const std::string&);  // write a string
@@ -40,6 +42,7 @@ namespace cme {
       Deflate& operator>>(std::string&);        // get data
 
       // MISC
+      void clearbuf();// clear the output buffer & outpos
       bool closed();  // check if the input is closed
       void close();   // close the input
       void reset();   // close input and then set it up again
@@ -55,6 +58,7 @@ namespace cme {
       z_stream decompress_stream; // zlib decompression stream
       bool closed_input;          // whether or not this is closed
       mutable int outpos;         // where we are in the outputting
+      unsigned long total_out;    // keep track of how many bytes of output there were
 
       void setup();   // set the decompression up
     public:
@@ -65,6 +69,7 @@ namespace cme {
       char get() const;         // read a single character
       std::string read() const; // read new data
       std::string data() const; // read all data
+      std::string dread();      // read all new data & clear the output buffer
 
       // INPUT FUNCTIONS
       void write(const std::string&);  // write a string
@@ -74,6 +79,7 @@ namespace cme {
       Inflate& operator>>(std::string&);        // get data
 
       // MISC
+      void clearbuf();// clear the output buffer
       bool closed();  // check if the input is closed
       void close();   // close the input
       void reset();   // close input and then set it up again
