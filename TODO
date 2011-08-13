@@ -9,4 +9,5 @@ Write
  * mcrypt
 
 Bugfixes
- * ascii86 - ignore newlines and spaced in decode86 [done]
+ * ascii86 - ignore newlines and spaced in decode86       [done]
+ * deflate - make use of total_out in write() and close() [in progress]
