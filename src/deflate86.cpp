@@ -35,11 +35,11 @@ int main(int argc, char *argv[]) {
   // once done, we have to close the deflation (this means deflate flushes the output)
   deflate.close();
   // we encode the last data to be read
-  encode << deflate.read();
+  encode << deflate.dread();
   // close the encoding stream
   encode.close();
   // write the last encoded stuff to stdout
-  cout << encode.read();
+  cout << encode.dread();
   // flush output & write newline
   cout << endl;
 }
@@ -68,9 +68,9 @@ void read_file(cme::Deflate& deflate, cme::Encode86& encode, string filename) {
     // deflate said line
     deflate << line;
     // encode it
-    encode << deflate.read();
+    encode << deflate.dread();
     // and output it
-    cout << encode.read();
+    cout << encode.dread();
   }
 }
 
@@ -96,8 +96,8 @@ void read_input(cme::Deflate& deflate, cme::Encode86& encode) {
     // deflate the line
     deflate << line;
     // encode it 
-    encode << deflate.read();
+    encode << deflate.dread();
     // and output it
-    cout << encode.read();
+    cout << encode.dread();
   }
 }

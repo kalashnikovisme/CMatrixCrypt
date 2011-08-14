@@ -42,7 +42,7 @@ int main(int argc, char *argv[]) {
   // after we're done inflating, close the stream (and flush it)
   inflate.close();
   // output it to stdout
-  cout << inflate.read();
+  cout << inflate.dread();
   // and DON'T write a newline char [cuz that ain't part of the original file]
   //cout << endl;
 }
@@ -69,9 +69,9 @@ void read_file(cme::Inflate& inflate, cme::Decode86& decode, string filename) {
     // deocde the read line
     decode << line;
     // inflate the line
-    inflate << decode.read();
+    inflate << decode.dread();
     // and print the inflated stuff
-    cout << inflate.read();
+    cout << inflate.dread();
   }
 }
 
@@ -95,8 +95,8 @@ void read_input(cme::Inflate& inflate, cme::Decode86& decode) {
     // decode the line
     decode << line;
     // inflat the line
-    inflate << decode.read();
+    inflate << decode.dread();
     // and write to cout
-    cout << inflate.read();
+    cout << inflate.dread();
   }
 }
