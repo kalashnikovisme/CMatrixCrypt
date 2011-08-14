@@ -175,14 +175,9 @@ void inflate_test_input() {
   cme::Inflate inf;
   string comp;
   comp = deflate("watch out, dog poop");
-  cout << inf.data() << endl;
   inf.write(comp.substr(0, 10));
-  cout << inf.data() << endl;
   inf << comp.substr(10, 100);
-  cout << inf.data() << endl;
   inf.close();
-  cout << inf.data() << endl;
-  cout << inf.data().size() << endl;
   assert(inf.data() == "watch out, dog poop");
 }
 
@@ -207,15 +202,10 @@ void inflate_test_output() {
   assert(str == "testing");
   inf.reset(); str.clear();
 
-  cout << "deflating fun stuff" << endl;
   inf << deflate("fun stuff");
-  cout << inf.data().size() << endl;
   str += inf.dread();
-  cout << inf.data().size() << endl;
   inf.close();
-  cout << inf.data().size() << endl;
   str += inf.dread();
-  cout << inf.data().size() << endl;
 
   assert(str == "fun stuff");
 }

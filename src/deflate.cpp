@@ -175,9 +175,10 @@ namespace cme {
       ret = deflate(&compress_stream, Z_NO_FLUSH);
 
       // if there is new, inflated data in the output buffer,
-      if(output.size() < compress_stream.total_out) {
+      if(total_out < compress_stream.total_out) {
         // add it to the output string
-        output.append(output_buffer, compress_stream.total_out - output.size());
+        output.append(output_buffer, compress_stream.total_out - total_out);
+        total_out = compress_stream.total_out;  // keep track of how many bytes were output so far
       }
     } while(ret == Z_OK); // repeat while the return value indicates that this should be done
 
@@ -231,8 +232,9 @@ namespace cme {
       ret = deflate(&compress_stream, Z_FINISH);  // Z_FINISH indicates that this is the last data to be compressed
 
       // add any remaining stuff from the flush to the output string
-      if(output.size() < compress_stream.total_out) {
-        output.append(output_buffer, compress_stream.total_out - output.size());
+      if(total_out < compress_stream.total_out) {
+        output.append(output_buffer, compress_stream.total_out - total_out);
+        total_out = compress_stream.total_out;  // keep track of byte output
       }
     } while(ret == Z_OK);
 
@@ -266,6 +268,7 @@ namespace cme {
     }
 
     outpos = 0;
+    total_out = 0;
   }
 
   void Deflate::reset() {
@@ -366,10 +369,10 @@ namespace cme {
       if(total_out < decompress_stream.total_out) {
         // add it to the output string
         output.append(output_buffer, decompress_stream.total_out - total_out);
+        total_out = decompress_stream.total_out;  // keep track of how many bytes were output
       }
     } while(ret == Z_OK); // repeat while the return value indicates that this should be done
 
-    total_out = decompress_stream.total_out;  // keep track of how many bytes were output
 
     if (ret != Z_STREAM_END && ret != Z_BUF_ERROR) {          // an error occurred that was not EOF
         std::ostringstream oss;
@@ -423,10 +426,10 @@ namespace cme {
       // add any remaining stuff from the flush to the output string
       if(total_out < decompress_stream.total_out) {
         output.append(output_buffer, decompress_stream.total_out - total_out);
+        total_out = decompress_stream.total_out;  // keep track of how many bytes output yet
       }
     } while(ret == Z_OK);
 
-    total_out = decompress_stream.total_out;  // keep track of how many bytes output yet
 
     if (ret != Z_STREAM_END && ret != Z_BUF_ERROR) {          // an error occurred that was not EOF
         std::ostringstream oss;
