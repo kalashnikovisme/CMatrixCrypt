@@ -11,3 +11,5 @@ Write
 Bugfixes
  * ascii86 - ignore newlines and spaced in decode86       [done]
  * deflate - make use of total_out in write() and close() [in progress]
+ * think about adding more diffusion to the password... possibly use XOR 8 chars in advance? 
+   but this would change the format....
