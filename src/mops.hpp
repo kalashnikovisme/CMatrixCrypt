@@ -7,42 +7,42 @@
 #include "util.hpp"
 
 namespace cme {
-  // bloody mary
-  typedef std::vector<CMatrix> marry;
+	// bloody mary
+	typedef std::vector<CMatrix> marry;
 
-  /* OLD CODE - TO BE REPLACED WITH OBJECT ORIENTED CODE
-  // turn string into list of pass matrices
-  marry makePassMatrix(const std::string&);
-  // turn string into list of mesg matrices
-  marry makeMesgMatrix(const std::string&);
+	/* OLD CODE - TO BE REPLACED WITH OBJECT ORIENTED CODE
+	// turn string into list of pass matrices
+	marry makePassMatrix(const std::string&);
+	// turn string into list of mesg matrices
+	marry makeMesgMatrix(const std::string&);
 
-  // encrypt the mesg and pass matrices
-  marry encryptMatrices(marry mesg, const marry& pass);
-  // decrypt the mesg and pass matrices
-  marry decryptMatrices(marry mesg, const marry& pass);
+	// encrypt the mesg and pass matrices
+	marry encryptMatrices(marry mesg, const marry& pass);
+	// decrypt the mesg and pass matrices
+	marry decryptMatrices(marry mesg, const marry& pass);
 
-  // turn two encrpyted matrices into a string with 17 chars
-  std::string twoMatricesToString(const CMatrix& m1, const CMatrix& m2);
+	// turn two encrpyted matrices into a string with 17 chars
+	std::string twoMatricesToString(const CMatrix& m1, const CMatrix& m2);
 
-  // turn one encrypted matrix into a string
-  std::string oneMatrixToString(const CMatrix& mat);
+	// turn one encrypted matrix into a string
+	std::string oneMatrixToString(const CMatrix& mat);
 
-  // turn that encrypted shiba into a string
-  std::string crypedMatrixToString(const marry& crypt);
+	// turn that encrypted shiba into a string
+	std::string crypedMatrixToString(const marry& crypt);
 
-  std::string matrixEncrypt(const std::string& mesg, const std::string& pass);
-  */
+	std::string matrixEncrypt(const std::string& mesg, const std::string& pass);
+	*/
 
-  // this will be a bitch to code...
-  class Encrypt {
-    private:
+	// this will be a bitch to code...
+	class Encrypt {
+	  private:
 			/* input buffer
 			 * writing to this class will fill up this buffer, and the encrypt
 			 * function will take as much data from this buffer as it can encrypt
 			 * and leaves the rest for the next encryption call. this buffer is
 			 * cleared if the input is closed (with close())
 			 */
-      std::string input;
+	    std::string input;
 
 			/* output buffer
 			 * this will get filled up by encrypt(). it can be accessed with data(),
@@ -51,30 +51,30 @@ namespace cme {
 			 * new data. it is recommended however to use dread(), which works in 
 			 * the same way as read(), but it clears the output buffer
 			 */
-      std::string output;
-      // current position in the output buffer - needed for read() and dread()
-      mutable int output_pos;
+	    std::string output;
+	    // current position in the output buffer - needed for read() and dread()
+	    mutable int output_pos;
 
 			/* delfater class
 			 * this class is responsible for compressing the encrypted data
 			 * to improve efficiency. it uses the DEFLATE algorithm as 
 			 * implemented by zlib
 			 */
-      Deflate deflate;
+	    Deflate deflate;
 
 			/* encoding class
 			 * this class encodes the encrypted data with ascii86 to make it
 			 * safe for use in non-binary environments (like mail and chatting
 			 * protocols)
 			 */
-      Encode86 encode;
+	    Encode86 encode;
 
 			/* encrypt
 			 * this function will try to encrypt as much data from the input buffer
 			 * as possible and add it to the output buffer. this function is called
 			 * by any of the input functions as well as by close().
 			 */
-      void encrypt();
+	    void encrypt();
 
 			/* encrypt matrix
 			 * called by encrypt() to actually encrypt a matrix. it does the encryption
@@ -97,10 +97,10 @@ namespace cme {
 			 */
 			CMatrix& nextPassMatrix() const;
 			// password matrix offset
-      mutable int pass_offset;
+	    mutable int pass_offset;
 
 			// keeps track of whether or not this is closed
-      bool closed;
+	    bool closed;
 		public:
 			/* constructor
 			 * needs a password as argument, this is used to construct the password
@@ -129,5 +129,5 @@ namespace cme {
 			void reset();
 			// print debug information
 			void debug();
-  }
+	}
 }
