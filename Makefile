@@ -133,12 +133,17 @@ wc:
 	wc Makefile src/*.cpp src/*.hpp
 
 # remove all .o files
-clean:
+cleanobj:
 	rm -f src/*.o
+
+clean: cleanobj
 
 # clean the bin folder
 cleanbin:
 	rm -f bin/*
+
+# clean everything
+cleanall: cleanbin cleanobj
 
 # shortcut to compile & run all tests
 run_tests: src/*.cpp src/*.hpp

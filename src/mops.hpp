@@ -36,26 +36,98 @@ namespace cme {
   // this will be a bitch to code...
   class Encrypt {
     private:
-      // input buffer
+			/* input buffer
+			 * writing to this class will fill up this buffer, and the encrypt
+			 * function will take as much data from this buffer as it can encrypt
+			 * and leaves the rest for the next encryption call. this buffer is
+			 * cleared if the input is closed (with close())
+			 */
       std::string input;
-      // output buffer
-      std::string output;
-      // current position in the output buffer
-      int output_pos;
 
-      // exporting classes
+			/* output buffer
+			 * this will get filled up by encrypt(). it can be accessed with data(),
+			 * which returns the whole content of this buffer, or with read(),
+			 * which remembers how much it read and, on further calls, only returns
+			 * new data. it is recommended however to use dread(), which works in 
+			 * the same way as read(), but it clears the output buffer
+			 */
+      std::string output;
+      // current position in the output buffer - needed for read() and dread()
+      mutable int output_pos;
+
+			/* delfater class
+			 * this class is responsible for compressing the encrypted data
+			 * to improve efficiency. it uses the DEFLATE algorithm as 
+			 * implemented by zlib
+			 */
       Deflate deflate;
+
+			/* encoding class
+			 * this class encodes the encrypted data with ascii86 to make it
+			 * safe for use in non-binary environments (like mail and chatting
+			 * protocols)
+			 */
       Encode86 encode;
 
-      // encryption code
+			/* encrypt
+			 * this function will try to encrypt as much data from the input buffer
+			 * as possible and add it to the output buffer. this function is called
+			 * by any of the input functions as well as by close().
+			 */
       void encrypt();
-      marry getMesgMatrices();
-      marry getPassMatrices();
-      marry doMatrixEncryption(marry& mesg, const marry& pass);
-      std::string matricesToString(const marry& matrices);
 
-      // status tools
+			/* encrypt matrix
+			 * called by encrypt() to actually encrypt a matrix. it does the encryption
+			 * and then adds the result to the output buffer
+			 */
+			void encryptMatrix(const CMatrix& mesg, const CMatrix& pass);
+
+			/* matrix to string
+			 * this function is called by encryptMatrix() to convert a matrix to a
+			 * string representation. this also compresses it with deflate and
+			 * encodes it with ascii86 before appending it to the output buffer.
+			 */
+			void matrixToString(const CMatrix& matrix);
+
+			/* get the next password matrix
+			 * password matrices are stored in a vector and they are used by rotation.
+			 * this function will take a password matrix from the index of the 
+			 * password matrix index and then increase the index to prepare for the 
+			 * next call.
+			 */
+			CMatrix& nextPassMatrix() const;
+			// password matrix offset
+      mutable int pass_offset;
+
+			// keeps track of whether or not this is closed
       bool closed;
-      int pass_offset;
+		public:
+			/* constructor
+			 * needs a password as argument, this is used to construct the password
+			 * matrix array. 
+			 */
+			Encrypt(std::string pass);
+
+			/* write
+			 * adds data to the input buffer and calls encrypt() to encrypt it all. 
+			 */
+			void write(std::string data);
+
+			/* data
+			 * gets all data that is currently in the output buffer
+			 */
+			std::string data();
+
+			/* close
+			 * closes the input and finishes encrypting the whole input buffer.
+			 * this finalizes the encryption, thus after calling this you can't
+			 * add any more data.
+			 */
+			void close();
+
+			// resets everything
+			void reset();
+			// print debug information
+			void debug();
   }
 }
