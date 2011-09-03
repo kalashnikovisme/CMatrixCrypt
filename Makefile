@@ -1,14 +1,15 @@
+# VARIABLES
+# compiler
 CC=g++
+# compile flags
 CFLAGS=-c -Wall -Wno-sign-compare 
+# link flags
 LFLAGS=-lz -Wall -Wno-sign-compare
 
 
-# LIBRARIES
+# LIBRARIES (anything that compiles to *.o)
 # all the libraries used
 all: src/cmatrix.o src/deflate.o src/util.o src/ascii86.o src/mops.o
-
-# everything that is from other dirs and not coded here
-stuff: src/cmatrix.o src/deflate.o src/util.o src/ascii86.o
 
 # matrix class
 src/cmatrix.o: src/cmatrix.cpp src/cmatrix.hpp
@@ -30,8 +31,12 @@ src/ascii86.o: src/ascii86.cpp src/ascii86.hpp
 src/mops.o: src/mops.cpp src/mops.hpp
 	$(CC) $(CFLAGS) -o src/mops.o src/mops.cpp
 
+# some experimentations regarding password hashing
+src/phash.o: src/phash.cpp src/phash.hpp
+	$(CC) $(CFLAGS) -o src/phash.o src/phash.cpp
 
-# TESTS
+
+# TESTS (object files)
 # compile tests
 src/test.o: src/test.cpp
 	$(CC) $(CFLAGS) -o src/test.o src/test.cpp
@@ -65,7 +70,7 @@ src/inflate86.o: src/inflate86.cpp
 	$(CC) $(CFLAGS) -o src/inflate86.o src/inflate86.cpp
 
 
-# TESTS - link the compiled tests
+# TESTS (binaries)
 # make a binary for test
 bin/test: all src/test.o
 	$(CC) $(LFLAGS) -o bin/test src/cmatrix.o src/deflate.o src/util.o src/ascii86.o src/mops.o src/test.o
@@ -98,7 +103,7 @@ bin/inflate86: src/deflate.o src/ascii86.o src/inflate86.o
 	$(CC) $(LFLAGS) -o bin/inflate86 src/deflate.o src/ascii86.o src/inflate86.o
 
 
-# BINARIES
+# BINARIES (end product)
 # compile the final product
 src/mcrypt.o: src/mcrypt.cpp src/mcrypt.hpp
 	$(CC) $(CFLAGS) src/mcrypt.cpp -o src/mcrypt.o
@@ -110,6 +115,7 @@ bin/mcrypt: all src/mcrypt.o
 
 # ALIASES
 test: bin/test
+tests: ascii86_tests deflate_tests cmatrix_tests util_tests
 util_tests: bin/util_tests
 mops_tests: bin/mops_tests
 cmatrix_tests: bin/cmatrix_tests
@@ -134,11 +140,8 @@ clean:
 cleanbin:
 	rm -f bin/*
 
-# shortcut for compiling all tests
-tests: ascii86_tests deflate_tests cmatrix_tests util_tests
-
 # shortcut to compile & run all tests
-run_tests:
+run_tests: src/*.cpp src/*.hpp
 	ruby run_tests
 
 # targets that don't really exist
