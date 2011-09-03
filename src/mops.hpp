@@ -55,6 +55,13 @@ namespace cme {
 	    // current position in the output buffer - needed for read() and dread()
 	    mutable int output_pos;
 
+			/* password array
+			 * this password array is used for encryption, it is looped thru to 
+			 * encrypt each message matrix with a different password array (until
+			 * all password matrices are used, then it wraps back to the beginning)
+			 */
+			marry passwords;
+
 			/* delfater class
 			 * this class is responsible for compressing the encrypted data
 			 * to improve efficiency. it uses the DEFLATE algorithm as 

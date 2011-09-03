@@ -127,5 +127,27 @@ string matrixEncrypt(const std::string& mesg, const std::string& pass) {
 */ 
 
 namespace cme {
-	
+	Encrypt::Encrypt(std::string password) {
+		int missing = (4-(password.size()%4))%4;	// calculates how many characters are missing until the length is a multiple of 4
+
+		for(int i = 0; i < missing; ++i) {
+			// add NULLs to the pass until it's length is a multiple of 4
+			password.push_back('\0');
+		}
+
+		// for every 4 characters in password
+		for(int i = 0; i < (password.size() / 4); i+=4) {
+			// make a new CMatrix
+			CMatrix pw;
+
+			// which is filled up with the 4 characters
+			for(int j = 0; j < 4; ++j) {
+				// cast to unsigned char is necessary because we don't like signs in our matrix ;)
+				pw[j] = (float)(unsigned char)password[i+j];
+			}
+
+			// add this CMatrix to the list of password matrices
+			passwords.push_back(pw);
+		}
+	}
 }
