@@ -14,3 +14,4 @@ Bugfixes
  * deflate - make use of total_out in write() and close() [no measurable improvement]
  * think about adding more diffusion to the password... possibly use XOR 8 chars in advance? 
    but this would change the format....                   [in progress]
+ * object files - move them all to obj/ to declutter src/ 
