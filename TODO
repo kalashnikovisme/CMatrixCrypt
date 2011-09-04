@@ -7,9 +7,10 @@ Rewrite to OOC
 
 Write
  * mcrypt
+ * util - function to generate a sha 512 hash for password hashing
 
 Bugfixes
  * ascii86 - ignore newlines and spaced in decode86       [done]
- * deflate - make use of total_out in write() and close() [in progress]
+ * deflate - make use of total_out in write() and close() [no measurable improvement]
  * think about adding more diffusion to the password... possibly use XOR 8 chars in advance? 
-   but this would change the format....
+   but this would change the format....                   [in progress]
