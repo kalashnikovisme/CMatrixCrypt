@@ -30,7 +30,7 @@ int main(void) {
 
 // test if encryption works
 void test_encryption() {
-	Encrypter enc("pw");
+	Encrypter enc("pwandstuff");
 	enc.write("fun stuff");
 	enc.close();
 	enc.debug();
