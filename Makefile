@@ -147,7 +147,7 @@ cleanall: cleanbin cleanobj
 
 # shortcut to compile & run all tests
 run_tests: src/*.cpp src/*.hpp
-	ruby run_tests
+	ruby run_tests | less
 
 # targets that don't really exist
 .PHONY: wc clean tests all stuff tests test util_tests cmatrix_tests deflate_tests ascii86_tests mops_tests mcrypt deflate86 inflate86 flate86
