@@ -136,7 +136,7 @@ namespace cme {
 		}
 
 		// for every 4 characters in password
-		for(int i = 0; i < (password.size() / 4); i+=4) {
+		for(int i = 0; i < password.size(); i+=4) {
 			// make a new CMatrix
 			CMatrix pw;
 
@@ -145,8 +145,24 @@ namespace cme {
 				// cast to unsigned char is necessary because we don't like signs in our matrix ;)
 				pw[j] = (float)(unsigned char)password[i+j];
 			}
+			
+			// escape the matrix (we need to be able to get it's inverse, this makes sure that this is the case)
+			pw.escape();
 
 			// add this CMatrix to the list of password matrices
+			passwords.push_back(pw);
+		}
+
+		// what if the password has a length of 0? this means that there shouldn't be any encryption
+		if(password.size() == 0) {
+			// new password matrix
+			CMatrix pw;
+
+			// set it to the identity matrix
+			pw[0] = pw[3] = 1;
+			pw[1] = pw[2] = 0;
+			// no need to call pw.escape() here because we know that the idenitity matrix doesn't need to be escaped
+
 			passwords.push_back(pw);
 		}
 	}

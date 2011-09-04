@@ -30,8 +30,26 @@ int main(void) {
 
 // test if encryption works
 void test_encryption() {
-	Encrypter enc("pwandstuff");
-	enc.write("fun stuff");
-	enc.close();
-	enc.debug();
+	Encrypter enc1("pwandstuf");
+	enc1.write("fun stuff");
+	enc1.close();
+	enc1.debug();
+
+	Encrypter enc2("pwandstuff");
+	enc2.write("fun stuff");
+	enc2.close();
+	enc2.debug();
+
+	Encrypter enc3("pwandstufff");
+	enc3.write("fun stuff");
+	enc3.close();
+	enc3.debug();
+
+	Encrypter enc4("pwandstuffff");
+	enc4.write("fun stuff");
+	enc4.close();
+	enc4.debug();
+
+	Encrypter enc5("");
+	enc5.debug();
 }
