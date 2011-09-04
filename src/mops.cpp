@@ -150,4 +150,24 @@ namespace cme {
 			passwords.push_back(pw);
 		}
 	}
+
+	Encrypter::~Encrypter() {
+	}
+
+	void Encrypter::write(std::string) {
+	}
+
+	void Encrypter::close() {
+	}
+
+	std::string Encrypter::data() {
+		return(string(""));
+	}
+
+	void Encrypter::debug() {
+		std::cout << "passwords: " << std::endl;
+		for(int i = 0; i < passwords.size(); ++i) {
+			std::cout << passwords[i] << std::endl;
+		}
+	}
 }

@@ -23,7 +23,7 @@ int main(void) {
 	// get difference
   double time = difftime(end, start) / CLOCKS_PER_SEC;
 	// set cout to show all digits of floating point numbers
-  cout.setf(ios_base::fixed);
+  cout.setf(std::ios_base::fixed);
 	// reveal the time taken
   cout << "tests took " << time << " seconds" << endl;
 }
@@ -33,5 +33,5 @@ void test_encryption() {
 	Encrypter enc("pw");
 	enc.write("fun stuff");
 	enc.close();
-	cout << enc.data() << endl;
+	enc.debug();
 }

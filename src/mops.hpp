@@ -115,6 +115,9 @@ namespace cme {
 			 */
 			Encrypter(std::string pass);
 
+			// destructor
+			~Encrypter();
+
 			/* write
 			 * adds data to the input buffer and calls encrypt() to encrypt it all. 
 			 */
@@ -136,5 +139,5 @@ namespace cme {
 			void reset();
 			// print debug information
 			void debug();
-	}
+	};
 }
