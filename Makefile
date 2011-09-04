@@ -80,8 +80,8 @@ bin/util_tests: src/util.o src/util_tests.o
 	$(CC) $(LFLAGS) -o bin/util_tests src/util.o src/util_tests.o
 
 # make tests for matrix operations
-bin/mops_tests: src/mops.o src/mops_tests.o
-	$(CC) $(LFLAGS) -o bin/mops_tests src/mops.o src/mops_tests.o
+bin/mops_tests: src/mops.o src/cmatrix.o src/deflate.o src/ascii86.o src/util.o src/mops_tests.o
+	$(CC) $(LFLAGS) -o bin/mops_tests src/mops.o src/cmatrix.o src/deflate.o src/ascii86.o src/util.o src/mops_tests.o
 
 # make cmatrix test binaries
 bin/cmatrix_tests: src/cmatrix.o src/cmatrix_tests.o
@@ -115,7 +115,6 @@ bin/mcrypt: all src/mcrypt.o
 
 # ALIASES
 test: bin/test
-tests: ascii86_tests deflate_tests cmatrix_tests util_tests mops_tests
 util_tests: bin/util_tests
 mops_tests: bin/mops_tests
 cmatrix_tests: bin/cmatrix_tests
@@ -125,6 +124,9 @@ deflate86: bin/deflate86
 inflate86: bin/inflate86
 flate86: inflate86 deflate86
 mcrypt: bin/mcrypt
+
+# all tests
+tests: ascii86_tests deflate_tests cmatrix_tests util_tests mops_tests
 
 
 # MISC
