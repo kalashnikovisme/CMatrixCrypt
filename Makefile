@@ -115,7 +115,7 @@ bin/mcrypt: all src/mcrypt.o
 
 # ALIASES
 test: bin/test
-tests: ascii86_tests deflate_tests cmatrix_tests util_tests
+tests: ascii86_tests deflate_tests cmatrix_tests util_tests mops_tests
 util_tests: bin/util_tests
 mops_tests: bin/mops_tests
 cmatrix_tests: bin/cmatrix_tests
