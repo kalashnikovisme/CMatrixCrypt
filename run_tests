@@ -1,12 +1,11 @@
 #!/usr/bin/env ruby
 puts "compiling tests..."
 compres = %x[make tests]
-puts ""
 if($? != 0)
   puts "compilation failed"
   puts compres
 end
-
+puts ""
 
 failures = []
 
