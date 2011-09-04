@@ -34,7 +34,7 @@ namespace cme {
 	*/
 
 	// this will be a bitch to code...
-	class Encrypt {
+	class Encrypter {
 	  private:
 			/* input buffer
 			 * writing to this class will fill up this buffer, and the encrypt
@@ -113,7 +113,7 @@ namespace cme {
 			 * needs a password as argument, this is used to construct the password
 			 * matrix array. 
 			 */
-			Encrypt(std::string pass);
+			Encrypter(std::string pass);
 
 			/* write
 			 * adds data to the input buffer and calls encrypt() to encrypt it all. 

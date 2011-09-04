@@ -127,7 +127,7 @@ string matrixEncrypt(const std::string& mesg, const std::string& pass) {
 */ 
 
 namespace cme {
-	Encrypt::Encrypt(std::string password) {
+	Encrypter::Encrypter(std::string password) {
 		int missing = (4-(password.size()%4))%4;	// calculates how many characters are missing until the length is a multiple of 4
 
 		for(int i = 0; i < missing; ++i) {
