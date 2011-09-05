@@ -143,7 +143,7 @@ tests: ascii86_tests deflate_tests cmatrix_tests util_tests mops_tests sha4_test
 # MISC
 # make wc is faster to type than make estimate, and more accurate too
 wc:
-	wc Makefile src/*.cpp src/*.hpp
+	find src -type f -exec wc {} +
 
 # remove all .o files
 cleanobj:
