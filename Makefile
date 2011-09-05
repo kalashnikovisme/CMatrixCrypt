@@ -36,7 +36,7 @@ obj/phash.o: src/phash.cpp src/phash.hpp
 	$(CC) $(CFLAGS) -o obj/phash.o src/phash.cpp
 
 # PolarSSL sha4 implementation
-obj/sha4.o: src/polarssl/config.h src/polarssl/sha4.h src/polarssl/sha4.c src/polarssl/sha4.cpp
+obj/sha4.o: src/polarssl/config.h src/polarssl/sha4.h src/polarssl/sha4.cpp
 	$(CC) $(CFLAGS) -o obj/sha4.o src/polarssl/sha4.cpp
 
 
@@ -73,6 +73,9 @@ obj/deflate86.o: src/deflate86.cpp
 obj/inflate86.o: src/inflate86.cpp
 	$(CC) $(CFLAGS) -o obj/inflate86.o src/inflate86.cpp
 
+obj/sha4_tests.o: src/sha4_tests.cpp
+	$(CC) $(CFLAGS) -o obj/sha4_tests.o src/sha4_tests.cpp
+
 
 # TESTS (binaries)
 # make a binary for test
@@ -105,6 +108,9 @@ bin/deflate86: obj/deflate.o obj/ascii86.o obj/deflate86.o
 
 bin/inflate86: obj/deflate.o obj/ascii86.o obj/inflate86.o
 	$(CC) $(LFLAGS) -o bin/inflate86 obj/deflate.o obj/ascii86.o obj/inflate86.o
+
+bin/sha4_tests: obj/sha4.o obj/sha4_tests.o
+	$(CC) $(LFLAGS) -o bin/sha4_tests obj/sha4.o obj/sha4_tests.o
 
 
 # BINARIES (end product)
