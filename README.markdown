@@ -11,16 +11,24 @@ Essentially, it converts the clear text and the password into matrices and multi
 How can I try it?
 -----------------
 
-You can't. I am not done coding it yet, there are a couple of components in the code that still need to be written/finished/tested:
+You can't. I am not done coding it yet, there are a couple of components in the code that still need to be written/finished/tested before there will be anything usable. 
 
-+   *CMatrix*, a class which represents matrices
-+   *Ascii86*, the implementation of Ascii85
-+   *GZip*, a wrapper around zlib's DEFLATE (has nothing to do with gzip, needs to be renamed)
++   *CMatrix*, a class which represents a matrix
++   *Ascii86*, my implementation of Ascii85
++   *Deflate*, a wrapper around zlib's DEFLATE algorithm
 +   *util.cpp*, various utilities (that is, functions)
+-   *SHA512*, a class that wraps around PolarSSL's implementation of SHA512
 -   *mops*, short for matrix operatrions, which deals with matrices
 -   *CMCcrypt*, which performs the matrix encryption
 
 Once all of these are done coding, I can get to finalize the API. Meanwhile you are welcome to help, if my coding style doesn't scare you. 
+
+How is it being written?
+------------------------
+
+I am writing all of the code in C++. Basically, I am using some libraries (like PolarSSL and zlib) for which I write C++ wrapper classes (because I like Object Oritented Programming) and also I'm writing some classes myself (like Ascii86, CMatrix) which are useful for the Encryption. Then I just piece all the things together to create Matrix Crypt. This is how I'm planning to finish the project. 
+
+All of the source code is in /src/. There are 2 libraries that I am using, one of which is PolarSSL, the part of it that I'm using is in /src/ in the folder /polarssl/. The other library is zlib, which needs to be linked via the linker argument `-lz` when compiling anything that uses the *Deflate* or *Inflate* classes. All of this is done automatically by the Makefile. The Makefile is set up so that it compiles all .cpp files that are in /src/ into object files which are stored in /obj/. These are then linked and places as binaries in /bin/. 
 
 Some sample encrypted stuff
 ---------------------------
