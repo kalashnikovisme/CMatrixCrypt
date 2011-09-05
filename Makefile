@@ -127,6 +127,7 @@ bin/mcrypt: all obj/mcrypt.o
 test: bin/test
 util_tests: bin/util_tests
 mops_tests: bin/mops_tests
+sha4_tests: bin/sha4_tests
 cmatrix_tests: bin/cmatrix_tests
 deflate_tests: bin/deflate_tests
 ascii86_tests: bin/ascii86_tests
@@ -136,7 +137,7 @@ flate86: inflate86 deflate86
 mcrypt: bin/mcrypt
 
 # all tests
-tests: ascii86_tests deflate_tests cmatrix_tests util_tests mops_tests
+tests: ascii86_tests deflate_tests cmatrix_tests util_tests mops_tests sha4_tests
 
 
 # MISC
