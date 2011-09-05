@@ -35,6 +35,10 @@ src/mops.o: src/mops.cpp src/mops.hpp
 src/phash.o: src/phash.cpp src/phash.hpp
 	$(CC) $(CFLAGS) -o src/phash.o src/phash.cpp
 
+# PolarSSL sha4 implementation
+src/sha4.o: src/polarssl/config.h src/polarssl/sha4.h src/polarssl/sha4.c src/polarssl/sha4.cpp
+	$(CC) $(CFLAGS) -o src/sha4.o src/polarssl/sha4.cpp
+
 
 # TESTS (object files)
 # compile tests
@@ -136,7 +140,7 @@ wc:
 
 # remove all .o files
 cleanobj:
-	rm -f src/*.o
+	find src -name "*.o" -exec rm {} \;
 
 clean: cleanobj
 

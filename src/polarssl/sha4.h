@@ -53,6 +53,8 @@ typedef struct
 sha4_context;
 
 #ifdef __cplusplus
+// we want to put it in it's own namespace
+namespace polarssl {
 extern "C" {
 #endif
 
@@ -161,7 +163,8 @@ void sha4_hmac( const unsigned char *key, size_t keylen,
 int sha4_self_test( int verbose );
 
 #ifdef __cplusplus
-}
+} // extern "C"
+} // namespace polarsll
 #endif
 
 #endif /* sha4.h */
