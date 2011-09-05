@@ -46,24 +46,24 @@ obj/test.o: src/test.cpp
 	$(CC) $(CFLAGS) -o obj/test.o src/test.cpp
 
 # ascii86 tests
-src/ascii86_tests.o: src/ascii86_tests.cpp
-	$(CC) $(CFLAGS) -o src/ascii86_tests.o src/ascii86_tests.cpp
+obj/ascii86_tests.o: src/ascii86_tests.cpp
+	$(CC) $(CFLAGS) -o obj/ascii86_tests.o src/ascii86_tests.cpp
 
 # deflate tests
-src/deflate_tests.o: src/deflate_tests.cpp
-	$(CC) $(CFLAGS) -o src/deflate_tests.o src/deflate_tests.cpp
+obj/deflate_tests.o: src/deflate_tests.cpp
+	$(CC) $(CFLAGS) -o obj/deflate_tests.o src/deflate_tests.cpp
 
 # cmatrix tests
-src/cmatrix_tests.o: src/cmatrix_tests.cpp
-	$(CC) $(CFLAGS) -o src/cmatrix_tests.o src/cmatrix_tests.cpp
+obj/cmatrix_tests.o: src/cmatrix_tests.cpp
+	$(CC) $(CFLAGS) -o obj/cmatrix_tests.o src/cmatrix_tests.cpp
 
 # util tests
-src/util_tests.o: src/util_tests.cpp
-	$(CC) $(CFLAGS) -o src/util_tests.o src/util_tests.cpp
+obj/util_tests.o: src/util_tests.cpp
+	$(CC) $(CFLAGS) -o obj/util_tests.o src/util_tests.cpp
 
 # matrix operations tests
-src/mops_tests.o: src/mops_tests.cpp
-	$(CC) $(CFLAGS) -o src/mops_tests.o src/mops_tests.cpp
+obj/mops_tests.o: src/mops_tests.cpp
+	$(CC) $(CFLAGS) -o obj/mops_tests.o src/mops_tests.cpp
 
 # make deflate86.o
 obj/deflate86.o: src/deflate86.cpp
@@ -83,24 +83,24 @@ bin/test: all obj/test.o
 	$(CC) $(LFLAGS) -o bin/test obj/cmatrix.o obj/deflate.o obj/util.o obj/ascii86.o obj/mops.o obj/test.o
 
 # make util test binaries
-bin/util_tests: obj/util.o src/util_tests.o
-	$(CC) $(LFLAGS) -o bin/util_tests obj/util.o src/util_tests.o
+bin/util_tests: obj/util.o obj/util_tests.o
+	$(CC) $(LFLAGS) -o bin/util_tests obj/util.o obj/util_tests.o
 
 # make tests for matrix operations
-bin/mops_tests: obj/mops.o obj/cmatrix.o obj/deflate.o obj/ascii86.o obj/util.o src/mops_tests.o
-	$(CC) $(LFLAGS) -o bin/mops_tests obj/mops.o obj/cmatrix.o obj/deflate.o obj/ascii86.o obj/util.o src/mops_tests.o
+bin/mops_tests: obj/mops.o obj/cmatrix.o obj/deflate.o obj/ascii86.o obj/util.o obj/mops_tests.o
+	$(CC) $(LFLAGS) -o bin/mops_tests obj/mops.o obj/cmatrix.o obj/deflate.o obj/ascii86.o obj/util.o obj/mops_tests.o
 
 # make cmatrix test binaries
-bin/cmatrix_tests: obj/cmatrix.o src/cmatrix_tests.o
-	$(CC) $(LFLAGS) -o bin/cmatrix_tests obj/cmatrix.o src/cmatrix_tests.o
+bin/cmatrix_tests: obj/cmatrix.o obj/cmatrix_tests.o
+	$(CC) $(LFLAGS) -o bin/cmatrix_tests obj/cmatrix.o obj/cmatrix_tests.o
 
 # make tests for deflate
-bin/deflate_tests: obj/deflate.o src/deflate_tests.o
-	$(CC) $(LFLAGS) -o bin/deflate_tests obj/deflate.o src/deflate_tests.o
+bin/deflate_tests: obj/deflate.o obj/deflate_tests.o
+	$(CC) $(LFLAGS) -o bin/deflate_tests obj/deflate.o obj/deflate_tests.o
 
 # make tests for ascii86
-bin/ascii86_tests: obj/ascii86.o src/ascii86_tests.o
-	$(CC) $(LFLAGS) -o bin/ascii86_tests obj/ascii86.o src/ascii86_tests.o
+bin/ascii86_tests: obj/ascii86.o obj/ascii86_tests.o
+	$(CC) $(LFLAGS) -o bin/ascii86_tests obj/ascii86.o obj/ascii86_tests.o
 
 # make deflate86 (a test for ascii86.cpp and deflate.cpp)
 bin/deflate86: obj/deflate.o obj/ascii86.o obj/deflate86.o
