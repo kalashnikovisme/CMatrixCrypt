@@ -1,10 +1,7 @@
-/* This is merely a C++ wrapper around sha4.c
- */
+#include "sha4.h"
 
-// I like this think to be in the namespace polarssl
 namespace polarssl {
-// after all, it's C code that we're dealing with here
-extern "C" {
+	extern "C" {
 #include "sha4.c"
-}
+	}
 }

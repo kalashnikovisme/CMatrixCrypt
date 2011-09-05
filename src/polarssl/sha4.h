@@ -37,6 +37,11 @@
   #define int64 long long
 #endif
 
+#ifdef __cplusplus
+namespace polarssl {
+extern "C" {
+#endif
+
 /**
  * \brief          SHA-512 context structure
  */
@@ -53,9 +58,6 @@ typedef struct
 sha4_context;
 
 #ifdef __cplusplus
-// we want to put it in it's own namespace
-namespace polarssl {
-extern "C" {
 #endif
 
 /**
