@@ -2,9 +2,9 @@
 # compiler
 CC=g++
 # compile flags
-CFLAGS=-c -Wall -Wno-sign-compare 
+CFLAGS=-c -O0 -g -Wall -Wno-sign-compare 
 # link flags
-LFLAGS=-lz -Wall -Wno-sign-compare
+LFLAGS=-lz -O0 -g -Wall -Wno-sign-compare
 
 
 # LIBRARIES (anything that compiles to *.o)
