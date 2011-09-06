@@ -45,6 +45,12 @@ namespace cme {
     write(data);
 	}
 
+	SHA512::~SHA512() {
+		if(!closed_input) {
+			close();
+		}
+	}
+
 	void SHA512::write(std::string input) {
 		sha4_update( (const unsigned char *) input.c_str(), input.size() );
 	}
@@ -76,18 +82,43 @@ namespace cme {
 		if(!closed_input) {
 			throw std::runtime_error("sha4 input not closed yet");
 		} else {
-			// declare a stringstream to hold the hex data
-			std::stringstream hexdigest;
-			// tell it that we want hex stuff
-			hexdigest << std::hex;
+			// we'll store the hexdigest in this string
+			std::string hex;
+			// sha512 hexdigests always have 128 characters (64 bytes, 2 chars per byte)
+			hex.reserve(128);
 
-			// add all digest digits
+			// loop thru all bytes
 			for(int i = 0; i < 64; ++i) {
-				hexdigest << hash[i];
+				// there are two chars per byte
+				char low, high;
+
+				// extract the last four bits (00001111)
+				low = hash[i] & 0x0F;
+				// extract the first four bits (11110000)
+				high = hash[i] >> 4;
+
+				// we now have numbers between 0 and 16 that need to be turned into characters
+				// +48 turns them into 0-9
+				low+=48;
+				if(low > '9') {
+					// if they are bigger than 9, add another 39 for anything that is between a and f
+					low+=39;
+				}
+
+				// same here: turn them into digits (0..9)
+				high+=48;
+				if(high > '9') {
+					// and if not a digit but rather a letter (a..f), add another 39
+					high+=39;
+				}
+
+				// add them to the string, high char first
+				hex.push_back(high);
+				hex.push_back(low);
 			}
 
 			// return the resulting string
-			return(hexdigest.str());
+			return(hex);
 		}
 	}
 
