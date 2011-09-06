@@ -1,6 +1,6 @@
 #include "polarssl/sha4.h"
 #include <string>
-#include <stringstream>
+#include <sstream>
 #include <iostream>
 #include <stdexcept>
 #pragma once
@@ -24,33 +24,34 @@ namespace cme {
 			SHA512();
 			// constructor with string argument, initializes and starts hashing the string
 			SHA512(std::string);
+			~SHA512();
 
 			// add a string to the hash
-			void write(std::string&);
+			void write(std::string);
 
 			// close the input (finishes the hash)
 			void close();
 
 			// check if it's closed
-			bool closed();
+			bool closed() const;
 
 			// get the hash as raw data
-			void hash(unsigned char data[64]) const;
+			void gethash(unsigned char data[64]) const;
 
 			// get the hash as string
-			std::string hash() const;
+			std::string gethash() const;
 
 			// or get it as a hex encoded string
 			std::string hexdigest() const;
 
 			// compare this hash to another hash
 			bool compare(const std::string) const;
-			bool compare(const unsigned char data[64]);
+			bool compare(const unsigned char data[64]) const;
 
 			// interaction with cout and cin
-			std::ostream& operator<<(std::ostream&, const SHA512&);
+			friend std::ostream& operator<<(std::ostream&, const SHA512&);
 			// read a link from istream and add it to the SHA512 hex
-			std::istream& operator>>(std::istream&, SHA512&);
+			friend std::istream& operator>>(std::istream&, SHA512&);
 
 			// string input and output
 			SHA512& operator<<(const std::string&);
@@ -63,5 +64,5 @@ namespace cme {
 			bool operator!=(const SHA512&);
 			bool operator!=(const std::string&);
 			bool operator!=(const unsigned char data[64]);
-	}
+	};
 }

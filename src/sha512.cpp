@@ -13,7 +13,7 @@ namespace cme {
 		if(closed_input) {
 			throw std::runtime_error("sha4 input already closed");
 		} else {
-			sha4_update(&sha4_ctx, input, ilen);
+			polarssl::sha4_update(&sha4_ctx, input, ilen);
 		}
 	}
 
@@ -21,7 +21,7 @@ namespace cme {
 		if(closed_input) {
 			throw std::runtime_error("sha4 input already closed");
 		} else {
-			sha4_finish(&sha4_ctx, hash);
+			polarssl::sha4_finish(&sha4_ctx, hash);
 		}
 	}
 
@@ -30,7 +30,7 @@ namespace cme {
 		closed_input = true;
 	}
 
-	bool SHA512::closed() {
+	bool SHA512::closed() const {
 		return(closed_input);
 	}
 
@@ -45,11 +45,11 @@ namespace cme {
     write(data);
 	}
 
-	void SHA512::write(std::string& input) {
+	void SHA512::write(std::string input) {
 		sha4_update( (const unsigned char *) input.c_str(), input.size() );
 	}
 
-	void SHA512::hash(unsigned char data[64]) {
+	void SHA512::gethash(unsigned char data[64]) const {
 		// check if the input is closed (and thus the hash is available)
 		if(!closed_input) {
 			throw std::runtime_error("sha4 input not closed yet");
@@ -61,17 +61,17 @@ namespace cme {
 		}
 	}
 
-	std::string SHA512::hash() {
+	std::string SHA512::gethash() const {
 		// check if the input is closed (and thus the hash is available)
 		if(!closed_input) {
 			throw std::runtime_error("sha4 input not closed yet");
 		} else {
 			// package the hash as a string and return
-			return(string( (char *) hash, 64));
+			return(std::string( (char *) hash, 64));
 		}
 	}
 
-	std::string SHA512::hexdigest() {
+	std::string SHA512::hexdigest() const {
 		// check if the input is closed (and thus the hash is available)
 		if(!closed_input) {
 			throw std::runtime_error("sha4 input not closed yet");
@@ -91,14 +91,14 @@ namespace cme {
 		}
 	}
 
-	bool compare(const std::string ohash) {
+	bool SHA512::compare(const std::string ohash) const {
 		if(!closed_input) {
 			throw std::runtime_error("sha4 input not closed yet");
 		}
 
 		switch(ohash.size()) {
 			case 64:
-				return(this->hash() == ohash);
+				return(this->gethash() == ohash);
 				break;
 			case 128:
 				return(this->hexdigest() == ohash);
@@ -108,7 +108,7 @@ namespace cme {
 		}
 	}
 
-	bool compare(const unsigned char data[64]) {
+	bool SHA512::compare(const unsigned char data[64]) const {
 		if(!closed_input) {
 			throw std::runtime_error("sha4 input not closed yet");
 		}
@@ -128,51 +128,51 @@ namespace cme {
 	}
 
 	std::istream& operator>>(std::istream& in, SHA512& h) {
-		string line;
+		std::string line;
 		std::getline(in, line);
 		h.write(line);
 		return(in);
 	}
 
-	SHA512& operator>>(std::string& str) {
+	SHA512& SHA512::operator>>(std::string& str) {
 		str = this->hexdigest();
 		return(*this);
 	}
 
-	SHA512& operator<<(const std::string& str) {
+	SHA512& SHA512::operator<<(const std::string& str) {
 		this->write(str);
 		return(*this);
 	}
 
-	bool operator==(const SHA512& other) {
-		const unsigned char ohash[64];
-		other.hash(ohash);
+	bool SHA512::operator==(const SHA512& other) {
+		unsigned char ohash[64];
+		other.gethash(ohash);
 		return(this->compare(ohash));
 	}
 	
-	bool operator==(const std::string& ohash) {
+	bool SHA512::operator==(const std::string& ohash) {
 		bool same;
 		try {
 			same = this->compare(ohash);
-		} catch (runtime_error& e) {
+		} catch (std::runtime_error& e) {
 			same = 0;
 		}
 		return(same);
 	}
 
-	bool operator==(const unsigned char data[64]) {
+	bool SHA512::operator==(const unsigned char data[64]) {
 		return(this->compare(data));
 	}
 
-	bool operator!=(const SHA512& other) {
+	bool SHA512::operator!=(const SHA512& other) {
 		return( !(*this == other) );
 	}
 
-	bool operator!=(const std::string& ohash) {
+	bool SHA512::operator!=(const std::string& ohash) {
 		return( !(*this == ohash) );
 	}
 
-	bool operator!=(const unsigned char data[64]) {
+	bool SHA512::operator!=(const unsigned char data[64]) {
 		return( !(*this == data) );
 	}
 }
