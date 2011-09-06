@@ -12,13 +12,13 @@ void test_pad_left();
 int main() {
   clock_t start = clock();
   cout.setf(ios_base::fixed);
-  cout << "test int to bin fixed size" << endl;
+  cout << "testing int to bin fixed size" << endl;
   test_int_to_bin_fixed_size();
-  cout << "test int to bin" << endl;
+  cout << "testing int to bin" << endl;
   test_int_to_bin();
-  cout << "test pad right" << endl;
+  cout << "testing pad right" << endl;
   test_pad_right();
-  cout << "test pad left" << endl;
+  cout << "testing pad left" << endl;
   test_pad_left();
   clock_t end = clock();
   double time = difftime(end, start) / CLOCKS_PER_SEC;
