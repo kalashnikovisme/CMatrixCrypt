@@ -65,7 +65,7 @@ obj/util_tests.o: src/util_tests.cpp
 	$(CC) $(CFLAGS) -o obj/util_tests.o src/util_tests.cpp
 
 # matrix operations tests
-obj/mops_tests.o: src/mops_tests.cpp
+obj/mops_tests.o: src/mops_tests.cpp src/mops.hpp src/cmatrix.hpp src/ascii86.hpp src/deflate.hpp src/util.hpp
 	$(CC) $(CFLAGS) -o obj/mops_tests.o src/mops_tests.cpp
 
 # make deflate86.o
@@ -78,6 +78,9 @@ obj/inflate86.o: src/inflate86.cpp
 
 obj/sha4_tests.o: src/sha4_tests.cpp
 	$(CC) $(CFLAGS) -o obj/sha4_tests.o src/sha4_tests.cpp
+
+obj/sha512_tests.o: src/sha512_tests.cpp src/sha512.hpp
+	$(CC) $(CFLAGS) -o obj/sha512_tests.o src/sha512_tests.cpp
 
 
 # TESTS (binaries)
@@ -115,6 +118,9 @@ bin/inflate86: obj/deflate.o obj/ascii86.o obj/inflate86.o
 bin/sha4_tests: obj/sha4.o obj/sha4_tests.o
 	$(CC) $(LFLAGS) -o bin/sha4_tests obj/sha4.o obj/sha4_tests.o
 
+bin/sha512_tests: obj/sha512.o obj/sha4.o obj/sha512_tests.o
+	$(CC) $(LFLAGS) -o bin/sha512_tests obj/sha512.o obj/sha4.o obj/sha512_tests.o
+
 
 # BINARIES (end product)
 # compile the final product
@@ -131,6 +137,7 @@ test: bin/test
 util_tests: bin/util_tests
 mops_tests: bin/mops_tests
 sha4_tests: bin/sha4_tests
+sha512_tests: bin/sha512_tests
 cmatrix_tests: bin/cmatrix_tests
 deflate_tests: bin/deflate_tests
 ascii86_tests: bin/ascii86_tests
@@ -140,7 +147,7 @@ flate86: inflate86 deflate86
 mcrypt: bin/mcrypt
 
 # all tests
-tests: ascii86_tests deflate_tests cmatrix_tests util_tests mops_tests sha4_tests
+tests: ascii86_tests deflate_tests cmatrix_tests util_tests mops_tests sha4_tests sha512_tests
 
 
 # MISC
