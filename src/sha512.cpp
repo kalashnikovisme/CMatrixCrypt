@@ -122,4 +122,57 @@ namespace cme {
 		return true;
 	}
 
+	std::ostream& operator<<(std::ostream& out, const SHA512& h) {
+		out << h.hexdigest();
+		return(out);
+	}
+
+	std::istream& operator>>(std::istream& in, SHA512& h) {
+		string line;
+		std::getline(in, line);
+		h.write(line);
+		return(in);
+	}
+
+	SHA512& operator>>(std::string& str) {
+		str = this->hexdigest();
+		return(*this);
+	}
+
+	SHA512& operator<<(const std::string& str) {
+		this->write(str);
+		return(*this);
+	}
+
+	bool operator==(const SHA512& other) {
+		const unsigned char ohash[64];
+		other.hash(ohash);
+		return(this->compare(ohash));
+	}
+	
+	bool operator==(const std::string& ohash) {
+		bool same;
+		try {
+			same = this->compare(ohash);
+		} catch (runtime_error& e) {
+			same = 0;
+		}
+		return(same);
+	}
+
+	bool operator==(const unsigned char data[64]) {
+		return(this->compare(data));
+	}
+
+	bool operator!=(const SHA512& other) {
+		return( !(*this == other) );
+	}
+
+	bool operator!=(const std::string& ohash) {
+		return( !(*this == ohash) );
+	}
+
+	bool operator!=(const unsigned char data[64]) {
+		return( !(*this == data) );
+	}
 }

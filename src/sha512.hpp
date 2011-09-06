@@ -49,6 +49,7 @@ namespace cme {
 
 			// interaction with cout and cin
 			std::ostream& operator<<(std::ostream&, const SHA512&);
+			// read a link from istream and add it to the SHA512 hex
 			std::istream& operator>>(std::istream&, SHA512&);
 
 			// string input and output

@@ -39,6 +39,9 @@ obj/phash.o: src/phash.cpp src/phash.hpp
 obj/sha4.o: src/polarssl/config.h src/polarssl/sha4.h src/polarssl/sha4.cpp
 	$(CC) $(CFLAGS) -o obj/sha4.o src/polarssl/sha4.cpp
 
+obj/sha512.o: src/sha512.cpp src/sha512.hpp src/polarssl/sha4.h
+	$(CC) $(CFLAGS) -o obj/sha512.o src/sha512.cpp
+
 
 # TESTS (object files)
 # compile tests
