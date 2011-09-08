@@ -167,6 +167,16 @@ namespace cme {
 		}
 	}
 
+	void Encrypter::initialize() {
+		output_pos = 0;
+		pass_offset = 0;
+		input.clear();
+		output.clear();
+		encoder.reset();
+		deflater.reset();
+		closed_input = false;
+	}
+
 	Encrypter::~Encrypter() {
 	}
 
@@ -182,7 +192,15 @@ namespace cme {
 		return(passwords[requested]);
 	}
 
-	void Encrypter::write(std::string) {
+	void Encrypter::write(std::string str) {
+		if(closed_input) {
+			throw std::runtime_error("input already closed");
+		}
+		
+		// add the string to the input buffer
+		input.append(str);
+		// call encrypt to encrypt as much as possible at this point in time
+		encrypt();
 	}
 
 	void Encrypter::close() {
