@@ -67,14 +67,21 @@ namespace cme {
 			 * to improve efficiency. it uses the DEFLATE algorithm as 
 			 * implemented by zlib
 			 */
-	    Deflate deflate;
+	    Deflate deflater;
 
 			/* encoding class
 			 * this class encodes the encrypted data with ascii86 to make it
 			 * safe for use in non-binary environments (like mail and chatting
 			 * protocols)
 			 */
-	    Encode86 encode;
+	    Encode86 encoder;
+
+			/* initialize
+			 * set everything up to be ready for encryption. this sets variables to
+			 * their default, clears the boffers and all that stuff. should be called
+			 * by the constructor and maybe the reset function.
+			 */
+			void initialize();
 
 			/* encrypt
 			 * this function will try to encrypt as much data from the input buffer
@@ -107,7 +114,7 @@ namespace cme {
 	    mutable int pass_offset;
 
 			// keeps track of whether or not this is closed
-	    bool closed;
+	    bool closed_input;
 		public:
 			/* constructor
 			 * needs a password as argument, this is used to construct the password
