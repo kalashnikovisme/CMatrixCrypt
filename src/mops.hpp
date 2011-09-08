@@ -90,11 +90,11 @@ namespace cme {
 			void encryptMatrix(const CMatrix& mesg, const CMatrix& pass);
 
 			/* matrix to string
-			 * this function is called by encryptMatrix() to convert a matrix to a
-			 * string representation. this also compresses it with deflate and
+			 * this function is called by encryptMatrix() to convert 2 matrices to a
+			 * string representation. this also compresses them with deflate and
 			 * encodes it with ascii86 before appending it to the output buffer.
 			 */
-			void matrixToString(const CMatrix& matrix);
+			void matrixToString(const CMatrix& m1, const CMatrix& m2);
 
 			/* get the next password matrix
 			 * password matrices are stored in a vector and they are used by rotation.
