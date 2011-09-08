@@ -7,11 +7,24 @@ Rewrite to OOC
 
 Write
  * mcrypt
+  - postpwned until mops is written
  * util - function to generate a sha 512 hash for password hashing
+   [done] sha512.cpp has been written which takes care of this
+ * mops - write the actual matrix encryption code
+  - needs to be a class
+  - needs to be able to work with streams
+  - option to calculate the hashsum of the given password
+ * tests - write or expand tests for all code involved
+  - every single part of the public API needs to have tests
 
 Bugfixes
- * ascii86 - ignore newlines and spaced in decode86       [done]
- * deflate - make use of total_out in write() and close() [no measurable improvement]
- * think about adding more diffusion to the password... possibly use XOR 8 chars in advance? 
-   but this would change the format....                   [in progress]
- * object files - move them all to obj/ to declutter src/ 
+ * object files - move them all to obj/ to declutter src/ [done]
+ * ascii86 - ignore newlines and spaces in decode86       [done]
+ * deflate - make use of total_out in write() and close() [done but no improvement]
+ * remove all debugging code from libraries that work     []
+
+Algorithm Improvements
+ * think about adding more diffusion to the password... 
+   possibly use XOR 8 chars in advance?                   [in progress (phash.cpp)]
+ * work on an improved avalance effect for additional
+   crpytographic strength... XOR, hashes, etc.?           []
