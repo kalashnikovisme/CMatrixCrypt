@@ -170,6 +170,18 @@ namespace cme {
 	Encrypter::~Encrypter() {
 	}
 
+	// return the next password matrix to be used to encryption
+	CMatrix& Encrypter::nextPassMatrix() {
+		// the matrix the we want
+		int requested = pass_offset;
+		// increase the pass offset for the next call to nextPassMatrix()
+		++pass_offset;
+		// we also have to make sure that the pass_offset exists
+		pass_offset %= passwords.size();
+		// and return the requested pass matrix
+		return(passwords[requested]);
+	}
+
 	void Encrypter::write(std::string) {
 	}
 
