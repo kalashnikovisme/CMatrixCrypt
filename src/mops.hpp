@@ -42,7 +42,7 @@ namespace cme {
 			 * and leaves the rest for the next encryption call. this buffer is
 			 * cleared if the input is closed (with close())
 			 */
-	    std::string input;
+	    std::string inbuf;
 
 			/* output buffer
 			 * this will get filled up by encrypt(). it can be accessed with data(),
@@ -51,9 +51,9 @@ namespace cme {
 			 * new data. it is recommended however to use dread(), which works in 
 			 * the same way as read(), but it clears the output buffer
 			 */
-	    std::string output;
+	    std::string outbuf;
 	    // current position in the output buffer - needed for read() and dread()
-	    mutable int output_pos;
+	    mutable int outbuf_pos;
 
 			/* password array
 			 * this password array is used for encryption, it is looped thru to 
@@ -155,4 +155,6 @@ namespace cme {
 			// print debug information
 			void debug();
 	};
+
+	typedef Encrypter encrypter;
 }

@@ -168,10 +168,10 @@ namespace cme {
 	}
 
 	void Encrypter::initialize() {
-		output_pos = 0;
+		outbuf_pos = 0;
 		pass_offset = 0;
-		input.clear();
-		output.clear();
+		inbuf.clear();
+		outbuf.clear();
 		encoder.reset();
 		deflater.reset();
 		closed_input = false;
@@ -198,7 +198,7 @@ namespace cme {
 		}
 		
 		// add the string to the input buffer
-		input.append(str);
+		inbuf.append(str);
 		// call encrypt to encrypt as much as possible at this point in time
 		encrypt();
 	}
