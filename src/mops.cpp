@@ -216,4 +216,42 @@ namespace cme {
 			std::cout << passwords[i] << std::endl;
 		}
 	}
+
+	// turn two matrices into a string representation
+	void Encrypter::matrixToString(const CMatrix& m1, const CMatrix& m2) {
+		// the conversion temporarily converts the numbers in the matrices into a base 2 representation
+		// this will be the buffer and the result FIXME: inefficient!!!
+		string binpool, result;
+
+		// tell both strings how much space to allocate
+		binpool.reserve(136);
+		result.reserve(17);
+
+		// copy the first matrix into the binary pool
+		for(int i = 0; i < 4; ++i) {
+			binpool += intToBinString(m1.get(i), 17);
+		}
+
+		// same with the second matrix
+		for(int i = 0; i < 4; ++i) {
+			binpool += intToBinString(m2.get(i), 17);
+		}
+
+		// convert it into a string
+		for(int i = 0; i < 17; ++i) {
+			result.push_back((char)binStringToInt(binpool.substr(i*8, 8))); // extract 8 chars and convert
+		}
+
+		addToOutbuf(result);
+	}
+
+	void Encrypter::addToOutbuf(const std::string& add) {
+		// FIXME: allow for custom treatment of the encrypted string ;)
+		// add the string to the deflater (compresser) object
+		deflater.write(add);
+		// then take the compressed string and put it into the encoder
+		encoder.write(deflater.dread());
+		// take the encoded output and add it to the output buffer
+		outbuf.append(encoder.dread());
+	}
 }

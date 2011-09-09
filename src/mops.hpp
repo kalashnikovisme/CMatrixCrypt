@@ -103,6 +103,14 @@ namespace cme {
 			 */
 			void matrixToString(const CMatrix& m1, const CMatrix& m2);
 
+			/* addToOutbuf
+			 * this function adds some (encrypted) string to the output buffer. 
+			 * this is done in a seperate function to allow for special things 
+			 * like XOR encryption, compression and/or encoding (the latter two
+			 * are done by default)
+			 */
+			void addToOutbuf(const std::string& add);
+
 			/* get the next password matrix
 			 * password matrices are stored in a vector and they are used by rotation.
 			 * this function will take a password matrix from the index of the 
