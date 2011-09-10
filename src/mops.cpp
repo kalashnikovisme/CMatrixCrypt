@@ -207,6 +207,35 @@ namespace cme {
 		encrypt();
 	}
 
+	// return as many message matrices as can be extracted at this point
+	marry getMesgMatrices() {
+		// number or available mesg matrices
+		int available = inbuf.size()/4;
+		// we want an even number of mesg matrices
+		available -= available%2;
+
+		// marry to store the mesgMatrices
+		marry mesgMatrices;
+
+		// extract the matrices and add them to mesgMatrices
+		for(int i = 0; i < (available*4); i+=4) {
+			// new matrix
+			CMatrix mesg;
+			// fill matrix up
+			mesg[0] = inbuf[i+0]; // okay, i could've done this as a loop...
+			mesg[1] = inbuf[i+1];
+			mesg[2] = inbuf[i+2];
+			mesg[3] = inbuf[i+3];
+			// add matrix to mesgMatrices
+			mesgMatrices.append(mesg);
+		}
+
+		// now, delete the part of inbuf that we've just used
+		inbuf.erase(0, available*4);
+
+		return(mesgMatrices);
+	}
+
 	void Encrypter::encrypt() {
 	}
 

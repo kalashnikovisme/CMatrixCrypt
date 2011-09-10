@@ -135,6 +135,14 @@ namespace cme {
 			 * next call.
 			 */
 			CMatrix nextPassMatrix() const;
+
+			/* getMesgMatrices
+			 * returns a matrix array of as many message matrices as can be
+			 * extracted from inbuf. the number of matrices extracted is 
+			 * always a multiple of 2, like that they can be turned into
+			 * a string representation right away. 
+			 */
+			marry getMesgMatrices();
 		public:
 			/* constructor
 			 * needs a password as argument, this is used to construct the password
