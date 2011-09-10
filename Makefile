@@ -5,11 +5,15 @@ CC=g++
 CFLAGS=-c -O0 -g -Wall -Wno-sign-compare 
 # link flags
 LFLAGS=-lz -O0 -g -Wall -Wno-sign-compare
+# names
+LIBRARY_HEADERS=src/ascii86.hpp src/cmatrix.hpp src/deflate.hpp src/mops.hpp src/sha512.hpp src/util.hpp
+LIBRARY_FILES=src/ascii86.cpp src/cmatrix.cpp src/deflate.cpp src/mops.cpp src/sha512.cpp src/util.cpp
+LIBRARY_OBJS=obj/ascii86.o obj/cmatrix.o obj/deflate.o obj/mops.o obj/sha512.o obj/util.o
 
 
 # LIBRARIES (anything that compiles to *.o)
 # all the libraries used
-all: obj/cmatrix.o obj/deflate.o obj/util.o obj/ascii86.o obj/mops.o
+all: cmatrixcrypt.a
 
 # matrix class
 obj/cmatrix.o: src/cmatrix.cpp src/cmatrix.hpp
@@ -124,12 +128,15 @@ bin/sha512_tests: obj/sha512.o obj/sha4.o obj/sha512_tests.o
 
 # BINARIES (end product)
 # compile the final product
-obj/mcrypt.o: src/mcrypt.cpp src/mcrypt.hpp
-	$(CC) $(CFLAGS) src/mcrypt.cpp -o obj/mcrypt.o
+obj/mcrypt.o: $(LIBRARY_OBJS)
+	$(CC) $(CFLAGS) -o obj/mcrypt.o src/mcrypt.cpp $(LIBRARY_OBJS)
+
+obj/cmatrixcrypt.a: $(LIBRARY_OBJS)
+	$(AR) -r obj/cmatrixcrypt.a $(LIBRARY_OBJS)
 
 # make a binary for mcrypt
 bin/mcrypt: all obj/mcrypt.o
-	$(CC) $(LFLAGS) obj/cmatrix.o obj/deflate.o obj/util.o obj/ascii86.o obj/mops.o obj/mcrypt.o -o bin/mcrypt
+	$(CC) $(LFLAGS) -o bin/mcrypt obj/cmatrix.o obj/deflate.o obj/util.o obj/ascii86.o obj/mops.o obj/mcrypt.o
 
 
 # ALIASES
@@ -145,6 +152,7 @@ deflate86: bin/deflate86
 inflate86: bin/inflate86
 flate86: inflate86 deflate86
 mcrypt: bin/mcrypt
+cmatrixcrypt.a: obj/cmatrixcrypt.a
 
 # all tests
 tests: ascii86_tests deflate_tests cmatrix_tests util_tests mops_tests sha4_tests sha512_tests
@@ -158,6 +166,7 @@ wc:
 # remove all .o files
 cleanobj:
 	rm -f obj/*.o
+	rm -f obj/*.a
 
 clean: cleanobj
 
