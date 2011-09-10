@@ -117,7 +117,7 @@ namespace cme {
 			 * password matrix index and then increase the index to prepare for the 
 			 * next call.
 			 */
-			CMatrix& nextPassMatrix() const;
+			CMatrix nextPassMatrix() const;
 			// password matrix offset
 	    mutable int pass_offset;
 

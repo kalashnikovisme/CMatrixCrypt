@@ -181,7 +181,7 @@ namespace cme {
 	}
 
 	// return the next password matrix to be used to encryption
-	CMatrix& Encrypter::nextPassMatrix() {
+	CMatrix Encrypter::nextPassMatrix() const {
 		// the matrix the we want
 		int requested = pass_offset;
 		// increase the pass offset for the next call to nextPassMatrix()
@@ -201,6 +201,9 @@ namespace cme {
 		inbuf.append(str);
 		// call encrypt to encrypt as much as possible at this point in time
 		encrypt();
+	}
+
+	void Encrypter::encrypt() {
 	}
 
 	void Encrypter::close() {
@@ -229,17 +232,17 @@ namespace cme {
 
 		// copy the first matrix into the binary pool
 		for(int i = 0; i < 4; ++i) {
-			binpool += intToBinString(m1.get(i), 17);
+			binpool += intToBin(m1.get(i), 17);
 		}
 
 		// same with the second matrix
 		for(int i = 0; i < 4; ++i) {
-			binpool += intToBinString(m2.get(i), 17);
+			binpool += intToBin(m2.get(i), 17);
 		}
 
 		// convert it into a string
 		for(int i = 0; i < 17; ++i) {
-			result.push_back((char)binStringToInt(binpool.substr(i*8, 8))); // extract 8 chars and convert
+			result.push_back((char)binToInt(binpool.substr(i*8, 8))); // extract 8 chars and convert
 		}
 
 		addToOutbuf(result);
