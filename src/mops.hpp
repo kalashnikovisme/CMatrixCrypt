@@ -94,6 +94,12 @@ namespace cme {
 			 */
 			void initialize();
 
+			/* initializePassword
+			 * creates the password matrices array passMatrices
+			 * from the string given as argument
+			 */
+			void initializePassword(std::string password);
+
 			/* encrypt
 			 * this function will try to encrypt as much data from the input buffer
 			 * as possible and add it to the output buffer. this function is called

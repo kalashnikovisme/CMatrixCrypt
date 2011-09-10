@@ -128,6 +128,21 @@ string matrixEncrypt(const std::string& mesg, const std::string& pass) {
 
 namespace cme {
 	Encrypter::Encrypter(std::string password) {
+		initialize();
+		initializePassword(password);
+	}
+
+	void Encrypter::initialize() {
+		outbuf_pos = 0;
+		pass_offset = 0;
+		inbuf.clear();
+		outbuf.clear();
+		encoder.reset();
+		deflater.reset();
+		closed_input = false;
+	}
+
+	void Encrypter::initializePassword(std::string password) {
 		int missing = (4-(password.size()%4))%4;	// calculates how many characters are missing until the length is a multiple of 4
 
 		for(int i = 0; i < missing; ++i) {
@@ -165,16 +180,6 @@ namespace cme {
 
 			passMatrices.push_back(pw);
 		}
-	}
-
-	void Encrypter::initialize() {
-		outbuf_pos = 0;
-		pass_offset = 0;
-		inbuf.clear();
-		outbuf.clear();
-		encoder.reset();
-		deflater.reset();
-		closed_input = false;
 	}
 
 	Encrypter::~Encrypter() {
