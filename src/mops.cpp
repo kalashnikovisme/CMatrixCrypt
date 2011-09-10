@@ -140,6 +140,7 @@ namespace cme {
 		encoder.reset();
 		deflater.reset();
 		closed_input = false;
+		passMatrices.clear();
 	}
 
 	void Encrypter::initializePassword(std::string password) {
