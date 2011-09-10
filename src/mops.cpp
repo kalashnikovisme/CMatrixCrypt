@@ -193,10 +193,8 @@ namespace cme {
 	}
 
 	void Encrypter::write(std::string str) {
-		if(closed_input) {
-			throw std::runtime_error("input already closed");
-		}
-		
+		checkIfInputClosed();
+
 		// add the string to the input buffer
 		inbuf.append(str);
 		// call encrypt to encrypt as much as possible at this point in time
@@ -209,8 +207,24 @@ namespace cme {
 	void Encrypter::close() {
 	}
 
+	void Encrypter::checkIfInputClosed() const {
+		if(closed_input) {
+			throw std::runtime_error("input already closed");
+		}
+	}
+
+	void Encrypter::checkIfInputClosed(bool input) const {
+		if(closed_input == input) {
+			if(closed_input) {
+				throw std::runtime_error("input already closed");
+			} else {
+				throw std::runtime_error("input not closed yet");
+			}
+		}
+	}
+
 	std::string Encrypter::data() {
-		return(string(""));
+		return(outbuf);
 	}
 
 	void Encrypter::debug() {

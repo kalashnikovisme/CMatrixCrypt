@@ -123,6 +123,10 @@ namespace cme {
 
 			// keeps track of whether or not this is closed
 	    bool closed_input;
+
+			// check if the input is closed (or opened)
+			void checkIfInputClosed() const;
+			void checkIfInputClosed(bool input) const;
 		public:
 			/* constructor
 			 * needs a password as argument, this is used to construct the password
