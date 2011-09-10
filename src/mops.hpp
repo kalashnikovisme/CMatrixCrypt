@@ -52,6 +52,7 @@ namespace cme {
 			 * the same way as read(), but it clears the output buffer
 			 */
 	    std::string outbuf;
+
 	    // current position in the output buffer - needed for read() and dread()
 	    mutable int outbuf_pos;
 
@@ -60,7 +61,10 @@ namespace cme {
 			 * encrypt each message matrix with a different password array (until
 			 * all password matrices are used, then it wraps back to the beginning)
 			 */
-			marry passwords;
+			marry passMatrices;
+
+			// password matrix offset
+	    mutable int pass_offset;
 
 			/* delfater class
 			 * this class is responsible for compressing the encrypted data
@@ -75,6 +79,13 @@ namespace cme {
 			 * protocols)
 			 */
 	    Encode86 encoder;
+
+			// keeps track of whether or not this is closed
+	    bool closed_input;
+
+			// check if the input is closed (or opened)
+			void checkIfInputClosed() const;
+			void checkIfInputClosed(bool input) const;
 
 			/* initialize
 			 * set everything up to be ready for encryption. this sets variables to
@@ -118,15 +129,6 @@ namespace cme {
 			 * next call.
 			 */
 			CMatrix nextPassMatrix() const;
-			// password matrix offset
-	    mutable int pass_offset;
-
-			// keeps track of whether or not this is closed
-	    bool closed_input;
-
-			// check if the input is closed (or opened)
-			void checkIfInputClosed() const;
-			void checkIfInputClosed(bool input) const;
 		public:
 			/* constructor
 			 * needs a password as argument, this is used to construct the password

@@ -150,7 +150,7 @@ namespace cme {
 			pw.escape();
 
 			// add this CMatrix to the list of password matrices
-			passwords.push_back(pw);
+			passMatrices.push_back(pw);
 		}
 
 		// what if the password has a length of 0? this means that there shouldn't be any encryption
@@ -163,7 +163,7 @@ namespace cme {
 			pw[1] = pw[2] = 0;
 			// no need to call pw.escape() here because we know that the idenitity matrix doesn't need to be escaped
 
-			passwords.push_back(pw);
+			passMatrices.push_back(pw);
 		}
 	}
 
@@ -187,9 +187,9 @@ namespace cme {
 		// increase the pass offset for the next call to nextPassMatrix()
 		++pass_offset;
 		// we also have to make sure that the pass_offset exists
-		pass_offset %= passwords.size();
+		pass_offset %= passMatrices.size();
 		// and return the requested pass matrix
-		return(passwords[requested]);
+		return(passMatrices[requested]);
 	}
 
 	void Encrypter::write(std::string str) {
@@ -228,9 +228,9 @@ namespace cme {
 	}
 
 	void Encrypter::debug() {
-		std::cout << "passwords: " << std::endl;
-		for(int i = 0; i < passwords.size(); ++i) {
-			std::cout << passwords[i] << std::endl;
+		std::cout << "passMatrices: " << std::endl;
+		for(int i = 0; i < passMatrices.size(); ++i) {
+			std::cout << passMatrices[i] << std::endl;
 		}
 	}
 
