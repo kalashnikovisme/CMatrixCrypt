@@ -241,7 +241,7 @@ namespace cme {
 		marry mesgMatrices = getMesgMatrices();
 
 		// encrypt
-		for(int i = 0; i < mesgMatrices(); ++i) {
+		for(int i = 0; i < mesgMatrices.size(); ++i) {
 			// multiply the mesg matrix with the next password matrix
 			mesgMatrices[i] *= nextPassMatrix();
 		}
@@ -254,6 +254,31 @@ namespace cme {
 	}
 
 	void Encrypter::close() {
+		// make sure that the input isn't closed yet
+		checkIfInputClosed(true);
+
+		// append ; to the inbuf to denote then end of input
+		inbuf.push_back(';');
+
+		// caluclate how many NULLs we need to pad the inbuf with
+		int missing = inbuf.size()%8;
+
+		// pad the input until it's a multiple of 8
+		for(int i = 0; i < missing; ++i) {
+			inbuf.push_back('\0');
+		}
+
+		// do the last encryption cycle
+		encrypt();
+
+		// now extract the last bit of output
+		deflater.close();
+		encoder.write(deflater.dread());
+		encoder.close();
+		outbuf.append(encoder.dread());
+
+		// aaaand we're done. almost.
+		closed_input = true;
 	}
 
 	void Encrypter::checkIfInputClosed() const {
