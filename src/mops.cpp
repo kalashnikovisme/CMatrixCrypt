@@ -208,7 +208,7 @@ namespace cme {
 	}
 
 	// return as many message matrices as can be extracted at this point
-	marry getMesgMatrices() {
+	marry Encrypter::getMesgMatrices() {
 		// number or available mesg matrices
 		int available = inbuf.size()/4;
 		// we want an even number of mesg matrices
@@ -227,7 +227,7 @@ namespace cme {
 			mesg[2] = inbuf[i+2];
 			mesg[3] = inbuf[i+3];
 			// add matrix to mesgMatrices
-			mesgMatrices.append(mesg);
+			mesgMatrices.push_back(mesg);
 		}
 
 		// now, delete the part of inbuf that we've just used
@@ -237,6 +237,20 @@ namespace cme {
 	}
 
 	void Encrypter::encrypt() {
+		// get the mesgMatrices that we wanna encrypt
+		marry mesgMatrices = getMesgMatrices();
+
+		// encrypt
+		for(int i = 0; i < mesgMatrices(); ++i) {
+			// multiply the mesg matrix with the next password matrix
+			mesgMatrices[i] *= nextPassMatrix();
+		}
+
+		// turn the enxrypted mesgMatrices to strings (append to outbuf)
+		for(int i = 0; i < mesgMatrices.size(); i+=2) {
+			// turn to string and add to the output buffer
+			matrixToString(mesgMatrices[i+0], mesgMatrices[i+1]);
+		}
 	}
 
 	void Encrypter::close() {
