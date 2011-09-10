@@ -22,6 +22,7 @@ Bugfixes
  * ascii86 - ignore newlines and spaces in decode86       [done]
  * deflate - make use of total_out in write() and close() [done but no improvement]
  * remove all debugging code from libraries that work     []
+ * change the code to use size_t where appropriate        []
 
 Algorithm Improvements
  * think about adding more diffusion to the password... 
