@@ -118,7 +118,7 @@ namespace cme {
 			 * string representation. this also compresses them with deflate and
 			 * encodes it with ascii86 before appending it to the output buffer.
 			 */
-			void matrixToString(const CMatrix& m1, const CMatrix& m2);
+			void matricesToOutbuf(const CMatrix& m1, const CMatrix& m2);
 
 			/* addToOutbuf
 			 * this function adds some (encrypted) string to the output buffer. 
@@ -126,7 +126,7 @@ namespace cme {
 			 * like XOR encryption, compression and/or encoding (the latter two
 			 * are done by default)
 			 */
-			void addToOutbuf(const std::string& add);
+			void stringToOutbuf(const std::string& add);
 
 			/* get the next password matrix
 			 * password matrices are stored in a vector and they are used by rotation.

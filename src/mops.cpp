@@ -249,7 +249,7 @@ namespace cme {
 		// turn the enxrypted mesgMatrices to strings (append to outbuf)
 		for(int i = 0; i < mesgMatrices.size(); i+=2) {
 			// turn to string and add to the output buffer
-			matrixToString(mesgMatrices[i+0], mesgMatrices[i+1]);
+			matricesToOutbuf(mesgMatrices[i+0], mesgMatrices[i+1]);
 		}
 	}
 
@@ -284,7 +284,7 @@ namespace cme {
 	}
 
 	// turn two matrices into a string representation
-	void Encrypter::matrixToString(const CMatrix& m1, const CMatrix& m2) {
+	void Encrypter::matricesToOutbuf(const CMatrix& m1, const CMatrix& m2) {
 		// the conversion temporarily converts the numbers in the matrices into a base 2 representation
 		// this will be the buffer and the result FIXME: inefficient!!!
 		string binpool, result;
@@ -308,10 +308,10 @@ namespace cme {
 			result.push_back((char)binToInt(binpool.substr(i*8, 8))); // extract 8 chars and convert
 		}
 
-		addToOutbuf(result);
+		stringToOutbuf(result);
 	}
 
-	void Encrypter::addToOutbuf(const std::string& add) {
+	void Encrypter::stringToOutbuf(const std::string& add) {
 		// FIXME: allow for custom treatment of the encrypted string ;)
 		// add the string to the deflater (compresser) object
 		deflater.write(add);
