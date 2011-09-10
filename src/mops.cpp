@@ -277,4 +277,8 @@ namespace cme {
 		// take the encoded output and add it to the output buffer
 		outbuf.append(encoder.dread());
 	}
+
+	void Encrypter::clear() {
+		initialize();
+	}
 }

@@ -162,8 +162,8 @@ namespace cme {
 			 */
 			void close();
 
-			// resets everything
-			void reset();
+			// clears everything (except the passMatrices)
+			void clear();
 			// print debug information
 			void debug();
 	};
