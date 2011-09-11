@@ -261,7 +261,7 @@ namespace cme {
 		inbuf.push_back(';');
 
 		// caluclate how many NULLs we need to pad the inbuf with
-		int missing = inbuf.size()%8;
+		int missing = 8-(inbuf.size()%8);
 
 		// pad the input until it's a multiple of 8
 		for(int i = 0; i < missing; ++i) {

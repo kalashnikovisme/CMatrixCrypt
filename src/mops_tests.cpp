@@ -30,8 +30,8 @@ int main(void) {
 
 // test if encryption works
 void test_encryption() {
-	Encrypter enc1("pwandstuf");
-	enc1.write("fun stuff");
+	Encrypter enc1("test");
+	enc1.write("moogabe.");
 	enc1.close();
 	cout << enc1.data() << endl;
 }
