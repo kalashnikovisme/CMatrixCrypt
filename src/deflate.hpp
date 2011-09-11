@@ -21,6 +21,7 @@
  *  with this program; if not, write to the Free Software Foundation, Inc.,
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+
 #pragma once
 #include <string>
 #include <stdexcept>
@@ -28,9 +29,6 @@
 #include <iomanip>
 #include <sstream>
 #include <zlib.h>
-
-//std::string compress_string(const std::string& str, int compressionlevel /*= Z_BEST_COMPRESSION*/);
-//std::string decompress_string(const std::string& str);
 
 namespace cme {
   class Deflate {
