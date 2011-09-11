@@ -21,11 +21,13 @@
  *  with this program; if not, write to the Free Software Foundation, Inc.,
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+
 #include <string>
 #include <iostream>
 #include <fstream>
 #include "deflate.hpp"
 #include "ascii86.hpp"
+
 using namespace std;
 
 // decompress a file
