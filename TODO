@@ -1,21 +1,24 @@
 Rewrite to OOC
  * ascii86 [done]
- * gzip    [done]
+ * deflate [done]
  * cmatrix [done]
  * util    [done]
  * mops    [in progress]
 
 Write
  * mcrypt
-  - postpwned until mops is written
- * util - function to generate a sha 512 hash for password hashing
-   [done] sha512.cpp has been written which takes care of this
+  [ >> ] postpwned until mops is written
+ * function to generate a sha 512 hash for password hashing
+  [done] sha512.cpp has been written which takes care of this
  * mops - write the actual matrix encryption code
-  - needs to be a class
-  - needs to be able to work with streams
-  - option to calculate the hashsum of the given password
+  [done] needs to be a class
+  [    ] needs to be able to work with streams
+  [    ] option to calculate the hashsum of the given password
+  [    ] needs to have the same methods as ascii86 and deflate
  * tests - write or expand tests for all code involved
-  - every single part of the public API needs to have tests
+  [    ] every single part of the public API needs to have tests
+  [    ] encryption needs to be rigorously tests to prevent
+         the loss of data through encryption
 
 Bugfixes
  * object files - move them all to obj/ to declutter src/ [done]
@@ -25,7 +28,10 @@ Bugfixes
  * change the code to use size_t where appropriate        []
 
 Algorithm Improvements
- * think about adding more diffusion to the password... 
-   possibly use XOR 8 chars in advance?                   [in progress (phash.cpp)]
- * work on an improved avalance effect for additional
-   crpytographic strength... XOR, hashes, etc.?           []
+ * use the identity matrix when an empty password is      [done but not documented]
+   specified
+ * think about adding more diffusion to the password...   [in progress (phash.cpp)]
+   possibly use XOR 8 chars in advance?
+ * work on an improved avalance effect for additional     []
+   crpytographic strength... XOR, hashes, etc.?
+ * use lrot or rrot for extra cryptographic security      []
