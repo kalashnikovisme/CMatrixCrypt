@@ -8,7 +8,7 @@ LFLAGS=-lz -O0 -g -Wall -Wno-sign-compare
 # names
 LIBRARY_HEADERS=src/ascii86.hpp src/cmatrix.hpp src/deflate.hpp src/mops.hpp src/sha512.hpp src/util.hpp
 LIBRARY_FILES=src/ascii86.cpp src/cmatrix.cpp src/deflate.cpp src/mops.cpp src/sha512.cpp src/util.cpp
-LIBRARY_OBJS=obj/ascii86.o obj/cmatrix.o obj/deflate.o obj/mops.o obj/sha512.o obj/util.o
+LIBRARY_OBJS=obj/ascii86.o obj/cmatrix.o obj/deflate.o obj/mops.o obj/sha512.o obj/sha4.o obj/util.o
 
 
 # LIBRARIES (anything that compiles to *.o)
@@ -80,6 +80,9 @@ obj/deflate86.o: src/deflate86.cpp
 obj/inflate86.o: src/inflate86.cpp
 	$(CC) $(CFLAGS) -o obj/inflate86.o src/inflate86.cpp
 
+obj/cryptest.o: src/cryptest.cpp
+	$(CC) $(CFLAGS) -o obj/cryptest.o src/cryptest.cpp
+
 obj/sha4_tests.o: src/sha4_tests.cpp
 	$(CC) $(CFLAGS) -o obj/sha4_tests.o src/sha4_tests.cpp
 
@@ -118,6 +121,9 @@ bin/deflate86: obj/deflate.o obj/ascii86.o obj/deflate86.o
 
 bin/inflate86: obj/deflate.o obj/ascii86.o obj/inflate86.o
 	$(CC) $(LFLAGS) -o bin/inflate86 obj/deflate.o obj/ascii86.o obj/inflate86.o
+
+bin/cryptest: obj/cryptest.o $(LIBRARY_OBJS)
+	$(CC) $(LFLAGS) -o bin/cryptest obj/cryptest.o $(LIBRARY_OBJS)
 
 bin/sha4_tests: obj/sha4.o obj/sha4_tests.o
 	$(CC) $(LFLAGS) -o bin/sha4_tests obj/sha4.o obj/sha4_tests.o

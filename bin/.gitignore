@@ -1,7 +1,6 @@
 *_tests
 test
-
 inflate86
 deflate86
-
 mcrypt
+cryptest
