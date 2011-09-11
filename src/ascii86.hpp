@@ -21,6 +21,7 @@
  *  with this program; if not, write to the Free Software Foundation, Inc.,
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+
 #pragma once
 #include <iostream>
 #include <cstdio>
@@ -28,12 +29,6 @@
 #include <string>
 #include <sstream>
 #include <stdexcept>
-
-// PROTOTYPES
-//std::string encode86(std::string data); //encodes a string of any length
-//std::string decode86(std::string code); //decodes a string of any length
-//std::string encode86_tuple(std::string tuple); //encodes a tuple (of 4 characters)
-//std::string decode86_tuple(std::string tuple); //decodes a tuple (of 5 characters)
 
 namespace cme {
   class Encode86 {
