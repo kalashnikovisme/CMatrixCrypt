@@ -19,6 +19,12 @@ Write
   [    ] every single part of the public API needs to have tests
   [    ] encryption needs to be rigorously tests to prevent
          the loss of data through encryption
+ * documentation - people should easily be able to use this code,
+   which is why I need to make sure it's well documented
+  [    ] add class comments for every significan class
+  [    ] add method comments in the header files, at least 
+         for the public API
+  [    ] add file comments describing what the file does
 
 Bugfixes
  * object files - move them all to obj/ to declutter src/ [done]
