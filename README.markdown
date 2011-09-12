@@ -1,27 +1,29 @@
 Matrix Crypt
 ============
 
-*Matrix Crypt* is a very inefficient and weak algorithm for encrypting stuff. It is vaguely similar to the [Hill cipher](http://en.wikipedia.org/wiki/Hill_cipher), that means it uses matrix algebra to encrypt, kinda like [this](http://aix1.uottawa.ca/~jkhoury/cryptography.htm) but different. It is just a small hobby project of mine, so don't except much. 
+*Matrix Crypt* is a pet project of mine. It is an encryption algorithm vaguely similar to the [Hill cipher](http://en.wikipedia.org/wiki/Hill_cipher), that means it uses matrix algebra to encrypt, kinda like [this](http://aix1.uottawa.ca/~jkhoury/cryptography.htm) but different. It provides more diffusion than a classic substitution cipher et the expense of space (it inflates data by 212.5%). 
 
 How does it work?
 -----------------
 
-Essentially, it converts the clear text and the password into matrices and multiplies them. The result is translated back into text, which is then compressed with zlib's [DEFLATE](http://en.wikipedia.org/wiki/DEFLATE) and encoded with [Ascii85](http://en.wikipedia.org/wiki/Ascii85). This means that the encrypted version is far larger than the original cleartext, but it is in a format that can easily be worked with (Ascii85). 
+It's difficult to explain, you can find a better explanation in `doc/`. Essentially, it converts the clear text and the password into 2x2 matrices and multiplies them. This is how the algorithm manages to encrypt data, decryption is done in the same way except the inverses of the 2x2 password matrices are used.  
+Encrypted data will be compressed with zlib's [DEFLATE](http://en.wikipedia.org/wiki/DEFLATE) and encoded with [Ascii85](http://en.wikipedia.org/wiki/Ascii85). The deflate algorithm compresses the encrypted data and the ascii85 algorithm encodes it in a format that can be easily used (like in mails or in the web). 
 
 How can I try it?
 -----------------
 
-You can't. I am not done coding it yet, there are a couple of components in the code that still need to be written/finished/tested before there will be anything usable. 
+Since I'm still coding it, I don't really have anything that you can 'try' apart from the source code. CMatrixCrypt is made up of these essential files/classes:
 
-+   *CMatrix*, a class which represents a matrix
-+   *Ascii86*, my implementation of Ascii85
-+   *Deflate*, a wrapper around zlib's DEFLATE algorithm
-+   *util.cpp*, various utilities (that is, functions)
+-   *CMatrix*, a class which represents a matrix
+-   *Ascii86*, my implementation of Ascii85
+-   *Deflate*, a wrapper around zlib's DEFLATE algorithm
 -   *SHA512*, a class that wraps around PolarSSL's implementation of SHA512
--   *mops*, short for matrix operatrions, which deals with matrices
--   *CMCcrypt*, which performs the matrix encryption
+-   *util*, various utilities (that is, functions)
+-   *mops*, short for matrix operations, which deals with matrices
 
-Once all of these are done coding, I can get to finalize the API. Meanwhile you are welcome to help, if my coding style doesn't scare you. 
+Once all of these are done coding, I can get to finalize the API so that other people can actually use this code. In the meantime, you can have a look through the code, I think it it pretty much self-explanatory. 
+
+If you want to code something that uses CMatrixCrypt, you should run `make`, which will give you the file `cmatrixcrypt.a` (in `obj`). When writing code, you can `#include "src/mops.hpp"` or any other header file, and then compile your code with `gcc -lz -o yourfile yourfile.cpp obj/cmatrixcrypt.a`. 
 
 How is it being written?
 ------------------------
@@ -50,4 +52,4 @@ with the password "unfathomable", the encrypted output looks like this:
     Ln'Vl"1W@\@?7a!^o9QAl2g7Z+f=G@`K%&$=\7@fRFONe3?JlLY[o9Feqg&m]D^]@I)SmkC^0p\/EbDQ
     OG&T_Wh49,?]!/#Ru&c~>
 
-Except it all has to be in one long string, no newline or spaces separating the thing. 
+You can see that the encrypted output is far longer than the raw text, this is an unfortunate side-effect of the matrix multiplication algorithm I am using.
