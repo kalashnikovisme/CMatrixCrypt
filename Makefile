@@ -1,10 +1,12 @@
 # VARIABLES
 # compiler
 CC=g++
+# global flags
+GFLAGS=-O0 -q -Wall -Wno-sign-compare
 # compile flags
-CFLAGS=-c -O0 -g -Wall -Wno-sign-compare 
+CFLAGS=-c  $(GFLAGS)
 # link flags
-LFLAGS=-lz -O0 -g -Wall -Wno-sign-compare
+LFLAGS=-lz $(GFLAGS)
 # names
 LIBRARY_HEADERS=src/ascii86.hpp src/cmatrix.hpp src/deflate.hpp src/mops.hpp src/sha512.hpp src/util.hpp
 LIBRARY_FILES=src/ascii86.cpp src/cmatrix.cpp src/deflate.cpp src/mops.cpp src/sha512.cpp src/util.cpp
