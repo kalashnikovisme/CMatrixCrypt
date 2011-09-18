@@ -172,7 +172,7 @@ namespace cme {
 			 * needs a password as argument, this is used to construct the password
 			 * matrix array. 
 			 */
-			Encrypter(std::string pass);
+			explicit Encrypter(std::string pass);
 
 			// destructor
 			~Encrypter();

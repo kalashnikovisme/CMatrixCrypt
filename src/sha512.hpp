@@ -47,7 +47,7 @@ namespace cme {
 			// default constructor, initializes sha4 hashing
 			SHA512();
 			// constructor with string argument, initializes and starts hashing the string
-			SHA512(std::string);
+			explicit SHA512(std::string);
 			~SHA512();
 
 			// add a string to the hash

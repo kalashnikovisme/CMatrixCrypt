@@ -46,7 +46,7 @@ namespace cme {
       void setup();   // set the compression up
     public:
       Deflate();                // default
-      Deflate(int);             // specific compression level
+      explicit Deflate(int);    // specific compression level
       ~Deflate();               // destructor
 
       // OUTPUT FUNCTIONS

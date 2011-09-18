@@ -44,8 +44,8 @@ namespace cme {
       void encode();
     public:
       // constructors
-      Encode86();           // empty constructur
-      Encode86(std::string);// fill up the input buffer with std::string
+      Encode86();                     // empty constructur
+      explicit Encode86(std::string); // fill up the input buffer with std::string
 
       // read encoded data
       char get() const;             // reads just one character
