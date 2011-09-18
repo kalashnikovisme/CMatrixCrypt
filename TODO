@@ -30,10 +30,12 @@ Bugfixes
  * object files - move them all to obj/ to declutter src/ [done]
  * ascii86 - ignore newlines and spaces in decode86       [done]
  * deflate - make use of total_out in write() and close() [done but no improvement]
+ * change the constructors of all classes to be           [in progress]
+   explicit where appropriate
  * remove all debugging code from libraries that work     []
  * change the code to use size_t where appropriate        []
- * use the namespace "cmc" instead of "cme" because this
-   library also does decryption (not only encryption)     []
+ * use the namespace "cmc" instead of "cme" because this  []
+   library also does decryption (not only encryption)
 
 Algorithm Improvements
  * use the identity matrix when an empty password is      [done but not documented]
