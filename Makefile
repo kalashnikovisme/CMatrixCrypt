@@ -149,6 +149,11 @@ bin/mcrypt: all obj/mcrypt.o
 
 # ALIASES
 test: bin/test
+mcrypt: bin/mcrypt
+flate86: inflate86 deflate86
+cryptest: bin/cryptest
+deflate86: bin/deflate86
+inflate86: bin/inflate86
 util_tests: bin/util_tests
 mops_tests: bin/mops_tests
 sha4_tests: bin/sha4_tests
@@ -156,10 +161,6 @@ sha512_tests: bin/sha512_tests
 cmatrix_tests: bin/cmatrix_tests
 deflate_tests: bin/deflate_tests
 ascii86_tests: bin/ascii86_tests
-deflate86: bin/deflate86
-inflate86: bin/inflate86
-flate86: inflate86 deflate86
-mcrypt: bin/mcrypt
 cmatrixcrypt.a: obj/cmatrixcrypt.a
 
 # all tests
