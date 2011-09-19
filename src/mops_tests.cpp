@@ -27,21 +27,28 @@
 #include <ctime>
 #include <cassert>
 #include "mops.hpp"
+#include "deflate.hpp"
+#include "ascii86.hpp"
 
 using namespace cme;
 using std::cout;
 using std::cin;
 using std::endl;
 
-// all tests
+// testing encryption
+void test_encryption_short_input();
+void test_encryption_short_pass();
+void test_encryption_empty_pass();
 void test_encryption();
+
+void test_inputs();
+void test_outputs();
 
 int main(void) {
 	// start timer
   clock_t start = clock();
 	
 	// testing code
-	test_encryption();
 
 	// stop timer
   clock_t end = clock();
@@ -53,10 +60,25 @@ int main(void) {
   cout << "tests took " << time << " seconds" << endl;
 }
 
-// test if encryption works
-void test_encryption() {
-	Encrypter enc1("test");
-	enc1.write("moogabe.");
-	enc1.close();
-	cout << enc1.data() << endl;
+// useful function: check if the encrypted data matches
+void test_match(string data, size_t len, unsigned char *expected) {
+	assert(data.size() == len);
+
+	// the data is currently compressed and encoded
+	Decode86 dec;
+	Inflate inf;
+	// write it to the decoder
+	dec.write(data);
+	// finish decoding
+	dec.close();
+	// feed that into the inflater
+	inf.write(dec.dread());
+	// finish inflating
+	inf.close();
+	// and take the result and put it back into data
+	data = inf.dread();
+
+	for(size_t pos = 0; pos < len, ++pos) {
+		assert(((unsigned char) data[pos]) == expected[pos]);
+	}
 }
