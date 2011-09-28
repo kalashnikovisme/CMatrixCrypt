@@ -1,20 +1,12 @@
-Rewrite to OOC
- * ascii86 [done]
- * deflate [done]
- * cmatrix [done]
- * util    [done]
- * mops    [in progress]
-
+MatrixCrypt TODOs
 
 Write
  * mcrypt
-  [ >> ] postpwned until mops is written
 
  * function to generate a sha 512 hash for password hashing
   [done] sha512.cpp has been written which takes care of this
 
  * mops - write the actual matrix encryption code
-  [done] needs to be a class
   [done] needs to be able to work with streams
   [    ] option to calculate the hashsum of the given password
   [    ] needs to have the same methods as ascii86 and deflate
@@ -33,8 +25,6 @@ Write
 
 
 Bugfixes
- * object files - move them all to obj/ to declutter src/ [done]
- * ascii86 - ignore newlines and spaces in decode86       [done]
  * change the constructors of all classes to be           [done]
    explicit where appropriate
  * deflate - make use of total_out in write() and close() [done but no improvement]
