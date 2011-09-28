@@ -28,12 +28,16 @@
 using namespace std;
 using namespace cme;
 
-int main() {
-	string pass;
-	cout << "pass: ";
-	getline(cin, pass);
+int main(int argc, char *argv[]) {
+	// test if a password was given as commandline argument
+	if(argc < 2) {
+		cout << "need to specify password as commandline argument" << endl;
+		return -1;
+	}
+
+	// encode all input
+	string pass(argv[1]);
   Encrypter enc(pass);
-	cout << "encryption initialized, enter data" << endl;
 	while(!cin.eof()) {
 		string data;
 		getline(cin, data);
@@ -44,6 +48,5 @@ int main() {
 		enc.write("\n");
 	}
 	enc.close();
-	cout << "encryption done" << endl;
 	cout << enc.data() << endl;
 }
