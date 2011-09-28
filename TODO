@@ -5,26 +5,32 @@ Rewrite to OOC
  * util    [done]
  * mops    [in progress]
 
+
 Write
  * mcrypt
   [ >> ] postpwned until mops is written
+
  * function to generate a sha 512 hash for password hashing
   [done] sha512.cpp has been written which takes care of this
+
  * mops - write the actual matrix encryption code
   [done] needs to be a class
-  [    ] needs to be able to work with streams
+  [done] needs to be able to work with streams
   [    ] option to calculate the hashsum of the given password
   [    ] needs to have the same methods as ascii86 and deflate
+
  * tests - write or expand tests for all code involved
   [    ] every single part of the public API needs to have tests
-  [    ] encryption needs to be rigorously tests to prevent
-         the loss of data through encryption
+  [    ] use the samples in the file SAMPLES to test mops.cpp 
+         for possible faults. 
+
  * documentation - people should easily be able to use this code,
    which is why I need to make sure it's well documented
-  [    ] add class comments for every significan class
+  [    ] add class comments for every significant class
   [    ] add method comments in the header files, at least 
          for the public API
   [    ] add file comments describing what the file does
+
 
 Bugfixes
  * object files - move them all to obj/ to declutter src/ [done]
@@ -37,6 +43,7 @@ Bugfixes
  * use the namespace "cmc" instead of "cme" because this  []
    library also does decryption (not only encryption)
 
+
 Algorithm Improvements
  * use the identity matrix when an empty password is      [done but not documented]
    specified
@@ -45,3 +52,8 @@ Algorithm Improvements
  * work on an improved avalance effect for additional     []
    crpytographic strength... XOR, hashes, etc.?
  * use lrot or rrot for extra cryptographic security      []
+ * instead of the current block cipher operation mode,    []
+   the electronic codebook mode, switch to using cipher
+   block chaining. this means that output depends of 
+   previous output and an option for an IV needs to be
+   added. 
