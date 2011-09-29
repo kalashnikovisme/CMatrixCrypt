@@ -2,7 +2,7 @@
 # compiler
 CC=g++
 # global flags
-GFLAGS=-O0 -q -Wall -Wno-sign-compare
+GFLAGS=-O0 -g -Wall -Wno-sign-compare
 # compile flags
 CFLAGS=-c  $(GFLAGS)
 # link flags
