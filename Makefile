@@ -1,6 +1,6 @@
 # VARIABLES
 # compiler
-CC=g++
+CC=clang++
 # global flags
 GFLAGS=-O0 -g -Wall -Wno-sign-compare
 # compile flags
