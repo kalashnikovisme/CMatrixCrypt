@@ -31,6 +31,7 @@
 #include "ascii86.hpp"
 
 using namespace cme;
+using std::string;
 using std::cout;
 using std::cin;
 using std::endl;
@@ -38,9 +39,9 @@ using std::endl;
 // testing encryption
 void test_encryption_short_input();
 void test_encryption_short_pass();
-void test_encryption_empty_pass();
+void test_encryption_medium_input();
+void test_encryption_long_input();
 void test_encryption();
-
 void test_inputs();
 void test_outputs();
 
@@ -49,6 +50,7 @@ int main(void) {
   clock_t start = clock();
 	
 	// testing code
+	test_encryption_short_pass();
 
 	// stop timer
   clock_t end = clock();
@@ -60,25 +62,40 @@ int main(void) {
   cout << "tests took " << time << " seconds" << endl;
 }
 
-// useful function: check if the encrypted data matches
-void test_match(string data, size_t len, unsigned char *expected) {
-	assert(data.size() == len);
+// decode the encoded output
+string inflate86(string data) {
+	// decoder/inflater objects
+	Decode86 decoder;
+	Inflate inflater;
+	// feed the decoder object with data
+	decoder.write(data);
+	// feed the data to the inflater
+	inflater.write(decoder.dread());
+	// close the inflating
+	inflater.close();
+	// return the result
+	return(inflater.dread());
+}
 
-	// the data is currently compressed and encoded
-	Decode86 dec;
-	Inflate inf;
-	// write it to the decoder
-	dec.write(data);
-	// finish decoding
-	dec.close();
-	// feed that into the inflater
-	inf.write(dec.dread());
-	// finish inflating
-	inf.close();
-	// and take the result and put it back into data
-	data = inf.dread();
+// compare the encrypted output with reference data
+bool compare_encrypted(string encrypted, const unsigned char* data, size_t size) {
+	string d( (const char*) data, size);
+  return(d == inflate86(encrypted));
+}
 
-	for(size_t pos = 0; pos < len, ++pos) {
-		assert(((unsigned char) data[pos]) == expected[pos]);
-	}
+void test_encryption_short_pass() {
+	const unsigned char data1[17] = {0x0c, 0xd8, 0x02, 0xa3, 0x03, 0x36, 0x00, 0xa8, 0xc0, 0x54, 0xd0, 0x0b, 0x10, 0x00, 0x00, 0x00, 0x00};
+	const unsigned char data2[17] = {0x0c, 0xd8, 0x06, 0xc1, 0x83, 0x36, 0x01, 0xb0, 0x60, 0x54, 0xd0, 0x2d, 0x2c, 0x00, 0x00, 0x00, 0x00};
+	bool correct = true;
+	Encrypter enc1(".");
+	enc1.write("roro");
+	enc1.close();
+	correct = compare_encrypted(enc1.data(), data1, 17);
+	assert(correct);
+
+	Encrypter enc2(".1");
+	enc2.write("roro");
+	enc2.close();
+	correct = compare_encrypted(enc2.data(), data2, 17);
+	assert(correct);
 }
