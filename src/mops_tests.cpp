@@ -64,6 +64,7 @@ int main(void) {
 
 // decode the encoded output
 string inflate86(string data) {
+	cout << data << endl;
 	// decoder/inflater objects
 	Decode86 decoder;
 	Inflate inflater;
@@ -80,6 +81,7 @@ string inflate86(string data) {
 // compare the encrypted output with reference data
 bool compare_encrypted(string encrypted, const unsigned char* data, size_t size) {
 	string d( (const char*) data, size);
+	cout << encrypted << endl;
   return(d == inflate86(encrypted));
 }
 
@@ -90,6 +92,7 @@ void test_encryption_short_pass() {
 	Encrypter enc1(".");
 	enc1.write("roro");
 	enc1.close();
+	cout << enc1.data() << endl;
 	correct = compare_encrypted(enc1.data(), data1, 17);
 	assert(correct);
 
