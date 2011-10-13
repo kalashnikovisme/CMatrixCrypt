@@ -27,19 +27,23 @@
 #include <vector>
 #include "ascii86.hpp"
 #include "cmatrix.hpp"
-#include "gzip.hpp"
+#include "deflate.hpp"
 #include "util.hpp"
 #include "mops.hpp"
 
+using namespace cme;
 using namespace std;
 
 int main(int argc, char *argv[]) {
-  if(argc < 3) {
-    cout << "Need 2 arguments" << endl;
-    return(-1);
-  }
-  string mesg, pass;
-  mesg = argv[1];
-  pass = argv[2];
-  cout << matrixEncrypt(mesg, pass) << endl;
+	cme::Encrypter enc("."); // use password "."
+	enc.write("roro");       // encrypt "roro"
+	enc.close();             // finish encryption
+	// now we have the encrypted and encoded data
+	
+	cme::Decode86 dec;       // construct decoder
+	cme::Inflate inf;        // construct inflater
+	dec.write(enc.data());   // decode encrypted data
+	inf.write(dec.data());   // inflate decoded data
+	inf.close();
+	cout << inf.data();      // output raw inflated data
 }
