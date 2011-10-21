@@ -129,7 +129,7 @@ void encode_test_outputs() {
   std::string test = "Test case";
   std::string result;
 
-  for(int i = 0; i < test.size(); ++i) {
+  for(size_t i = 0; i < test.size(); ++i) {
     enc.put(test[i]);
     result += enc.read();
   }
@@ -203,7 +203,7 @@ void decode_test_inputs() {
 
   dec << "<~6#";
   dec.write("L=UGp$R1E");
-  for(int i = 0; i < text.size(); ++i) {
+  for(size_t i = 0; i < text.size(); ++i) {
     dec.put(text[i]);
   }
 
@@ -220,7 +220,7 @@ void decode_test_outputs() {
   std::string enc = "<~7:C7ZATDZ2Eb0E4Cisi6Df,~>";
   std::string orig;
 
-  for(int i = 0; i < enc.size(); ++i) {
+  for(size_t i = 0; i < enc.size(); ++i) {
     dec.put(enc[i]);
   }
 

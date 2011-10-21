@@ -36,7 +36,7 @@ namespace cmc {
       // buffers for input/output
       std::string inbuf, outbuf;
       // position for outputting
-      mutable int outpos;
+      mutable size_t outpos;
       // whether the input is closed
       bool closed_input;
 
@@ -74,7 +74,7 @@ namespace cmc {
       // buffers for i/o
       std::string inbuf, outbuf;
       // position in the outbuf
-      mutable int outpos;
+      mutable size_t outpos;
       // closed input
       bool closed_input;
       bool start_decoding;

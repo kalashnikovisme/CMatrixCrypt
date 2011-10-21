@@ -42,7 +42,7 @@ namespace cmc {
     long int int_rep = 0; // integer representation of the string, this is a LONG int so that it's min. 32bit
 
     long int multiplier = 256*256*256;                // turn the tuple into an int, this is, too, a LONG int
-    for(int i = 0; i < tuple.length(); i++) {         // loop thru the characters
+    for(size_t i = 0; i < tuple.length(); i++) {         // loop thru the characters
       int_rep += multiplier * (unsigned char)tuple[i];// add the byte to the int_representation. coerce this to unsigned char because 
       multiplier /= 256;                              // increase the multiplier
     }
@@ -210,7 +210,7 @@ namespace cmc {
     long int int_rep = 0; // integer representation of the tuple, long int so that it's at least 32bit
 
     long int multiplier = 85*85*85*85;        // turn the tuple into an int, long so that it's at least 32bit
-    for(int i = 0; i < tuple.length(); i++) { // loop thru the characters
+    for(size_t i = 0; i < tuple.length(); i++) { // loop thru the characters
       int_rep += (((unsigned char)tuple[i])-33) * multiplier; // add the byte to the int_representation, subtracting 33
                                                               // coerced to unsigned char to correctly multiply chars >128
       multiplier /= 85;                       // increase the multiplier
@@ -229,7 +229,7 @@ namespace cmc {
   void Decode86::decode() {
     // start_decoding indicates wheather <~ has been met yet (start of encoded stream)
     if(!start_decoding) {
-      int pos = inbuf.find("<~", 0);    // try to find <~
+      size_t pos = inbuf.find("<~", 0);    // try to find <~
       if(pos != std::string::npos) {    // if it's found
         inbuf.erase(0, pos+2);          // erase everything before it and itself
         start_decoding = true;          // and start decoding
@@ -239,12 +239,13 @@ namespace cmc {
     }
 
     // let's try to find the end of the input
-    int end = inbuf.find("~>", 0);
+    size_t end = inbuf.find("~>", 0);
     if(end != std::string::npos) {        // in case we do find it,
       inbuf.erase(end, inbuf.size()-end); // erase it and all the crap after it
     }
 
-    if(inbuf.size() > 5 or end!=std::string::npos) {
+		// the cast to size_t is neccessary to avoid warnings
+    if(inbuf.size() > ((size_t)5) or end!=std::string::npos) {
       int amount = inbuf.size()/5;                // how many tuples need to be decoded?
       outbuf.reserve(outbuf.size() + (amount*4)); // make space in outbuf
       int pos;
@@ -313,7 +314,7 @@ namespace cmc {
       throw std::runtime_error("input already closed");
     }
     inbuf.reserve(inbuf.size() + data.size());
-    for(int i = 0; i < data.size(); ++i) {
+    for(size_t i = 0; i < data.size(); ++i) {
       if((32 < data[i] && data[i] < 118) || (data[i] == '~')) {
         inbuf.push_back(data[i]);
       }
