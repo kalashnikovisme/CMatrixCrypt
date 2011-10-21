@@ -65,7 +65,6 @@ namespace cmc {
       bool closed() const;// check if the input is closed (this needs to be done explicitly)
       void close();       // close the input
       void reset();       // reset everything
-      void debug();
       void clearbuf();
       bool eol();         // is the output buffer exhausted?
   };
@@ -106,7 +105,6 @@ namespace cmc {
       // others
       bool closed() const;
       void reset();
-      void debug();
       bool eol();   // has the output reached end of line yet?
       void clearbuf();
   };

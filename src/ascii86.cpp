@@ -193,13 +193,6 @@ namespace cmc {
     outbuf.clear();
   }
 
-  void Encode86::debug() {
-    std::cout << "inbuf: " << inbuf << std::endl;
-    std::cout << "outbuf: " << outbuf << std::endl;
-    std::cout << "outpos: " << outpos << std::endl;
-    std::cout << "closed: " << closed_input << std::endl;
-  }
-
   /* DECODE86 CODE */
   /* CONSTRUCTORS */
   Decode86::Decode86() {
@@ -393,12 +386,5 @@ namespace cmc {
   void Decode86::clearbuf() {
     outpos = 0;
     outbuf.clear();
-  }
-
-  void Decode86::debug() {
-    std::cout << "inbuf: " << inbuf << std::endl;
-    std::cout << "outbuf: " << outbuf << std::endl;
-    std::cout << "outpos: " << outpos << std::endl;
-    std::cout << "closed: " << closed_input << std::endl;
   }
 }
