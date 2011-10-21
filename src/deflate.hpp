@@ -33,14 +33,14 @@
 namespace cmc {
   class Deflate {
     private:
-      static const int output_buffer_size = 10000;  // keep track of how big the buffer is
+      static const size_t output_buffer_size = 10000; // keep track of how big the buffer is
       //char output_buffer[output_buffer_size];       // buffer to read zlib's output from
-      std::string output;                           // where to store the output
+      std::string output;                           	// where to store the output
 
       z_stream compress_stream; // zlib compression stream
       bool closed_input;        // whether or not this is closed
       int compressionlevel;     // determines how good the compression should be
-      mutable int outpos;       // where we are in the outputting
+      mutable size_t outpos;    // where we are in the outputting
       int total_out;            // keep track of how many bytes of output there were
 
       void setup();   // set the compression up
@@ -72,13 +72,13 @@ namespace cmc {
 
   class Inflate {
     private:
-      static const int output_buffer_size = 10000;  // keep track of how big the buffer is
+      static const size_t output_buffer_size = 10000; // keep track of how big the buffer is
       //char output_buffer[output_buffer_size];       // buffer to read zlib's output from
-      std::string output;                           // where to store the output
+      std::string output;                           	// where to store the output
 
       z_stream decompress_stream; // zlib decompression stream
       bool closed_input;          // whether or not this is closed
-      mutable int outpos;         // where we are in the outputting
+      mutable size_t outpos;      // where we are in the outputting
       unsigned long total_out;    // keep track of how many bytes of output there were
 
       void setup();   // set the decompression up
