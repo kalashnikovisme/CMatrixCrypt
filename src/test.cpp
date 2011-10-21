@@ -35,8 +35,8 @@ using namespace cme;
 using namespace std;
 
 int main(int argc, char *argv[]) {
-	cme::Encrypter enc("."); // use password "."
-	enc.write("roro");       // encrypt "roro"
+	cme::Encrypter enc("accadura"); // use password "."
+	enc.write("abacsor");       // encrypt "roro"
 	enc.close();             // finish encryption
 	// now we have the encrypted and encoded data
 	
