@@ -27,11 +27,11 @@ Write
 Bugfixes
  * change the constructors of all classes to be           [done]
    explicit where appropriate
+ * use the namespace "cmc" instead of "cme" because this  [done]
+   library also does decryption (not only encryption)
  * deflate - make use of total_out in write() and close() [done but no improvement]
  * remove all debugging code from libraries that work     []
  * change the code to use size_t where appropriate        []
- * use the namespace "cmc" instead of "cme" because this  []
-   library also does decryption (not only encryption)
  * test why the encrypted version of "roro" with the      []
    pass "." isn't the same in the ruby version and the 
    C++ version of MatrixCrypt
