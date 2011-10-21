@@ -196,8 +196,6 @@ namespace cmc {
 
 			// clears everything (except the passMatrices)
 			void clear();
-			// print debug information
-			void debug();
 	};
 
 	typedef Encrypter encrypter;

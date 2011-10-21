@@ -326,13 +326,6 @@ namespace cmc {
 		return(outbuf);
 	}
 
-	void Encrypter::debug() {
-		std::cout << "passMatrices: " << std::endl;
-		for(int i = 0; i < passMatrices.size(); ++i) {
-			std::cout << passMatrices[i] << std::endl;
-		}
-	}
-
 	// turn two matrices into a string representation
 	void Encrypter::matricesToOutbuf(const CMatrix& m1, const CMatrix& m2) {
 		// the conversion temporarily converts the numbers in the matrices into a base 2 representation
