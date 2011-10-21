@@ -52,31 +52,31 @@ int main() {
 
 void test_int_to_bin_fixed_size() {
   int num = 555;
-  assert(cme::intToBin(num, 12) == "001000101011");
+  assert(cmc::intToBin(num, 12) == "001000101011");
   num = 255;
-  assert(cme::intToBin(num, 10) == "0011111111");
-  assert(cme::intToBin(num, 7) == "1111111");
+  assert(cmc::intToBin(num, 10) == "0011111111");
+  assert(cmc::intToBin(num, 7) == "1111111");
 }
 
 void test_int_to_bin() {
   int num = 128;
-  assert(cme::intToBin(num) == "10000000");
+  assert(cmc::intToBin(num) == "10000000");
   num = 1020;
-  assert(cme::intToBin(num) == "1111111100");
+  assert(cmc::intToBin(num) == "1111111100");
   num = 4;
-  assert(cme::intToBin(num) == "100");
+  assert(cmc::intToBin(num) == "100");
 }
 
 void test_pad_right() {
   string str = "Too short.";
-  assert(cme::padRight(str, 11, ' ') == "Too short. ");
+  assert(cmc::padRight(str, 11, ' ') == "Too short. ");
   str = "Fun times";
-  assert(cme::padRight(str, 12, '.') == "Fun times...");
+  assert(cmc::padRight(str, 12, '.') == "Fun times...");
 }
 
 void test_pad_left() {
   string str = "server";
-  assert(cme::padLeft(str, 10, ' ') == "    server");
+  assert(cmc::padLeft(str, 10, ' ') == "    server");
   str = "here";
-  assert(cme::padLeft(str, 5, '-') == "-here");
+  assert(cmc::padLeft(str, 5, '-') == "-here");
 }

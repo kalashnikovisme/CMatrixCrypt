@@ -30,7 +30,7 @@
 #include "deflate.hpp"
 #include "util.hpp"
 
-namespace cme {
+namespace cmc {
 	// bloody mary
 	typedef std::vector<CMatrix> marry;
 

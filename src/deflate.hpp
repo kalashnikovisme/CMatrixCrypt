@@ -30,7 +30,7 @@
 #include <sstream>
 #include <zlib.h>
 
-namespace cme {
+namespace cmc {
   class Deflate {
     private:
       static const int output_buffer_size = 10000;  // keep track of how big the buffer is

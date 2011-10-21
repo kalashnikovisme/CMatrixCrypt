@@ -45,14 +45,14 @@ void inflate_test_misc();
 
 // shorter alias to decompress
 string inflate(string in) {
-  cme::Inflate inf;
+  cmc::Inflate inf;
   inf.write(in);
   inf.close();
   return(inf.data());
 }
 
 string deflate(string in) {
-  cme::Deflate def;
+  cmc::Deflate def;
   def << in;
   def.close();
   return(def.read());
@@ -97,7 +97,7 @@ void inflate_tests() {
 }
 
 void deflate_test_words() {
-  cme::Deflate def;
+  cmc::Deflate def;
   def << "Harrow";
   def.close();
   assert(inflate(def.data()) == "Harrow");
@@ -110,7 +110,7 @@ void deflate_test_words() {
 }
 
 void deflate_test_sentences() {
-  cme::Deflate def;
+  cmc::Deflate def;
   def << "Harrow, harrow, sais the Korean.";
   def.close();
   assert(inflate(def.data()) == "Harrow, harrow, sais the Korean.");
@@ -123,7 +123,7 @@ void deflate_test_sentences() {
 }
 
 void deflate_test_input() {
-  cme::Deflate def;
+  cmc::Deflate def;
   def << "Hello ";
   def.write("world");
   def.close();
@@ -132,7 +132,7 @@ void deflate_test_input() {
 }
 
 void deflate_test_output() {
-  cme::Deflate def;
+  cmc::Deflate def;
   string out;
   def << "Long output test";
   out += def.read();
@@ -162,7 +162,7 @@ void deflate_test_constructor() {
 }
 
 void deflate_test_misc() {
-  cme::Deflate def;
+  cmc::Deflate def;
   assert(def.closed() == false);
   def.write("asafd");
   def.close();
@@ -172,7 +172,7 @@ void deflate_test_misc() {
 }
 
 void inflate_test_words() {
-  cme::Inflate inf;
+  cmc::Inflate inf;
   inf << deflate("Phillip");
   inf.close();
   assert(inf.data() == "Phillip");
@@ -184,7 +184,7 @@ void inflate_test_words() {
 }
 
 void inflate_test_sentences() {
-  cme::Inflate inf;
+  cmc::Inflate inf;
   inf << deflate("Harrow, harrow");
   inf.close();
   assert(inf.data() == "Harrow, harrow");
@@ -196,7 +196,7 @@ void inflate_test_sentences() {
 }
 
 void inflate_test_input() {
-  cme::Inflate inf;
+  cmc::Inflate inf;
   string comp;
   comp = deflate("watch out, dog poop");
   inf.write(comp.substr(0, 10));
@@ -206,7 +206,7 @@ void inflate_test_input() {
 }
 
 void inflate_test_output() {
-  cme::Inflate inf;
+  cmc::Inflate inf;
   string str;
   inf << deflate("testing");
   inf.close();
@@ -235,7 +235,7 @@ void inflate_test_output() {
 }
 
 void inflate_test_misc() {
-  cme::Inflate inf;
+  cmc::Inflate inf;
   assert(inf.closed() == false);
   inf << deflate("text");
   inf.close();

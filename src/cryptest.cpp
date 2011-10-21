@@ -26,7 +26,7 @@
 #include <string>
 #include "mops.hpp"
 using namespace std;
-using namespace cme;
+using namespace cmc;
 
 int main(int argc, char *argv[]) {
 	// test if a password was given as commandline argument

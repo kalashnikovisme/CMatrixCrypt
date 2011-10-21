@@ -30,7 +30,7 @@
 #include "deflate.hpp"
 #include "ascii86.hpp"
 
-using namespace cme;
+using namespace cmc;
 using std::string;
 using std::cout;
 using std::cin;

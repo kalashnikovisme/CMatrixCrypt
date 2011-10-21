@@ -31,15 +31,15 @@
 using namespace std;
 
 // read text from file
-void read_file(cme::Deflate&, cme::Encode86&, string filename);
+void read_file(cmc::Deflate&, cmc::Encode86&, string filename);
 // read text from stdin
-void read_input(cme::Deflate&, cme::Encode86&);
+void read_input(cmc::Deflate&, cmc::Encode86&);
 
 int main(int argc, char *argv[]) {
   // class to handle the compression
-  cme::Deflate deflate;
+  cmc::Deflate deflate;
   // class to handle the encoding
-  cme::Encode86 encode;
+  cmc::Encode86 encode;
 
   // if there is no commandline argument
   if(argc < 2) {
@@ -70,7 +70,7 @@ int main(int argc, char *argv[]) {
 }
 
 // read from file
-void read_file(cme::Deflate& deflate, cme::Encode86& encode, string filename) {
+void read_file(cmc::Deflate& deflate, cmc::Encode86& encode, string filename) {
   // construct an ifstream to read from the file
   ifstream input(filename.data());
   // temp string to hold a single line of the file
@@ -100,7 +100,7 @@ void read_file(cme::Deflate& deflate, cme::Encode86& encode, string filename) {
 }
 
 // read from stdin
-void read_input(cme::Deflate& deflate, cme::Encode86& encode) {
+void read_input(cmc::Deflate& deflate, cmc::Encode86& encode) {
   // temp string to hold a single line from stdin
   string line;
 

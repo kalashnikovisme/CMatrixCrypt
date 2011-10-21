@@ -29,7 +29,7 @@
 #include <stdexcept>
 #pragma once
 
-namespace cme {
+namespace cmc {
 	class SHA512 {
 		private:
 			// used by polarssl for hashing

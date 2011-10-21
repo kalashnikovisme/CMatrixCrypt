@@ -26,7 +26,7 @@
 #include <string>
 
 // PROTOTYPES
-namespace cme {
+namespace cmc {
   std::string intToBin(unsigned);         // turns 'num' into a binary string
   std::string intToBin(unsigned, int);    // turns 'num' into a binary string of size 'size'. 
   unsigned binToInt(const std::string&);  // turns binary string 'bin' into an unsigned integer.

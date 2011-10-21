@@ -24,7 +24,7 @@
 
 #include "ascii86.hpp"
 
-namespace cme {
+namespace cmc {
   /* ENCODE86 CODE */
   /* CONSTRUCTORS */
   Encode86::Encode86() {

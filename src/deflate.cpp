@@ -24,7 +24,7 @@
 
 #include "deflate.hpp"
 
-namespace cme {
+namespace cmc {
   /* DEFLATE */
   // standard constructor
   Deflate::Deflate() {

@@ -31,17 +31,17 @@
 #include "util.hpp"
 #include "mops.hpp"
 
-using namespace cme;
+using namespace cmc;
 using namespace std;
 
 int main(int argc, char *argv[]) {
-	cme::Encrypter enc("accadura"); // use password "."
+	cmc::Encrypter enc("accadura"); // use password "."
 	enc.write("abacsor");       // encrypt "roro"
 	enc.close();             // finish encryption
 	// now we have the encrypted and encoded data
 	
-	cme::Decode86 dec;       // construct decoder
-	cme::Inflate inf;        // construct inflater
+	cmc::Decode86 dec;       // construct decoder
+	cmc::Inflate inf;        // construct inflater
 	dec.write(enc.data());   // decode encrypted data
 	inf.write(dec.data());   // inflate decoded data
 	inf.close();

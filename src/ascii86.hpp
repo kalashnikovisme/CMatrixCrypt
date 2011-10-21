@@ -30,7 +30,7 @@
 #include <sstream>
 #include <stdexcept>
 
-namespace cme {
+namespace cmc {
   class Encode86 {
     private:
       // buffers for input/output

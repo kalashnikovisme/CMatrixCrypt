@@ -151,7 +151,7 @@ string matrixEncrypt(const std::string& mesg, const std::string& pass) {
 }
 */ 
 
-namespace cme {
+namespace cmc {
 	Encrypter::Encrypter(std::string password) {
 		initialize();
 		initializePassword(password);

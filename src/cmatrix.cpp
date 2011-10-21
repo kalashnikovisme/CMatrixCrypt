@@ -24,7 +24,7 @@
 
 #include "cmatrix.hpp"
 
-namespace cme {
+namespace cmc {
   /* DATA STRUCTURE STUFF
    * this code might change if the data structure used is changed. 
    * this is why it's not public but private, it shoudln't be called

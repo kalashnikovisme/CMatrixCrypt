@@ -28,7 +28,7 @@
 #include <stdexcept>
 #include "sha512.hpp"
 
-using namespace cme;
+using namespace cmc;
 using std::cout;
 using std::cin;
 using std::endl;

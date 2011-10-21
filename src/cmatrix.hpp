@@ -27,7 +27,7 @@
 #ifndef CMATRIX_H
 #define CMATRIX_H
 
-namespace cme {
+namespace cmc {
   class CMatrix {
   private:
     // data structure related stuff - this could change if i use a different data structure

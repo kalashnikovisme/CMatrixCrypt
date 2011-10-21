@@ -24,7 +24,7 @@
 
 #include "util.hpp"
 
-namespace cme {
+namespace cmc {
   // convert an integer to a binary string
   std::string intToBin(unsigned num) {
     std::string binaryString;                    // a place to store the binary string

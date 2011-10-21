@@ -31,15 +31,15 @@
 using namespace std;
 
 // decompress a file
-void read_file(cme::Inflate&, cme::Decode86&, string filename);
+void read_file(cmc::Inflate&, cmc::Decode86&, string filename);
 // decompress stdin
-void read_input(cme::Inflate&, cme::Decode86&);
+void read_input(cmc::Inflate&, cmc::Decode86&);
 
 int main(int argc, char *argv[]) {
   // object to inflate (decompress)
-  cme::Inflate inflate;
+  cmc::Inflate inflate;
   // decode object
-  cme::Decode86 decode;
+  cmc::Decode86 decode;
 
   // if there is no command line argument
   if(argc < 2) {
@@ -73,7 +73,7 @@ int main(int argc, char *argv[]) {
 }
 
 // read from file
-void read_file(cme::Inflate& inflate, cme::Decode86& decode, string filename) {
+void read_file(cmc::Inflate& inflate, cmc::Decode86& decode, string filename) {
   // use an ifstream to read (easier to use)
   ifstream input(filename.data());
   // temp var to hold a single line
@@ -101,7 +101,7 @@ void read_file(cme::Inflate& inflate, cme::Decode86& decode, string filename) {
 }
 
 // read from stdin
-void read_input(cme::Inflate& inflate, cme::Decode86& decode) {
+void read_input(cmc::Inflate& inflate, cmc::Decode86& decode) {
   // a single line of data
   string line;
 

@@ -79,7 +79,7 @@ void decode_tests() {
 }
 
 void encode_test_words() {
-  cme::Encode86 enc;
+  cmc::Encode86 enc;
   std::string word;
   
   enc << "Working";
@@ -96,7 +96,7 @@ void encode_test_words() {
 }
 
 void encode_test_sentences() {
-  cme::Encode86 enc;
+  cmc::Encode86 enc;
   std::string sentence;
 
   enc << "Working state";
@@ -113,7 +113,7 @@ void encode_test_sentences() {
 }
 
 void encode_test_inputs() {
-  cme::Encode86 enc;
+  cmc::Encode86 enc;
   std::string input;
 
   enc << "He";
@@ -125,7 +125,7 @@ void encode_test_inputs() {
 }
 
 void encode_test_outputs() {
-  cme::Encode86 enc;
+  cmc::Encode86 enc;
   std::string test = "Test case";
   std::string result;
 
@@ -161,7 +161,7 @@ void encode_test_outputs() {
 }
 
 void encode_test_misc() {
-  cme::Encode86 enc;
+  cmc::Encode86 enc;
 
   enc << "test";
   assert(enc.closed() == false);
@@ -174,7 +174,7 @@ void encode_test_misc() {
 }
 
 void decode_test_words() {
-  cme::Decode86 dec;
+  cmc::Decode86 dec;
   
   dec << "<~6Xb%I~>";
   assert(dec.data() == "Case");
@@ -186,7 +186,7 @@ void decode_test_words() {
 }
 
 void decode_test_sentences() {
-  cme::Decode86 dec;
+  cmc::Decode86 dec;
 
   dec << "<~6Xb%I+EMXIA9e~>";
   assert(dec.data() == "Case study");
@@ -198,7 +198,7 @@ void decode_test_sentences() {
 }
 
 void decode_test_inputs() {
-  cme::Decode86 dec;
+  cmc::Decode86 dec;
   std::string text = "b'4~>";
 
   dec << "<~6#";
@@ -216,7 +216,7 @@ void decode_test_inputs() {
 }
 
 void decode_test_outputs() {
-  cme::Decode86 dec;
+  cmc::Decode86 dec;
   std::string enc = "<~7:C7ZATDZ2Eb0E4Cisi6Df,~>";
   std::string orig;
 
@@ -249,7 +249,7 @@ void decode_test_outputs() {
 }
 
 void decode_test_misc() {
-  cme::Decode86 dec;
+  cmc::Decode86 dec;
 
   assert(dec.closed() == false);
   dec << "<~7:C7ZATDZ2Eb0E4Cisi6Df,~>";

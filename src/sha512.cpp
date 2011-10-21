@@ -24,7 +24,7 @@
 
 #include "sha512.hpp"
 
-namespace cme {
+namespace cmc {
 	void SHA512::sha4_starts(int is384) {
 		if(closed_input) {
 			throw std::runtime_error("sha4 input already closed");
