@@ -41,7 +41,7 @@ namespace cmc {
       bool closed_input;        // whether or not this is closed
       int compressionlevel;     // determines how good the compression should be
       mutable size_t outpos;    // where we are in the outputting
-      int total_out;            // keep track of how many bytes of output there were
+      unsigned long total_out;  // keep track of how many bytes of output there were
 
       void setup();   // set the compression up
     public:
