@@ -101,7 +101,7 @@ void test_ouputs() {
   assert(mat(0,1) == 1.0);
   assert(mat(1,0) == 1.0);
   assert(mat(1,1) == 1.0);
-  for(int i = 0; i < mat.size(); ++i) {
+  for(size_t i = 0; i < mat.size(); ++i) {
     assert(mat[i] == 1.0);
   }
   assert(mat.get(0,0) == 1.0);
@@ -116,7 +116,7 @@ void test_inputs() {
   mat(0,1) = 0.0;
   mat[2] = 0.0;
   mat.set(1,1, 0.0);
-  for(int i = 0; i < mat.size(); ++i) {
+  for(size_t i = 0; i < mat.size(); ++i) {
     assert(mat[i] == 0.0);
   }
 }
@@ -127,7 +127,7 @@ void test_operations() {
   mat.resize(2,2);
   assert(mat.width() == 2);
   assert(mat.height() == 2);
-  for(int i = 0; i < mat.size(); ++i) {
+  for(size_t i = 0; i < mat.size(); ++i) {
     assert(mat[i] == 0.0);
   }
 
@@ -143,7 +143,7 @@ void test_math_operator() {
   mat *= 4;
   mat /= 2;
   mat -= -1;
-  for(int i = 0; i < mat.size(); ++i) {
+  for(size_t i = 0; i < mat.size(); ++i) {
     assert(mat[i] == 3.0);
   }
 }
