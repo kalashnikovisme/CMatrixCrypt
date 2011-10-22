@@ -31,10 +31,10 @@ Bugfixes
    library also does decryption (not only encryption)
  * remove all debugging code from libraries that work     [done]
  * change the code to use size_t where appropriate        [done]
- * deflate - make use of total_out in write() and close() [done but no improvement]
- * test why the encrypted version of "roro" with the      []
+ * test why the encrypted version of "roro" with the      [done]
    pass "." isn't the same in the ruby version and the 
    C++ version of MatrixCrypt
+ * deflate - make use of total_out in write() and close() [done]
 
 
 Algorithm Improvements
