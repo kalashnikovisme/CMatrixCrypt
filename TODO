@@ -13,7 +13,7 @@ Write
 
  * tests - write or expand tests for all code involved
   [    ] every single part of the public API needs to have tests
-  [    ] use the samples in the file SAMPLES to test mops.cpp 
+  [i.p.] use the samples in the file SAMPLES to test mops.cpp 
          for possible faults. 
 
  * documentation - people should easily be able to use this code,
