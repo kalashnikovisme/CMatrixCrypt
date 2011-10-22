@@ -78,7 +78,7 @@ namespace cmc {
 	    std::string outbuf;
 
 	    // current position in the output buffer - needed for read() and dread()
-	    mutable int outbuf_pos;
+	    mutable size_t outbuf_pos;
 
 			/* password array
 			 * this password array is used for encryption, it is looped thru to 
@@ -88,7 +88,7 @@ namespace cmc {
 			marry passMatrices;
 
 			// password matrix offset
-	    mutable int pass_offset;
+	    mutable size_t pass_offset;
 
 			/* delfater class
 			 * this class is responsible for compressing the encrypted data

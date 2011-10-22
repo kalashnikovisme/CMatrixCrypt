@@ -177,7 +177,7 @@ namespace cmc {
 		}
 
 		// for every 4 characters in password
-		for(int i = 0; i < password.size(); i+=4) {
+		for(size_t i = 0; i < password.size(); i+=4) {
 			// make a new CMatrix
 			CMatrix pw;
 
@@ -266,13 +266,13 @@ namespace cmc {
 		marry mesgMatrices = getMesgMatrices();
 
 		// encrypt
-		for(int i = 0; i < mesgMatrices.size(); ++i) {
+		for(size_t i = 0; i < mesgMatrices.size(); ++i) {
 			// multiply the mesg matrix with the next password matrix
 			mesgMatrices[i] *= nextPassMatrix();
 		}
 
 		// turn the enxrypted mesgMatrices to strings (append to outbuf)
-		for(int i = 0; i < mesgMatrices.size(); i+=2) {
+		for(size_t i = 0; i < mesgMatrices.size(); i+=2) {
 			// turn to string and add to the output buffer
 			matricesToOutbuf(mesgMatrices[i+0], mesgMatrices[i+1]);
 		}
