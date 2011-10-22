@@ -29,41 +29,46 @@
 
 namespace cmc {
   class CMatrix {
+	public:
+		// type for the dimension of the matrix
+		typedef size_t dim;
+		// type for the data of the matrix (possibly for templating)
+		//typedef float data_t;
   private:
     // data structure related stuff - this could change if i use a different data structure
     float **data;                   // internat data structure
-    void allocateData(int x, int y);// allocate the data structure of a X x Y matrix
+    void allocateData(dim x, dim y);// allocate the data structure of a X x Y matrix
     void deleteData();              // delete the data structure
 
     // abstract stuff - if i ever change the data structure, these'll remain
-    int             sizeX,  sizeY;          // size of the matrix
-    void checkBounds(int x, int y) const;   // check if X,Y are vaild elements
-    float getElemCon(int x, int y) const;   // get element X,Y
-    float&   getElem(int x, int y);         // get reference to element X,Y
-    void     setElem(int x, int y, float v);// set element X,Y to V
+    dim             sizeX,  sizeY;          // size of the matrix
+    void checkBounds(dim x, dim y) const;   // check if X,Y are vaild elements
+    float getElemCon(dim x, dim y) const;   // get element X,Y
+    float&   getElem(dim x, dim y);         // get reference to element X,Y
+    void     setElem(dim x, dim y, float v);// set element X,Y to V
     void setAllElems(float v);              // set all elements to V
 
   public:
     // constructors
     CMatrix();                          // default: 2x2 CMatrix
-    CMatrix(int x, int y);              // new CMatrix with these dims
-    CMatrix(int x, int y, float v);     // new CMatrix with default value V
-    CMatrix(int x, int y, float **mat); // new CMatrix with defaults
+    CMatrix(dim x, dim y);              // new CMatrix with these dims
+    CMatrix(dim x, dim y, float v);     // new CMatrix with default value V
+    CMatrix(dim x, dim y, float **mat); // new CMatrix with defaults
     CMatrix(const CMatrix&);            // copy constructor
     ~CMatrix();                         // destructor (most important piece of code, lol)
 
     // public accessors
-    float get(int x, int y) const;    // get a copy of X,Y
-    float get(int pos     ) const;    // get a copy of pos (like operator[])
-    void  set(int x, int y, float v); // set X,Y to V
-    int height() const;               // get the height of the matrix (
-    int width() const;                // get the matrix's length
-    int size() const;                 // get the matrix's size (X*Y)
+    float get(dim x, dim y) const;    // get a copy of X,Y
+    float get(dim pos     ) const;    // get a copy of pos (like operator[])
+    void  set(dim x, dim y, float v); // set X,Y to V
+    dim height() const;               // get the height of the matrix (
+    dim width() const;                // get the matrix's length
+    dim size() const;                 // get the matrix's size (X*Y)
 
     // matrix related things
     bool square() const;        // return true if this is a square matrix
     float determinant() const;  // get the determinant
-    void resize(int x, int y);  // resize this matrix to an XxY matrix
+    void resize(dim x, dim y);  // resize this matrix to an XxY matrix
     void escape();              // escape this matrix
     void invert();              // invert this matrix
     CMatrix escaped() const;    // return an escaped version of this matrix
@@ -71,8 +76,8 @@ namespace cmc {
 
     // operators
     // element access
-    float& operator()(int x, int y); 
-    float& operator[](int pos); 
+    float& operator()(dim x, dim y); 
+    float& operator[](dim pos); 
 
     // comparing
     bool operator==(const CMatrix&) const;
