@@ -42,7 +42,7 @@ Algorithm Improvements
    specified
  * think about adding more diffusion to the password...   [in progress (phash.cpp)]
    possibly use XOR 8 chars in advance?
- * work on an improved avalance effect for additional     []
+ * work on an improved avalanche effect for additional    []
    crpytographic strength... XOR, hashes, etc.?
  * use lrot or rrot for extra cryptographic security      []
  * instead of the current block cipher operation mode,    []
